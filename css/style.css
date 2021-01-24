@@ -34,6 +34,19 @@ td, th {
     user-select: none;
 }
 
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bingo-square {
+	animation: 2s linear 0s infinite normal none running rotating;
+}
+
 #game-title {
     padding: 5px;
     font-size: 55px;
