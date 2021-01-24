@@ -142,6 +142,6 @@ footer > a, a:hover, a:active {
 
 
 
-.bingo-card {
+.bingo-square {
 	animation: 2s linear 0s infinite normal none running rotating;
 }
