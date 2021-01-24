@@ -130,3 +130,18 @@ footer > a, a:hover, a:active {
     padding-top: 85px;
     padding-bottom: 375px;
 }
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+.bingo-card {
+	animation: 2s linear 0s infinite normal none running rotating;
+}
