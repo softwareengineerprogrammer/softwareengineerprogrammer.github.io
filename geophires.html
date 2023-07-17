@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge, chrome=1"/>
 
-    <style type="text/css">
+    <style>
         form {
             display: inline-block;
             vertical-align: top;
@@ -19,8 +19,16 @@
         function submitForm(oFormElement) {
             let xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                console.log('Got response', xhr.responseText);
-                document.getElementById('results').innerText = xhr.responseText
+
+                console.log('Got response', xhr.responseText, xhr);
+
+                let resultsText = ''
+                if (xhr.status !== 200) {
+                    resultsText = 'Error: ' + xhr.statusText
+                } else {
+                    resultsText = xhr.responseText
+                }
+                document.getElementById('results').innerText = resultsText
             }
             xhr.open(oFormElement.method, oFormElement.getAttribute("action"));
             xhr.send(new FormData(oFormElement));
@@ -30,7 +38,12 @@
 </head>
 
 <body>
-    <h1>GEOPHIRES</h1>
+<h1>GEOPHIRES</h1>
+<p>
+    <a href="https://github.com/softwareengineerprogrammer/softwareengineerprogrammer.github.io/blob/main/geophires.html">
+        code
+    </a>
+</p>
 <form method="POST"
       action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
       onsubmit="return submitForm(this);">
