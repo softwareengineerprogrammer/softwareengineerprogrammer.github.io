@@ -12,15 +12,39 @@
         #results {
             display: inline-block;
         }
+
+        .hidden {
+            visibility: hidden;
+        }
     </style>
     <script>
         "use strict";
 
+        function setInputEnabled(inputElt, isEnabled){
+            if(isEnabled){
+                inputElt.removeAttribute('disabled')
+            } else {
+                inputElt.setAttribute('disabled', 'true')
+            }
+        }
+
+        function setLoading(isLoading) {
+            let loader = document.getElementById('loading')
+            if (isLoading) {
+                loader.classList.remove('hidden')
+            } else {
+                loader.classList.add('hidden')
+            }
+
+            setInputEnabled(document.querySelector('input[type="submit"]'), !isLoading)
+            setInputEnabled(document.querySelector('textarea'), !isLoading)
+        }
+
         function submitForm(oFormElement) {
             let xhr = new XMLHttpRequest();
             xhr.onload = function () {
-
-                console.log('Got response', xhr.responseText, xhr);
+                console.log('Got response', xhr.responseText, xhr)
+                setLoading(false)
 
                 let resultsText = ''
                 if (xhr.status !== 200) {
@@ -30,20 +54,21 @@
                 }
                 document.getElementById('results').innerText = resultsText
             }
-            xhr.open(oFormElement.method, oFormElement.getAttribute("action"));
-            xhr.send(new FormData(oFormElement));
-            return false;
+
+            xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
+            xhr.send(new FormData(oFormElement))
+
+            setLoading(true)
+
+            return false
         }
     </script>
 </head>
 
 <body>
+
 <h1>GEOPHIRES</h1>
-<p>
-    <a href="https://github.com/softwareengineerprogrammer/softwareengineerprogrammer.github.io/blob/main/geophires.html">
-        code
-    </a>
-</p>
+
 <form method="POST"
       action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
       onsubmit="return submitForm(this);">
@@ -64,6 +89,7 @@
     </textarea>
     <br/>
     <input type="submit" value="Submit"/>
+    <span id="loading" class="hidden">Loading...</span>
 </form>
 <pre id="results"></pre>
 </body>
