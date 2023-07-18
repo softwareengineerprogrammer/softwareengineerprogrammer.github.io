@@ -56,7 +56,9 @@
             }
 
             xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
-            xhr.send(new FormData(oFormElement))
+            xhr.send(JSON.stringify({
+               'geophires_input_parameters': JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
+            }))
 
             setLoading(true)
 
@@ -77,7 +79,6 @@
               cols="69"
               rows="20">
 {
-    "Print Output to Console": 0,
     "End-Use Option": 2,
     "Reservoir Model": 1,
     "Time steps per year": 6,
