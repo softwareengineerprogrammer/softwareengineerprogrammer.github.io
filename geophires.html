@@ -20,8 +20,8 @@
     <script>
         "use strict";
 
-        function setInputEnabled(inputElt, isEnabled){
-            if(isEnabled){
+        function setInputEnabled(inputElt, isEnabled) {
+            if (isEnabled) {
                 inputElt.removeAttribute('disabled')
             } else {
                 inputElt.setAttribute('disabled', 'true')
@@ -55,19 +55,44 @@
                 document.getElementById('results').innerText = resultsText
             }
 
+            let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
+
             xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
             xhr.send(JSON.stringify({
-               'geophires_input_parameters': JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
+                'geophires_input_parameters': parsed_params
             }))
 
             setLoading(true)
 
+            let hash_params = new URLSearchParams()
+            hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))
+            setUrlHash(hash_params.toString())
+
             return false
+        }
+
+        function getUrlHash() {
+            return new URL(location.href).hash.replace('#', '')
+        }
+
+        function setUrlHash(urlHash) {
+            let url = new URL(location.href)
+            url.hash = urlHash
+            location.href = url
+        }
+
+        function onReady() {
+            console.log('URL hash is: ' + getUrlHash())
+            let params_from_hash = new URLSearchParams(getUrlHash()).get('geophires_input_parameters')
+            console.log(`URL hash as search params: ${params_from_hash}`)
+            if(params_from_hash){
+                document.querySelector('textarea[name="geophires_input_parameters"]').value = JSON.stringify(JSON.parse(params_from_hash), null, 4)
+            }
         }
     </script>
 </head>
 
-<body>
+<body onload="onReady()">
 
 <h1>GEOPHIRES</h1>
 
