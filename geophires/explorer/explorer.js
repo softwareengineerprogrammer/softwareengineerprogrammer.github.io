@@ -32,7 +32,7 @@ initMap().then(async () => {
     let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689890162.csv'
 
     $.get(dataFilePath, function (csv_data) {
-        let facilities = $.csv.toObjects(csv_data)
+        let facilities = $.csv.toObjects(csv_data).reverse()
         console.log('Got facility analysis data:', facilities)
 
         let facilities_by_name = {}
