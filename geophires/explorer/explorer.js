@@ -106,8 +106,8 @@ initMap().then(async () => {
                     "Reservoir Model": 1,
                     "Time steps per year": 6,
                     "Reservoir Depth": 3,
-                    "Gradient 1": facility_data.gradient_degC_per_km,
-                    "Maximum Temperature": facility_data.temp_3000m_degC
+                    "Gradient 1": parseFloat(facility_data.gradient_degC_per_km),
+                    "Maximum Temperature": parseInt(facility_data.temp_3000m_degC)
                 }, null, 4)
 
                 document.getElementById('results').innerText = JSON.stringify(facility_data.geophires_summary, null, 4)
