@@ -19,7 +19,8 @@ async function initMap() {
         zoom: 4.5,
         center: graymontCricketPosition,
         mapId: "DEMO_MAP_ID",
-        mapTypeId: 'terrain'
+        mapTypeId: 'terrain',
+        streetViewControl: false,
     });
 
     let facilities = [
@@ -79,10 +80,7 @@ async function initMap() {
         facilities_by_name[facility_name] = {
             facility_name: facility_name,
             CO2e_kt: facility[2],
-            //                    facility_lat: facility_lat,
-            //                    facility_lng: facility_lng,
-            //facility_geophires_summary: facility_geophires_summary,
-            facility_geophires_summary: JSON.parse(facility_geophires_summary.replaceAll("'", '"')),
+            geophires_summary: JSON.parse(facility_geophires_summary.replaceAll("'", '"')),
             temp_3000m_degC: temp_3000m,
             gradient_degC_per_km: facility[11],
         }
@@ -108,13 +106,12 @@ async function initMap() {
 
             infoWindow.close();
 
-            //infoWindow.setContent(marker.title);
-            let infoWindowContent = JSON.stringify(facility_data, null, 4).replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')
+            let infoWindowContent = JSON.stringify(facility_data, null, 4)
+                .replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')
             infoWindow.setContent(infoWindowContent);
 
             infoWindow.open(marker.map, marker);
             console.log('Facility clicked:', facility_data)
-            //document.getElementById('geophires_input_parameters').value = JSON.stringify(facility_data, null, 4)
             document.getElementById('geophires_input_parameters').value = JSON.stringify({
                 "End-Use Option": 2,
                 "Reservoir Model": 1,
@@ -123,10 +120,8 @@ async function initMap() {
                 "Gradient 1": facility_data.gradient_degC_per_km,
                 "Maximum Temperature": facility_data.temp_3000m_degC
             }, null, 4)
-            //                    document.getElementById('results').innerText = JSON.stringify(JSON.parse(
-            //                        facility_data.facility_geophires_summary.replaceAll("'",'"')), null, 4)
 
-            document.getElementById('results').innerText = JSON.stringify(facility_data.facility_geophires_summary, null, 4)
+            document.getElementById('results').innerText = JSON.stringify(facility_data.geophires_summary, null, 4)
         });
 
     }
