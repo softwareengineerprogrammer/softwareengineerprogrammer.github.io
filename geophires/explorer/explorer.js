@@ -1,14 +1,6 @@
 // Initialize and add the map
 let map;
 
-function getExplorerData() {
-    let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689881853.csv'
-
-    $.get(dataFilePath, function (csv_data) {
-        let data = $.csv.toObjects(csv_data)
-        console.log('Got facility analysis data:', data)
-    });
-}
 
 async function initMap() {
     // Request needed libraries.
@@ -37,7 +29,8 @@ initMap().then(async () => {
 
     const {InfoWindow} = await google.maps.importLibrary("maps");
 
-    let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689889571.csv'
+    // let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689889571.csv'
+    let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689890162.csv'
 
     $.get(dataFilePath, function (csv_data) {
         let facilities = $.csv.toObjects(csv_data)
@@ -63,20 +56,34 @@ initMap().then(async () => {
             let facility_name = facility.Facility_Name
             let facility_lat = parseFloat(facility.Latitude)
             let facility_lng = parseFloat(facility.Longitude)
-            let facility_geophires_summary = facility.geophires_summary
-            let temp_3000m = facility.Temp_3000m
+            let temp_3000m = parseInt(facility.Temp_3000m)
+
+            let get_facility_geophires_summary = function () {
+                try {
+                    return JSON.parse(facility.geophires_summary.replaceAll("'", '"'))
+                } catch (e) {
+                    return {}
+                }
+            }
+            let facility_geophires_summary = get_facility_geophires_summary()
 
             facilities_by_name[facility_name] = {
                 facility_name: facility_name,
                 CO2e_kt: facility[2],
-                geophires_summary: JSON.parse(facility_geophires_summary.replaceAll("'", '"')),
+                geophires_summary: facility_geophires_summary,
+                unit_Temp_degC: parseFloat(facility.Unit_Temp_degC),
                 temp_3000m_degC: temp_3000m,
                 gradient_degC_per_km: facility.Temp_Gradient_degC_per_km,
+                temp_plus15C_Available_3000m: facility.Temp_plus15C_Available_3000m == "true"
             }
 
+            let bgColor = "#FF0000"
+            if (facility.Temp_plus15C_Available_3000m !== "true") {
+                bgColor = "#d3d3d3"
+            }
             const pin = new PinElement({
                 glyph: `${getAbbrev(facility_name)}`,
-                //background: "#FBBC04",
+                background: bgColor,
             });
 
             let marker = new AdvancedMarkerElement({
