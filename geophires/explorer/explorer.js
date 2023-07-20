@@ -13,13 +13,13 @@
                 PinElement
             } = await google.maps.importLibrary("marker");
 
-            const spaceNeedlePosition = {
-                lat: 47.620415417603574,
-                lng: -122.34921062363883
+            const graymontCricketPosition = {
+                lat: 38.937677322387735,
+                lng: -112.81371837200508
             };
             map = new Map(document.getElementById("map"), {
-                zoom: 4,
-                center: spaceNeedlePosition,
+                zoom: 4.5,
+                center: graymontCricketPosition,
                 mapId: "DEMO_MAP_ID",
             });
 
