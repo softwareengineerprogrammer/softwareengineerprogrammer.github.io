@@ -16,16 +16,17 @@
             const graymontCricketPosition = {
                 lat: 38.937677322387735,
                 lng: -112.81371837200508
-            };
+            }
             map = new Map(document.getElementById("map"), {
                 zoom: 4.5,
                 center: graymontCricketPosition,
                 mapId: "DEMO_MAP_ID",
+                mapTypeId: 'terrain'
             });
 
             let facilities = [
-// Facility_ID,Facility_Name,CO2e_kt,Unit_Count,direct_use_heat_breakeven_price_USD_per_MMBTU,geophires_summary,Unit_Temp_degC,Temp_3000m,Temp_plus15C_Available_3000m,Latitude,Longitude,Temp_Gradient_degC_per_km
-[1001804,"MARTINEZ REFINING COMPANY LLC",8639.0,52,4.19,"{'capex_million_USD': 55.73, 'opex_million_USD_per_year': 2.16, 'direct_use_heat_breakeven_price_USD_per_MMBTU': 4.19}",220.0,250,true,38.02,-122.12,75.0],
+                // Facility_ID,Facility_Name,CO2e_kt,Unit_Count,direct_use_heat_breakeven_price_USD_per_MMBTU,geophires_summary,Unit_Temp_degC,Temp_3000m,Temp_plus15C_Available_3000m,Latitude,Longitude,Temp_Gradient_degC_per_km
+                [1001804,"MARTINEZ REFINING COMPANY LLC",8639.0,52,4.19,"{'capex_million_USD': 55.73, 'opex_million_USD_per_year': 2.16, 'direct_use_heat_breakeven_price_USD_per_MMBTU': 4.19}",220.0,250,true,38.02,-122.12,75.0],
 [1007390,"Martinez Renewable Fuel Facility",5152.0,104,4.19,"{'capex_million_USD': 55.73, 'opex_million_USD_per_year': 2.16, 'direct_use_heat_breakeven_price_USD_per_MMBTU': 4.19}",220.0,250,true,38.03,-122.07,75.0],
 [1006395,"SAN FRANCISCO REFINERY AT RODEO",5508.0,100,4.78,"{'capex_million_USD': 50.25, 'opex_million_USD_per_year': 1.81, 'direct_use_heat_breakeven_price_USD_per_MMBTU': 4.78}",220.0,250,true,38.04,-122.25,62.5],
 [1002916,"ARCHER DANIEL MIDLAND COMPANY",845.0,21,8.39,"{'capex_million_USD': 38.9, 'opex_million_USD_per_year': 1.03, 'direct_use_heat_breakeven_price_USD_per_MMBTU': 8.39}",50.0,125,true,41.42,-97.29,37.5],
@@ -79,11 +80,13 @@
 
                 facilities_by_name[facility_name] = {
                     facility_name: facility_name,
-                    facility_lat: facility_lat,
-                    facility_lng: facility_lng,
-                    facility_geophires_summary: facility_geophires_summary,
-                    temp_3000m: temp_3000m,
-                    gradient: facility[11]
+                    CO2e_kt: facility[2],
+                    //                    facility_lat: facility_lat,
+                    //                    facility_lng: facility_lng,
+                    //facility_geophires_summary: facility_geophires_summary,
+                    facility_geophires_summary: JSON.parse(facility_geophires_summary.replaceAll("'",'"')),
+                    temp_3000m_degC: temp_3000m,
+                    gradient_degC_per_km: facility[11],
                 }
 
                 const pin = new PinElement({
@@ -106,7 +109,11 @@
                     let facility_data = facilities_by_name[marker.title]
 
                     infoWindow.close();
-                    infoWindow.setContent(marker.title);
+
+                    //infoWindow.setContent(marker.title);
+                    let infoWindowContent = JSON.stringify(facility_data, null, 4).replaceAll('\n','<br/>').replaceAll(' ','&nbsp;')
+                    infoWindow.setContent(infoWindowContent);
+
                     infoWindow.open(marker.map, marker);
                     console.log('Facility clicked:',facility_data)
                     //document.getElementById('geophires_input_parameters').value = JSON.stringify(facility_data, null, 4)
@@ -115,11 +122,13 @@
                         "Reservoir Model": 1,
                         "Time steps per year": 6,
                         "Reservoir Depth": 3,
-                        "Gradient 1": facility_data.gradient,
-                        "Maximum Temperature": facility_data.temp_3000m
+                        "Gradient 1": facility_data.gradient_degC_per_km,
+                        "Maximum Temperature": facility_data.temp_3000m_degC
                     }, null, 4)
-                    document.getElementById('results').innerText = JSON.stringify(JSON.parse(
-                        facility_data.facility_geophires_summary.replaceAll("'",'"')), null, 4)
+                    //                    document.getElementById('results').innerText = JSON.stringify(JSON.parse(
+                    //                        facility_data.facility_geophires_summary.replaceAll("'",'"')), null, 4)
+
+                    document.getElementById('results').innerText = JSON.stringify(facility_data.facility_geophires_summary, null, 4)
                 });
 
             }
