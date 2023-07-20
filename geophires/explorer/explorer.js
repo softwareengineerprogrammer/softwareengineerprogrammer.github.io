@@ -29,7 +29,6 @@ initMap().then(async () => {
 
     const {InfoWindow} = await google.maps.importLibrary("maps");
 
-    // let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689889571.csv'
     let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689890162.csv'
 
     $.get(dataFilePath, function (csv_data) {
@@ -56,8 +55,10 @@ initMap().then(async () => {
             let facility_name = facility.Facility_Name
             let facility_lat = parseFloat(facility.Latitude)
             let facility_lng = parseFloat(facility.Longitude)
-            let temp_3000m = parseInt(facility.Temp_3000m)
 
+            if(!facility.geophires_summary){
+                continue
+            }
             let get_facility_geophires_summary = function () {
                 try {
                     return JSON.parse(facility.geophires_summary.replaceAll("'", '"'))
@@ -67,19 +68,34 @@ initMap().then(async () => {
             }
             let facility_geophires_summary = get_facility_geophires_summary()
 
-            facilities_by_name[facility_name] = {
+            let facility_obj = {
                 facility_name: facility_name,
-                CO2e_kt: facility[2],
+                CO2e_kt: parseFloat(facility.CO2e_kt),
                 geophires_summary: facility_geophires_summary,
                 unit_Temp_degC: parseFloat(facility.Unit_Temp_degC),
-                temp_3000m_degC: temp_3000m,
-                gradient_degC_per_km: facility.Temp_Gradient_degC_per_km,
+                temp_3000m_degC: parseInt(facility.Temp_3000m),
+                gradient_degC_per_km: parseFloat(facility.Temp_Gradient_degC_per_km),
                 temp_plus15C_Available_3000m: facility.Temp_plus15C_Available_3000m == "true"
             }
 
+            facilities_by_name[facility_name] = facility_obj
+
             let bgColor = "#FF0000"
-            if (facility.Temp_plus15C_Available_3000m !== "true") {
-                bgColor = "#d3d3d3"
+            if (!facility_obj.temp_plus15C_Available_3000m) {
+
+                function hslToHex(h, s, l) {
+                    l /= 100;
+                    const a = s * Math.min(l, 1 - l) / 100;
+                    const f = n => {
+                        const k = (n + h / 30) % 12;
+                        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                        return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+                    };
+                    return `#${f(0)}${f(8)}${f(4)}`;
+                }
+
+                let percent_unit_temp = (facility_obj.temp_3000m_degC/facility_obj.unit_Temp_degC)*100.0
+                bgColor = hslToHex(240, percent_unit_temp, 100-percent_unit_temp)
             }
             const pin = new PinElement({
                 glyph: `${getAbbrev(facility_name)}`,
