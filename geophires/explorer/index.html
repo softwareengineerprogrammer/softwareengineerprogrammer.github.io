@@ -3,6 +3,9 @@
 <head>
     <title>GEOPHIRES Explorer</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="jquery-3.7.0.min.js"></script>
+    <script src="jquery.csv.js"></script>
+
 
     <style>
         #map {
@@ -78,6 +81,15 @@
             //setUrlHash(hash_params.toString())
 
             return false
+        }
+
+        function getExplorerData(){
+            let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689881853.csv'
+
+            $.get( dataFilePath, function( csv_data ) {
+                let data = $.csv.toObjects(csv_data)
+                console.log('Got facility analysis data:', data )
+            });
         }
     </script>
 </head>
