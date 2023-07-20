@@ -17,8 +17,8 @@
 
         #results-container {
             display: inline-block;
-            max-width:45%;
-        vertical-align: top;
+            max-width: 45%;
+            vertical-align: top;
         }
 
         .hidden {
@@ -26,71 +26,70 @@
         }
 
     </style>
-    <!--<script type="module" src="./index.js"></script>-->
     <script type="module" src="explorer.js"></script>
     <script>
-         function setInputEnabled(inputElt, isEnabled) {
-                    if (isEnabled) {
-                        inputElt.removeAttribute('disabled')
-                    } else {
-                        inputElt.setAttribute('disabled', 'true')
-                    }
+        function setInputEnabled(inputElt, isEnabled) {
+            if (isEnabled) {
+                inputElt.removeAttribute('disabled')
+            } else {
+                inputElt.setAttribute('disabled', 'true')
+            }
+        }
+
+        function setLoading(isLoading) {
+            let loader = document.getElementById('loading')
+            if (isLoading) {
+                loader.classList.remove('hidden')
+            } else {
+                loader.classList.add('hidden')
+            }
+
+            setInputEnabled(document.querySelector('input[type="submit"]'), !isLoading)
+            setInputEnabled(document.querySelector('textarea'), !isLoading)
+        }
+
+        function submitForm(oFormElement) {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                console.log('Got response', xhr.responseText, xhr)
+                setLoading(false)
+
+                let resultsText = ''
+                if (xhr.status !== 200) {
+                    resultsText = `Error: ${xhr.statusText}`
+                } else {
+                    resultsText = xhr.responseText
                 }
+                document.getElementById('results').innerText = resultsText
+            }
 
-                function setLoading(isLoading) {
-                    let loader = document.getElementById('loading')
-                    if (isLoading) {
-                        loader.classList.remove('hidden')
-                    } else {
-                        loader.classList.add('hidden')
-                    }
+            let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
 
-                    setInputEnabled(document.querySelector('input[type="submit"]'), !isLoading)
-                    setInputEnabled(document.querySelector('textarea'), !isLoading)
-                }
+            xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
+            xhr.send(JSON.stringify({
+                'geophires_input_parameters': parsed_params
+            }))
 
-                function submitForm(oFormElement) {
-                    let xhr = new XMLHttpRequest();
-                    xhr.onload = function () {
-                        console.log('Got response', xhr.responseText, xhr)
-                        setLoading(false)
+            setLoading(true)
 
-                        let resultsText = ''
-                        if (xhr.status !== 200) {
-                            resultsText = `Error: ${xhr.statusText}`
-                        } else {
-                            resultsText = xhr.responseText
-                        }
-                        document.getElementById('results').innerText = resultsText
-                    }
+            //let hash_params = new URLSearchParams()
+            //hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))
+            //setUrlHash(hash_params.toString())
 
-                    let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
-
-                    xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
-                    xhr.send(JSON.stringify({
-                        'geophires_input_parameters': parsed_params
-                    }))
-
-                    setLoading(true)
-
-                    //let hash_params = new URLSearchParams()
-                    //hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))
-                    //setUrlHash(hash_params.toString())
-
-                    return false
-                }
+            return false
+        }
     </script>
 </head>
 <body>
-<h1>Geothermal Facilities Analysis</h1>
-<!--The div element for the map -->
+<h1>GEOPHIRES Explorer</h1>
+<p>Click a facility on the map to see a pre-computed GEOPHIRES result. Modify the parameters and re-run to get a new result.</p>
 <div id="map"></div>
 
 <div id="geophires-ui">
     <form method="POST"
           action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
           onsubmit="return submitForm(this);">
-    <h3>GEOPHIRES Parameters</h3>
+        <h3>GEOPHIRES Parameters</h3>
         <textarea id="geophires_input_parameters"
                   name="geophires_input_parameters"
                   rows="13"
@@ -103,14 +102,31 @@
     </form>
 
     <div id="results-container">
-    <h3>GEOPHIRES Result</h3>
-    <pre id="results"></pre>
+        <h3>GEOPHIRES Result</h3>
+        <pre id="results"></pre>
     </div>
 </div>
 
 <!-- prettier-ignore -->
-<script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyAfrygB1fSNIi8qb_1AAK-Upmy0ZPjX55k", v: "beta"});
+<script>(g => {
+    var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
+        b = window;
+    b = b[c] || (b[c] = {});
+    var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
+        u = () => h || (h = new Promise(async (f, n) => {
+            await (a = m.createElement("script"));
+            e.set("libraries", [...r] + "");
+            for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+            e.set("callback", c + ".maps." + q);
+            a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+            d[q] = f;
+            a.onerror = () => h = n(Error(p + " could not load."));
+            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+            m.head.append(a)
+        }));
+    d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+})
+({key: "AIzaSyAfrygB1fSNIi8qb_1AAK-Upmy0ZPjX55k", v: "beta"});
 </script>
 </body>
 </html>
