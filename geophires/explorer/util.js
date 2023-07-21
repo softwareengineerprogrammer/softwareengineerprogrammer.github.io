@@ -26,7 +26,11 @@ function getTbody(obj) {
         if (v === null) {
             displayValue = 'null'
         } else if (typeof v === 'object') {
-            displayValue = `<table>${getTbody(v).outerHTML}</table>`
+            if('value' in v && 'unit' in v){
+             displayValue = `${v['value']} ${v['unit']}`
+            }else {
+                displayValue = `<table>${getTbody(v).outerHTML}</table>`
+            }
         }
         let row = $(`<tr><td>${k}</td><td>${displayValue}</td></tr>`)
         $(tbody).append(row)
