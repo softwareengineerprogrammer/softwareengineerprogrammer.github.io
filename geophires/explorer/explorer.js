@@ -69,8 +69,8 @@ initMap().then(async () => {
 
             let facility = {
                 facility_name: facilityCsvObj.Facility_Name,
+                facility_id: facilityCsvObj.Facility_ID,
                 CO2e_kt: parseFloat(facilityCsvObj.CO2e_kt),
-                geophires_summary: facilityGeophiresSummary,
                 unit_Temp_degC: parseFloat(facilityCsvObj.Unit_Temp_degC),
                 temp_3000m_degC: parseInt(facilityCsvObj.Temp_3000m),
                 gradient_degC_per_km: parseFloat(facilityCsvObj.Temp_Gradient_degC_per_km),
@@ -78,7 +78,8 @@ initMap().then(async () => {
                 position: {
                     lat: parseFloat(facilityCsvObj.Latitude),
                     lng: parseFloat(facilityCsvObj.Longitude)
-                }
+                },
+                geophires_summary: facilityGeophiresSummary
             }
 
             facilitiesByName[facility.facility_name] = facility
@@ -103,18 +104,32 @@ initMap().then(async () => {
 
             marker.addListener('click', ({domEvent, latLng}) => {
                 const {target} = domEvent;
+
                 let facilityData = facilitiesByName[marker.title]
+                console.log('Facility clicked:', facilityData)
 
                 infoWindow.close();
 
-                let infoTable = $('<table class="mui-table">')
-                $(infoTable).append(getTbody(facilityData))
+                let facilityDisplay = Object.assign({}, facilityData)
+                delete facilityDisplay.facility_name
+                delete facilityDisplay.geophires_summary
+                let facilityId = facilityDisplay.facility_id
+                facilityDisplay.facility_id = `<a
+                    href="https://ghgdata.epa.gov/ghgp/service/facilityDetail/2021?id=${facilityId}&ds=E&et=&popup=true"
+                    target="_blank"
+                    title="Open EPA GHGRP Facility Details in a separate window">
+                        ${facilityId}
+                    </a>`
+                let facilityName = facilityData.facility_name
+
+                let infoTable = $(`<table class="mui-table"><thead><tr><th colspan="2">${facilityName}</th></tr></thead>`)
+                $(infoTable).append(getTbody(facilityDisplay))
                 let infoWindowContent = infoTable[0]
 
                 infoWindow.setContent(infoWindowContent);
 
                 infoWindow.open(marker.map, marker);
-                console.log('Facility clicked:', facilityData)
+
                 document.getElementById('geophires_input_parameters').value = JSON.stringify({
                     "End-Use Option": 2,
                     "Reservoir Model": 1,
