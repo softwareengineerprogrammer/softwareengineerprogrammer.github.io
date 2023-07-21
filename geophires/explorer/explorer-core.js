@@ -11,6 +11,10 @@ function setLoading(isLoading) {
 }
 
 function submitForm(oFormElement) {
+
+
+    let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
+
     let xhr = new XMLHttpRequest();
     xhr.onload = function () {
         console.log('Got response', xhr.responseText, xhr)
@@ -26,7 +30,7 @@ function submitForm(oFormElement) {
         //document.getElementById('results').innerText = resultsText
         let resultsTable = $('<table class="mui-table"></table>')
         let resultsData = JSON.parse(resultsText)
-        for(let resultsKey in resultsData){
+        for (let resultsKey in resultsData) {
             let resultsEntry = resultsData[resultsKey]
             $(resultsTable).append($(`<thead><tr><th colspan="2">${resultsKey}</th></tr></tr></thead>`))
             $(resultsTable).append(getTbody(resultsEntry))
@@ -36,8 +40,6 @@ function submitForm(oFormElement) {
         $('#results').empty()
             .append(resultsTable)
     }
-
-    let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
 
     xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
     xhr.send(JSON.stringify({
@@ -53,8 +55,13 @@ function submitForm(oFormElement) {
     return false
 }
 
-$(document).ready(function(){
-    let params_form = new GeophiresParametersForm($('#geophires_param_form'))
+$(document).ready(function () {
+    let params_form = new GeophiresParametersForm(
+        $('#geophires_param_form'),
+        function (params) {
+            $('textarea[name="geophires_input_parameters"]').val(JSON.stringify(params['geophires_input_parameters'], null, 4)).submit()
+        }
+    )
     params_form.setInputParameters({
         "End-Use Option": 2,
         "Reservoir Model": 1,

@@ -6,17 +6,22 @@ class GeophiresParametersForm {
         return $(this.$elt)
     }
 
-    constructor($elt) {
-        this.$elt = $elt
+    constructor($formElt, onSubmit) {
+        this.$elt = $formElt
 
         $(this.$elt).submit(function () {
             let params_request = {
                 'geophires_input_parameters': {}
             }
 
-            $.map($($elt).find('.geophires-parameters input[type="text"]'), function (value, index) {
+
+            $.map($($formElt).find('.geophires-parameters input[type="text"]'), function (value, index) {
                 console.log('f', value, index)
+                params_request['geophires_input_parameters'][value.name] = parseFloat(value.value)
             })
+
+            console.log('r',JSON.stringify(params_request))
+            onSubmit(params_request)
 
             return false
         })
