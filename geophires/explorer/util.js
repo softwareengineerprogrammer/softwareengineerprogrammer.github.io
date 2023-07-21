@@ -18,14 +18,18 @@ function setInputEnabled(inputElt, isEnabled) {
     }
 }
 
-function getTbody(obj){
+function getTbody(obj) {
     let tbody = document.createElement('tbody')
-    for(let k in obj){
-        let v = obj[k]
-        if(typeof v === 'object'){
-            v = `<table>${getTbody(v).outerHTML}</table>`
+    for (let k in obj) {
+        const v = obj[k]
+        let displayValue = v
+        if (v === null) {
+            displayValue = 'null'
+        } else if (typeof v === 'object') {
+            displayValue = `<table>${getTbody(v).outerHTML}</table>`
         }
-        $(tbody).append(`<tr><td>${k}</td><td>${v}</td></tr>`)
+        let row = $(`<tr><td>${k}</td><td>${displayValue}</td></tr>`)
+        $(tbody).append(row)
     }
     return tbody
 }
