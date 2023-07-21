@@ -33,13 +33,13 @@ initMap().then(async () => {
 
     $.get(dataFilePath, function (csv_data) {
         let facilities = $.csv.toObjects(csv_data).reverse()
-        console.log('Got facility analysis data:', facilities)
+        // console.log('Got facility analysis data:', facilities)
 
-        let facilities_by_name = {}
+        let facilitiesByName = {}
 
         const infoWindow = new InfoWindow();
 
-        const getAbbrev = function (str) {
+        const getFacilityNameAbbreviation = function (str) {
             let abbrev = ''
             let words = str.split(' ')
             for (let i = 0; i < Math.min(words.length, 3); i++) {
@@ -50,71 +50,59 @@ initMap().then(async () => {
             return abbrev
         }
 
-        for (const f in facilities) {
-            let facility = facilities[f]
-            let facility_name = facility.Facility_Name
-            let facility_lat = parseFloat(facility.Latitude)
-            let facility_lng = parseFloat(facility.Longitude)
+        const getFacilityGeophiresSummary = function (facilityCsvObject) {
+            try {
+                return JSON.parse(facilityCsvObject.geophires_summary.replaceAll("'", '"'))
+            } catch (e) {
+                return {}
+            }
+        }
 
-            if(!facility.geophires_summary){
+        for (const f in facilities) {
+            let facilityCsvObj = facilities[f]
+
+            if (!facilityCsvObj.geophires_summary) {
                 continue
             }
-            let get_facility_geophires_summary = function () {
-                try {
-                    return JSON.parse(facility.geophires_summary.replaceAll("'", '"'))
-                } catch (e) {
-                    return {}
-                }
-            }
-            let facility_geophires_summary = get_facility_geophires_summary()
+            let facility_geophires_summary = getFacilityGeophiresSummary(facilityCsvObj)
 
-            let facility_obj = {
-                facility_name: facility_name,
-                CO2e_kt: parseFloat(facility.CO2e_kt),
+            let facility = {
+                facility_name: facilityCsvObj.Facility_Name,
+                CO2e_kt: parseFloat(facilityCsvObj.CO2e_kt),
                 geophires_summary: facility_geophires_summary,
-                unit_Temp_degC: parseFloat(facility.Unit_Temp_degC),
-                temp_3000m_degC: parseInt(facility.Temp_3000m),
-                gradient_degC_per_km: parseFloat(facility.Temp_Gradient_degC_per_km),
-                temp_plus15C_Available_3000m: facility.Temp_plus15C_Available_3000m == "true"
+                unit_Temp_degC: parseFloat(facilityCsvObj.Unit_Temp_degC),
+                temp_3000m_degC: parseInt(facilityCsvObj.Temp_3000m),
+                gradient_degC_per_km: parseFloat(facilityCsvObj.Temp_Gradient_degC_per_km),
+                temp_plus15C_Available_3000m: facilityCsvObj.Temp_plus15C_Available_3000m === "true"
             }
 
-            facilities_by_name[facility_name] = facility_obj
+            facilitiesByName[facility.facility_name] = facility
 
             let bgColor = "#FF0000"
-            if (!facility_obj.temp_plus15C_Available_3000m) {
-
-                function hslToHex(h, s, l) {
-                    l /= 100;
-                    const a = s * Math.min(l, 1 - l) / 100;
-                    const f = n => {
-                        const k = (n + h / 30) % 12;
-                        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-                        return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
-                    };
-                    return `#${f(0)}${f(8)}${f(4)}`;
-                }
-
-                let percent_unit_temp = (facility_obj.temp_3000m_degC/facility_obj.unit_Temp_degC)*100.0
-                bgColor = hslToHex(240, percent_unit_temp, 100-percent_unit_temp)
+            if (!facility.temp_plus15C_Available_3000m) {
+                let percent_unit_temp = (facility.temp_3000m_degC / facility.unit_Temp_degC) * 100.0
+                bgColor = hslToHex(240, percent_unit_temp, 100 - percent_unit_temp)
             }
             const pin = new PinElement({
-                glyph: `${getAbbrev(facility_name)}`,
+                glyph: `${getFacilityNameAbbreviation(facility.facility_name)}`,
                 background: bgColor,
             });
 
+            let facility_lat = parseFloat(facilityCsvObj.Latitude)
+            let facility_lng = parseFloat(facilityCsvObj.Longitude)
             let marker = new AdvancedMarkerElement({
                 map: map,
                 position: {
                     lat: facility_lat,
                     lng: facility_lng
                 },
-                title: facility_name,
+                title: facility.facility_name,
                 content: pin.element,
             });
 
             marker.addListener("click", ({domEvent, latLng}) => {
                 const {target} = domEvent;
-                let facility_data = facilities_by_name[marker.title]
+                let facility_data = facilitiesByName[marker.title]
 
                 infoWindow.close();
 
