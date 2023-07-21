@@ -130,14 +130,15 @@ initMap().then(async () => {
 
                 infoWindow.open(marker.map, marker);
 
-                document.getElementById('geophires_input_parameters').value = JSON.stringify({
+                params_form.setInputParameters(
+                    {
                     "End-Use Option": 2,
                     "Reservoir Model": 1,
                     "Time steps per year": 6,
                     "Reservoir Depth": 3,
                     "Gradient 1": facilityData.gradient_degC_per_km,
                     "Maximum Temperature": facilityData.temp_3000m_degC
-                }, null, 4)
+                })
 
                 let summaryTable = $('<table class="mui-table mui-table--bordered"></table>')
                 $(summaryTable).append($("<thead><tr><th colspan='2'>Summary of Results (Pre-Computed)</th></tr></thead>"))

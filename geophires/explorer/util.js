@@ -40,3 +40,12 @@ function getTbody(obj) {
     }
     return tbody
 }
+
+function parseIfNumber(maybeNumber){
+    let parsed = parseFloat(maybeNumber)
+    if(isNaN(parsed)){
+        return maybeNumber
+    }else{
+        return parsed
+    }
+}
