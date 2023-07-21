@@ -3,8 +3,10 @@
 <head>
     <title>GEOPHIRES Direct-Use Heat Explorer</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="jquery-3.7.0.min.js"></script>
-    <script src="jquery.csv.js"></script>
+    <script src="lib/jquery-3.7.0.min.js"></script>
+    <script src="lib/jquery.csv.js"></script>
+    <link href="lib/mui.min.css" rel="stylesheet" type="text/css"/>
+    <script src="lib/mui.min.js"></script>
 
 
     <style>
@@ -80,35 +82,45 @@
     </script>
 </head>
 <body>
-<h1>GEOPHIRES Direct-Use Heat Explorer</h1>
-<p>Click a facility on the map to see a pre-computed GEOPHIRES result. Modify the parameters and re-run to get a new
-    result.</p>
-<p>Red markers indicate unit temperature plus 15 degrees Celcius is available at 3000m. Saturation of blue markers
-    indicates how close temps at 3000m are to unit temperature - darker blue = closer to unit temp</p>
-<div id="map"></div>
+<div class="mui-container">
+    <div class="mui-panel">
+        <h1>GEOPHIRES Direct-Use Heat Explorer</h1>
+        <p>Click a facility on the map to see a pre-computed GEOPHIRES result. Modify the parameters and re-run to get a
+            new
+            result.</p>
+        <p>Red markers indicate unit temperature plus 15 degrees Celcius is available at 3000m. Saturation of blue
+            markers
+            indicates how close temps at 3000m are to unit temperature - darker blue = closer to unit temp</p>
+    </div>
+    <div class="mui-panel">
+        <div id="map"></div>
 
-<div id="geophires-ui">
-    <form method="POST"
-          action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
-          onsubmit="return submitForm(this);">
-        <h3>GEOPHIRES Parameters</h3>
-        <textarea id="geophires_input_parameters"
-                  name="geophires_input_parameters"
-                  rows="13"
-                  cols="69"
-        ></textarea>
-        <br/>
-        <input type="submit" value="Run GEOPHIRES"/>
-        <span id="loading" class="hidden">Loading...</span>
+        <div id="geophires-ui">
+            <form method="POST"
+                  action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
+                  onsubmit="return submitForm(this);">
+                <h3>GEOPHIRES Parameters</h3>
+                <textarea id="geophires_input_parameters"
+                          name="geophires_input_parameters"
+                          rows="13"
+                          cols="69"
+                          class="mui-textfield"
+                ></textarea>
+                <br/>
+                <input type="submit"
+                       value="Run GEOPHIRES"
+                       class="mui-btn mui-btn--primary mui-btn--raised"/>
+                <span id="loading" class="hidden">Loading...</span>
 
-    </form>
+            </form>
 
-    <div id="results-container">
-        <h3>GEOPHIRES Summary/Result</h3>
-        <pre id="results"></pre>
+            <div id="results-container">
+                <h3>GEOPHIRES Summary/Result</h3>
+                <pre id="results"></pre>
+            </div>
+        </div>
     </div>
 </div>
-
 <!-- prettier-ignore -->
 <script>(g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
