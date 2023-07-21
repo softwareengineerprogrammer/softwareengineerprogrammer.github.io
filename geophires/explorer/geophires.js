@@ -16,11 +16,12 @@ class GeophiresParametersForm {
 
 
             $.map($($formElt).find('.geophires-parameters input[type="text"]'), function (value, index) {
-                console.log('f', value, index)
-                params_request['geophires_input_parameters'][value.name] = parseFloat(value.value)
+                if (value.name) {
+                    params_request['geophires_input_parameters'][value.name] = parseIfNumber(value.value)
+                }
             })
 
-            console.log('r', JSON.stringify(params_request))
+            console.log('Constructed params request object:', JSON.stringify(params_request))
             onSubmit(params_request)
 
             return false
