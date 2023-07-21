@@ -52,3 +52,15 @@ function submitForm(oFormElement) {
 
     return false
 }
+
+$(document).ready(function(){
+    let params_form = new GeophiresParametersForm($('#geophires_param_form'))
+    params_form.setInputParameters({
+        "End-Use Option": 2,
+        "Reservoir Model": 1,
+        "Time steps per year": 6,
+        "Reservoir Depth": 3,
+        "Gradient 1": 50,
+        "Maximum Temperature": 300
+    })
+})

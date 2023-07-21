@@ -14,6 +14,7 @@
     <script src="util.js"></script>
     <script type="module" src="explorer-map.js"></script>
     <script src="explorer-core.js"></script>
+    <script src="geophires.js"></script>
 
 </head>
 <body>
@@ -28,7 +29,7 @@
                 get a
                 new
                 result.</p>
-            <p>Red markers indicate unit temperature plus 15 degrees Celcius is available at 3000m. Saturation of blue
+            <p>Red markers indicate unit temperature plus 15&#8451; is available at 3000m. Saturation of blue
                 markers
                 indicates how close temps at 3000m are to unit temperature - darker blue = closer to unit temp</p>
         </div>
@@ -53,6 +54,13 @@
                            value="Run GEOPHIRES"
                            class="mui-btn mui-btn--primary mui-btn--raised"/>
                     <span id="loading" class="hidden">Running...</span>
+                </form>
+
+                <form
+                        id="geophires_param_form"
+                        method="POST"
+                        action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
+                        >
 
                 </form>
             </div>
