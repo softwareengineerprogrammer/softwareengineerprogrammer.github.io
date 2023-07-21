@@ -55,8 +55,9 @@ function submitForm(oFormElement) {
     return false
 }
 
+let params_form = null
 $(document).ready(function () {
-    let params_form = new GeophiresParametersForm(
+    params_form = new GeophiresParametersForm(
         $('#geophires_param_form'),
         function (params) {
             $('textarea[name="geophires_input_parameters"]').val(JSON.stringify(params['geophires_input_parameters'], null, 4)).submit()
