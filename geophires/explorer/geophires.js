@@ -20,7 +20,7 @@ class GeophiresParametersForm {
                 params_request['geophires_input_parameters'][value.name] = parseFloat(value.value)
             })
 
-            console.log('r',JSON.stringify(params_request))
+            console.log('r', JSON.stringify(params_request))
             onSubmit(params_request)
 
             return false
@@ -37,7 +37,7 @@ class GeophiresParametersForm {
         for (let paramName in inputParameters) {
             let paramData = inputParameters[paramName]
 
-            let removeButton = $(`<button type="button"  class="mui-btn mui-btn--small">X</button>`)
+            let removeButton = $(`<button type="button"  class="mui-btn mui-btn--small">Remove</button>`)
             removeButton.on("click", function () {
                 this_._removeInputParameter(paramName)
             })
@@ -53,12 +53,32 @@ class GeophiresParametersForm {
             `).append($('<td>').append(removeButton)))
         }
 
+        tbl.append(`
+            <tr>
+                <td colspan="3">
+                    <div class="mui-divider"></div>
+                </td>
+            </tr>
+            <tr>
+            <td>Add Parameter</td>
+            <td><input type="text" id="add_param_name"/></td>
+            <td>
+                <button type="button" class="mui-btn" id="add_param_btn">Add</button>
+            </td>
+        </tr>`)
         elt.append(tbl)
+
+        $("#add_param_btn").on('click', function () {
+            this_.inputParameters[$('#add_param_name').val()] = ''
+            this_.setInputParameters(this_.inputParameters)
+        })
+
         elt.append(`
-            <div class="mui-divider"/>
+        <div class="mui-divider" style="clear:both;"></div>
             <input type="submit"
                            value="Run GEOPHIRES"
-                           class="mui-btn mui-btn--primary mui-btn--raised" />`)
+                           class="mui-btn mui-btn--primary mui-btn--raised" />
+`)
     }
 
     _removeInputParameter(paramName) {

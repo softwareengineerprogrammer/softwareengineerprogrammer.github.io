@@ -40,11 +40,20 @@
 
         <div id="geophires-ui" class="mui-row">
             <div class="mui-col-md-4">
+
+                <h3>GEOPHIRES Parameters</h3>
+                <form
+                        id="geophires_param_form"
+                        method="POST"
+                        action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
+                >
+
+                </form>
+
                 <form
                         method="POST"
                         action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
                         onsubmit="return submitForm(this);">
-                    <h3>GEOPHIRES Parameters</h3>
                     <textarea id="geophires_input_parameters"
                               name="geophires_input_parameters"
                               class="mui-textfield"
@@ -54,14 +63,6 @@
                            value="Run GEOPHIRES"
                            class="mui-btn mui-btn--primary mui-btn--raised"/>
                     <span id="loading" class="hidden">Running...</span>
-                </form>
-
-                <form
-                        id="geophires_param_form"
-                        method="POST"
-                        action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
-                        >
-
                 </form>
             </div>
 
