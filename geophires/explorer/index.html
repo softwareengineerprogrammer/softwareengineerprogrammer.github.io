@@ -39,7 +39,19 @@
                 } else {
                     resultsText = xhr.responseText
                 }
-                document.getElementById('results').innerText = resultsText
+
+                //document.getElementById('results').innerText = resultsText
+                let resultsTable = $('<table class="mui-table mui-table--bordered"></table>')
+                let resultsData = JSON.parse(resultsText)
+                for(let resultsKey in resultsData){
+                    let resultsEntry = resultsData[resultsKey]
+                    $(resultsTable).append($(`<thead><tr><th colspan="2">${resultsKey}</th></tr></tr></thead>`))
+                    $(resultsTable).append(getTbody(resultsEntry))
+                }
+                //$(resultsTable).append(getTbody(resultsData))
+
+                $('#results').empty()
+                    .append(resultsTable)
             }
 
             let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
@@ -95,7 +107,7 @@
                     <input type="submit"
                            value="Run GEOPHIRES"
                            class="mui-btn mui-btn--primary mui-btn--raised"/>
-                    <span id="loading" class="hidden">Loading...</span>
+                    <span id="loading" class="hidden">Running...</span>
 
                 </form>
             </div>

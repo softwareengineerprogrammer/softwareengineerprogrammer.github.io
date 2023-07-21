@@ -17,3 +17,15 @@ function setInputEnabled(inputElt, isEnabled) {
         inputElt.setAttribute('disabled', 'true')
     }
 }
+
+function getTbody(obj){
+    let tbody = document.createElement('tbody')
+    for(let k in obj){
+        let v = obj[k]
+        if(typeof v === 'object'){
+            v = `<table>${getTbody(v).outerHTML}</table>`
+        }
+        $(tbody).append(`<tr><td>${k}</td><td>${v}</td></tr>`)
+    }
+    return tbody
+}

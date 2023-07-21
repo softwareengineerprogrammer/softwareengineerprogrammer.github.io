@@ -14,7 +14,7 @@ async function initMap() {
     map = new Map(document.getElementById("map"), {
         zoom: 4.5,
         center: graymontCricketPosition,
-        mapId: "DEMO_MAP_ID",
+        mapId: "geophires_direct_use_heat_explorer",
         mapTypeId: 'terrain',
         streetViewControl: false,
     });
@@ -64,12 +64,13 @@ initMap().then(async () => {
                 // TODO don't exclude these, probably
                 continue
             }
-            let facility_geophires_summary = getFacilityGeophiresSummary(facilityCsvObj)
+
+            let facilityGeophiresSummary = getFacilityGeophiresSummary(facilityCsvObj)
 
             let facility = {
                 facility_name: facilityCsvObj.Facility_Name,
                 CO2e_kt: parseFloat(facilityCsvObj.CO2e_kt),
-                geophires_summary: facility_geophires_summary,
+                geophires_summary: facilityGeophiresSummary,
                 unit_Temp_degC: parseFloat(facilityCsvObj.Unit_Temp_degC),
                 temp_3000m_degC: parseInt(facilityCsvObj.Temp_3000m),
                 gradient_degC_per_km: parseFloat(facilityCsvObj.Temp_Gradient_degC_per_km),
@@ -100,26 +101,12 @@ initMap().then(async () => {
                 content: pin.element,
             });
 
-            function getTbody(obj){
-                let tbody = document.createElement('tbody')
-                for(let k in obj){
-                    let v = obj[k]
-                    if(typeof v === 'object'){
-                        v = `<table>${getTbody(v).outerHTML}</table>`
-                    }
-                    $(tbody).append(`<tr><td>${k}</td><td>${v}</td></tr>`)
-                }
-                return tbody
-            }
-
             marker.addListener('click', ({domEvent, latLng}) => {
                 const {target} = domEvent;
                 let facilityData = facilitiesByName[marker.title]
 
                 infoWindow.close();
 
-                // let infoWindowContent = JSON.stringify(facilityData, null, 4)
-                //     .replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')
                 let infoTable = $('<table class="mui-table">')
                 $(infoTable).append(getTbody(facilityData))
                 let infoWindowContent = infoTable[0]
@@ -133,13 +120,11 @@ initMap().then(async () => {
                     "Reservoir Model": 1,
                     "Time steps per year": 6,
                     "Reservoir Depth": 3,
-                    "Gradient 1": parseFloat(facilityData.gradient_degC_per_km),
-                    "Maximum Temperature": parseInt(facilityData.temp_3000m_degC)
+                    "Gradient 1": facilityData.gradient_degC_per_km,
+                    "Maximum Temperature": facilityData.temp_3000m_degC
                 }, null, 4)
 
-                let summaryTable = document.createElement('table')
-                summaryTable.classList.add('mui-table')
-                summaryTable.classList.add('mui-table--bordered')
+                let summaryTable = $('<table class="mui-table mui-table--bordered"></table>')
                 $(summaryTable).append($("<thead><tr><th colspan='2'>Summary of Results (Pre-Computed)</th></tr></thead>"))
                 $(summaryTable).append(getTbody(facilityData.geophires_summary))
 
