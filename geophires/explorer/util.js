@@ -22,9 +22,12 @@ function getTbody(obj) {
     let tbody = document.createElement('tbody')
     for (let k in obj) {
         const v = obj[k]
+
+        let grayOut = ''
         let displayValue = v
         if (v === null) {
             displayValue = 'null'
+            grayOut = ' class="null-value-row"'
         } else if (typeof v === 'object') {
             if('value' in v && 'unit' in v){
              displayValue = `${v['value']} ${v['unit']}`
@@ -32,7 +35,7 @@ function getTbody(obj) {
                 displayValue = `<table>${getTbody(v).outerHTML}</table>`
             }
         }
-        let row = $(`<tr><td>${k}</td><td>${displayValue}</td></tr>`)
+        let row = $(`<tr${grayOut}><td>${k}</td><td>${displayValue}</td></tr>`)
         $(tbody).append(row)
     }
     return tbody
