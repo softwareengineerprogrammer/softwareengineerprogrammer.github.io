@@ -1,0 +1,12 @@
+#map {
+    width: 100%;
+    min-height: 420px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#geophires_input_parameters{
+    width: 100%;
+}
