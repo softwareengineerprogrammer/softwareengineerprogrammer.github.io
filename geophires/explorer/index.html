@@ -82,19 +82,10 @@
 
             return false
         }
-
-        function getExplorerData(){
-            let dataFilePath = 'gtw-facility-analysis_2023-07-20-1689881853.csv'
-
-            $.get( dataFilePath, function( csv_data ) {
-                let data = $.csv.toObjects(csv_data)
-                console.log('Got facility analysis data:', data )
-            });
-        }
     </script>
 </head>
 <body>
-<h1>GEOPHIRES Explorer</h1>
+<h1>GEOPHIRES Direct-Use Heat Explorer</h1>
 <p>Click a facility on the map to see a pre-computed GEOPHIRES result. Modify the parameters and re-run to get a new
     result.</p>
 <p>Red markers indicate unit temperature plus 15 degrees Celcius is available at 3000m. Saturation of blue markers indicates how close temps at 3000m are to unit temperature - darker blue = closer to unit temp</p>
