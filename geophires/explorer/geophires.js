@@ -54,32 +54,42 @@ class GeophiresParametersForm {
             `).append($('<td>').append(removeButton)))
         }
 
+        elt.append(`
+                <input type="submit"
+                           value="Run GEOPHIRES"
+                           class="mui-btn mui-btn--primary mui-btn--raised" />
+                            <div class="mui-divider" style="clear:both;"></div>
+            <br/>
+        `)
         tbl.append(`
             <tr>
                 <td colspan="3">
+                    <br/>
                     <div class="mui-divider"></div>
+                    <br/>
                 </td>
             </tr>
+
             <tr>
-            <td>Add Parameter</td>
-            <td><input type="text" id="add_param_name"/></td>
-            <td>
-                <button type="button" class="mui-btn" id="add_param_btn">Add</button>
-            </td>
-        </tr>`)
+                <td colspan="3">Add Parameter</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td colspan="2">Value</td>
+            </tr>
+            <tr>
+                <td><input type="text" id="add_param_name"/></td>
+                <td><input type="text" id="add_param_value"/></td>
+                <td><button type="button" class="mui-btn" id="add_param_btn">Add</button></td>
+            </tr>`)
         elt.append(tbl)
 
         $("#add_param_btn").on('click', function () {
-            this_.inputParameters[$('#add_param_name').val()] = ''
-            this_.setInputParameters(this_.inputParameters)
+            if($('#add_param_name').val()) {
+                this_.inputParameters[$('#add_param_name').val()] = $('#add_param_value').val()
+                this_.setInputParameters(this_.inputParameters)
+            }
         })
-
-        elt.append(`
-        <div class="mui-divider" style="clear:both;"></div>
-            <input type="submit"
-                           value="Run GEOPHIRES"
-                           class="mui-btn mui-btn--primary mui-btn--raised" />
-`)
     }
 
     _removeInputParameter(paramName) {

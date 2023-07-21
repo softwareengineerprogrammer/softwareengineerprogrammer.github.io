@@ -39,7 +39,7 @@
         <div id="map"></div>
 
         <div id="geophires-ui" class="mui-row">
-            <div class="mui-col-md-4">
+            <div class="mui-col-lg-6">
 
                 <h3>GEOPHIRES Parameters</h3>
                 <form
@@ -50,7 +50,7 @@
 
                 </form>
 
-                <form
+                <form class="hidden"
                         method="POST"
                         action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
                         onsubmit="return submitForm(this);">
@@ -62,12 +62,12 @@
                     <input type="submit"
                            value="Run GEOPHIRES"
                            class="mui-btn mui-btn--primary mui-btn--raised"/>
-                    <span id="loading" class="hidden">Running...</span>
                 </form>
             </div>
 
-            <div id="results-container" class="mui-col-md-8">
+            <div id="results-container" class="mui-col-lg-6">
                 <h3>GEOPHIRES Summary/Result</h3>
+                <span id="loading" class="hidden">Running...</span>
                 <div id="results">Click a facility on the map to see its GEOPHIRES summary</div>
             </div>
         </div>
