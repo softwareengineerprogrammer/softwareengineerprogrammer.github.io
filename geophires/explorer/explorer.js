@@ -5,7 +5,7 @@ let map;
 async function initMap() {
     // Request needed libraries.
     //@ts-ignore
-    const {Map, InfoWindow} = await google.maps.importLibrary("maps");
+    const {Map} = await google.maps.importLibrary("maps");
 
     const graymontCricketPosition = {
         lat: 38.937677322387735,
@@ -33,7 +33,6 @@ initMap().then(async () => {
 
     $.get(dataFilePath, function (csv_data) {
         let facilities = $.csv.toObjects(csv_data).reverse()
-        // console.log('Got facility analysis data:', facilities)
 
         let facilitiesByName = {}
 
@@ -62,6 +61,7 @@ initMap().then(async () => {
             let facilityCsvObj = facilities[f]
 
             if (!facilityCsvObj.geophires_summary) {
+                // TODO don't exclude these, probably
                 continue
             }
             let facility_geophires_summary = getFacilityGeophiresSummary(facilityCsvObj)
@@ -73,7 +73,11 @@ initMap().then(async () => {
                 unit_Temp_degC: parseFloat(facilityCsvObj.Unit_Temp_degC),
                 temp_3000m_degC: parseInt(facilityCsvObj.Temp_3000m),
                 gradient_degC_per_km: parseFloat(facilityCsvObj.Temp_Gradient_degC_per_km),
-                temp_plus15C_Available_3000m: facilityCsvObj.Temp_plus15C_Available_3000m === "true"
+                temp_plus15C_Available_3000m: facilityCsvObj.Temp_plus15C_Available_3000m === "true",
+                position: {
+                    lat: parseFloat(facilityCsvObj.Latitude),
+                    lng: parseFloat(facilityCsvObj.Longitude)
+                }
             }
 
             facilitiesByName[facility.facility_name] = facility
@@ -83,61 +87,62 @@ initMap().then(async () => {
                 let percent_unit_temp = (facility.temp_3000m_degC / facility.unit_Temp_degC) * 100.0
                 bgColor = hslToHex(240, percent_unit_temp, 100 - percent_unit_temp)
             }
+
             const pin = new PinElement({
                 glyph: `${getFacilityNameAbbreviation(facility.facility_name)}`,
                 background: bgColor,
             });
 
-            let facility_lat = parseFloat(facilityCsvObj.Latitude)
-            let facility_lng = parseFloat(facilityCsvObj.Longitude)
             let marker = new AdvancedMarkerElement({
                 map: map,
-                position: {
-                    lat: facility_lat,
-                    lng: facility_lng
-                },
+                position: facility.position,
                 title: facility.facility_name,
                 content: pin.element,
             });
 
+            function getTbody(obj){
+                let tbody = document.createElement('tbody')
+                for(let k in obj){
+                    let v = obj[k]
+                    if(typeof v === 'object'){
+                        v = `<table>${getTbody(v).outerHTML}</table>`
+                    }
+                    $(tbody).append(`<tr><td>${k}</td><td>${v}</td></tr>`)
+                }
+                return tbody
+            }
+
             marker.addListener('click', ({domEvent, latLng}) => {
                 const {target} = domEvent;
-                let facility_data = facilitiesByName[marker.title]
+                let facilityData = facilitiesByName[marker.title]
 
                 infoWindow.close();
 
-                let infoWindowContent = JSON.stringify(facility_data, null, 4)
-                    .replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')
+                // let infoWindowContent = JSON.stringify(facilityData, null, 4)
+                //     .replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')
+                let infoTable = $('<table class="mui-table">')
+                $(infoTable).append(getTbody(facilityData))
+                let infoWindowContent = infoTable[0]
+
                 infoWindow.setContent(infoWindowContent);
 
                 infoWindow.open(marker.map, marker);
-                console.log('Facility clicked:', facility_data)
+                console.log('Facility clicked:', facilityData)
                 document.getElementById('geophires_input_parameters').value = JSON.stringify({
                     "End-Use Option": 2,
                     "Reservoir Model": 1,
                     "Time steps per year": 6,
                     "Reservoir Depth": 3,
-                    "Gradient 1": parseFloat(facility_data.gradient_degC_per_km),
-                    "Maximum Temperature": parseInt(facility_data.temp_3000m_degC)
+                    "Gradient 1": parseFloat(facilityData.gradient_degC_per_km),
+                    "Maximum Temperature": parseInt(facilityData.temp_3000m_degC)
                 }, null, 4)
 
                 let summaryTable = document.createElement('table')
                 summaryTable.classList.add('mui-table')
                 summaryTable.classList.add('mui-table--bordered')
                 $(summaryTable).append($("<thead><tr><th colspan='2'>Summary of Results (Pre-Computed)</th></tr></thead>"))
+                $(summaryTable).append(getTbody(facilityData.geophires_summary))
 
-                let tbody = document.createElement('tbody')
-                for(let summaryKey in facility_data.geophires_summary){
-                    let summaryValue = facility_data.geophires_summary[summaryKey]
-                    $(tbody).append(`<tr><td>${summaryKey}</td><td>${summaryValue}</td></tr>`)
-                }
-                $(summaryTable).append(tbody)
-
-                /*document.getElementById('results').innerText = JSON.stringify(
-                    facility_data.geophires_summary,
-                    null,
-                    4
-                )*/
                 $('#results').empty()
                     .append(summaryTable)
             });
