@@ -100,7 +100,7 @@ initMap().then(async () => {
                 content: pin.element,
             });
 
-            marker.addListener("click", ({domEvent, latLng}) => {
+            marker.addListener('click', ({domEvent, latLng}) => {
                 const {target} = domEvent;
                 let facility_data = facilitiesByName[marker.title]
 
@@ -121,7 +121,25 @@ initMap().then(async () => {
                     "Maximum Temperature": parseInt(facility_data.temp_3000m_degC)
                 }, null, 4)
 
-                document.getElementById('results').innerText = JSON.stringify(facility_data.geophires_summary, null, 4)
+                let summaryTable = document.createElement('table')
+                summaryTable.classList.add('mui-table')
+                summaryTable.classList.add('mui-table--bordered')
+                $(summaryTable).append($("<thead><tr><th colspan='2'>Summary of Results (Pre-Computed)</th></tr></thead>"))
+
+                let tbody = document.createElement('tbody')
+                for(let summaryKey in facility_data.geophires_summary){
+                    let summaryValue = facility_data.geophires_summary[summaryKey]
+                    $(tbody).append(`<tr><td>${summaryKey}</td><td>${summaryValue}</td></tr>`)
+                }
+                $(summaryTable).append(tbody)
+
+                /*document.getElementById('results').innerText = JSON.stringify(
+                    facility_data.geophires_summary,
+                    null,
+                    4
+                )*/
+                $('#results').empty()
+                    .append(summaryTable)
             });
 
         }
