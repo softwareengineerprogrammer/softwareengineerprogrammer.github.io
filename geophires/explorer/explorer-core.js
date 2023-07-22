@@ -56,20 +56,21 @@ function submitForm(oFormElement) {
     setLoading(true)
     $('#results').empty()
 
-    //let hash_params = new URLSearchParams()
-    //hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))
-    //setUrlHash(hash_params.toString())
+    let hashParams = new URLSearchParams()
+    hashParams.set('geophires_input_parameters', JSON.stringify(parsed_params))
+    setUrlHash(hashParams.toString())
 
     return false
 }
 
-let params_form = null
-let params_text_input = null
+let GUIDED_PARAMS_FORM = null
+let TEXT_INPUT_PARAMS_FORM = null
+
 $(document).ready(function () {
-    params_form = new GeophiresParametersForm(
+    GUIDED_PARAMS_FORM = new GeophiresParametersForm(
         $('#geophires_param_form'),
         function (params) {
-            params_text_input.setInputParameters(params['geophires_input_parameters'])
+            TEXT_INPUT_PARAMS_FORM.setInputParameters(params['geophires_input_parameters'])
 
             $('textarea[name="geophires_input_parameters"]')
                 .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
@@ -77,17 +78,18 @@ $(document).ready(function () {
         }
     )
 
-    params_text_input = new GeophiresTextInputParameters(
+    TEXT_INPUT_PARAMS_FORM = new GeophiresTextInputParameters(
         $('#geophires_text_input_parameters'),
         function (params) {
-            params_form.setInputParameters(params['geophires_input_parameters'])
+            GUIDED_PARAMS_FORM.setInputParameters(params['geophires_input_parameters'])
 
             $('textarea[name="geophires_input_parameters"]')
                 .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
                 .submit()
         })
 
-    const defaultParams = {
+
+    let defaultParams = {
         "End-Use Option": 2,
         "Reservoir Model": 1,
         "Time steps per year": 6,
@@ -96,6 +98,13 @@ $(document).ready(function () {
         "Maximum Temperature": 400
     }
 
-    params_form.setInputParameters(defaultParams)
-    params_text_input.setInputParameters(defaultParams)
+    console.log('URL hash is:', getUrlHash())
+    let paramsFromHash = new URLSearchParams(getUrlHash()).get('geophires_input_parameters')
+    console.log(`URL hash as search params: ${paramsFromHash}`)
+    if(paramsFromHash){
+        defaultParams = JSON.parse(paramsFromHash)
+    }
+
+    GUIDED_PARAMS_FORM.setInputParameters(defaultParams)
+    TEXT_INPUT_PARAMS_FORM.setInputParameters(defaultParams)
 })

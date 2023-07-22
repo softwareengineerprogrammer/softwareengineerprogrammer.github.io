@@ -130,7 +130,7 @@ initMap().then(async () => {
 
                 infoWindow.open(marker.map, marker);
 
-                params_form.setInputParameters(
+                GUIDED_PARAMS_FORM.setInputParameters(
                     {
                     "End-Use Option": 2,
                     "Reservoir Model": 1,
