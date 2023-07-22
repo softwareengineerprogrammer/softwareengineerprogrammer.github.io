@@ -7,11 +7,16 @@
     visibility: hidden;
 }
 
-#geophires_input_parameters {
+#geophires_input_parameters, #geophires_text_input_parameters > textarea {
     width: 100%;
     font-family: monospace;
+    margin-top: 1em;
 }
 
 .null-value-row {
     color: #d3d3d3;
+}
+
+#geophires-ui {
+    min-height: 625px;
 }

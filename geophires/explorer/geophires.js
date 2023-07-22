@@ -10,19 +10,19 @@ class GeophiresParametersForm {
         this.$elt = $formElt
 
         $(this.$elt).submit(function () {
-            let params_request = {
+            let paramsRequest = {
                 'geophires_input_parameters': {}
             }
 
 
             $.map($($formElt).find('.geophires-parameters input[type="text"]'), function (value, index) {
                 if (value.name) {
-                    params_request['geophires_input_parameters'][value.name] = parseIfNumber(value.value)
+                    paramsRequest['geophires_input_parameters'][value.name] = parseIfNumber(value.value)
                 }
             })
 
-            console.log('Constructed params request object:', JSON.stringify(params_request))
-            onSubmit(params_request)
+            console.log('Constructed params request object:', JSON.stringify(paramsRequest))
+            onSubmit(paramsRequest)
 
             return false
         })
@@ -54,13 +54,6 @@ class GeophiresParametersForm {
             `).append($('<td>').append(removeButton)))
         }
 
-        elt.append(`
-                <input type="submit"
-                           value="Run GEOPHIRES"
-                           class="mui-btn mui-btn--primary mui-btn--raised" />
-                            <div class="mui-divider" style="clear:both;"></div>
-            <br/>
-        `)
         tbl.append(`
             <tr>
                 <td colspan="3">
@@ -71,7 +64,7 @@ class GeophiresParametersForm {
             </tr>
 
             <tr>
-                <td colspan="3">Add Parameter</td>
+                <td colspan="3"><legend>Add Parameter:</legend></td>
             </tr>
             <tr>
                 <td>Name</td>
@@ -85,17 +78,83 @@ class GeophiresParametersForm {
         elt.append(tbl)
 
         $("#add_param_btn").on('click', function () {
-            if($('#add_param_name').val()) {
+            if ($('#add_param_name').val()) {
                 this_.inputParameters[$('#add_param_name').val()] = $('#add_param_value').val()
                 this_.setInputParameters(this_.inputParameters)
             }
         })
+
+        elt.append(`
+                <div class="mui-divider"></div>
+                <br/>
+                <input type="submit"
+                           value="Run GEOPHIRES"
+                           class="mui-btn mui-btn--primary mui-btn--raised" />
+                            <div class="mui-divider" style="clear:both;"></div>
+        `)
     }
 
     _removeInputParameter(paramName) {
         delete this.inputParameters[paramName]
         this.setInputParameters(this.inputParameters)
     }
+}
 
+class GeophiresTextInputParameters {
+    constructor($formElt, onSubmit) {
+        $($formElt).append($(`
+            <textarea rows="13"></textarea>
+            <input type="submit"
+            value="Run GEOPHIRES"
+             class="mui-btn mui-btn--primary mui-btn--raised" />
+        `))
+        this.$textareaElt = $($formElt).find('textarea')
 
+        let _this = this
+        $($formElt).submit(function () {
+            let requestParams = {
+                'geophires_input_parameters': _this.getParameters()
+            }
+            console.log('text input as params obj', requestParams)
+            onSubmit(requestParams)
+            return false
+        })
+    }
+
+    setInputParameters(inputParametersObj) {
+        this.inputParameters = inputParametersObj
+
+        let txt = this._getParametersText()
+        $(this.$textareaElt).val(txt)
+        return txt
+    }
+
+    _getParametersText() {
+        let txt = ''
+        for (let paramName in this.inputParameters) {
+            let paramValue = this.inputParameters[paramName]
+            txt += `${paramName}, ${paramValue}\n`
+        }
+        return txt
+    }
+
+    getParameters() {
+        let params = {}
+
+        let lines = $(this.$textareaElt).val().split('\n')
+        for (let l in lines) {
+            let line = lines[l].split(',')
+
+            if (line && line.length >= 2) {
+                let paramName = line[0].trim()
+                let paramValue = parseIfNumber(line[1].trim())
+                params[paramName] = paramValue
+            } else {
+                console.log('Skipping text input line:', line)
+            }
+
+        }
+
+        return params
+    }
 }

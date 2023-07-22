@@ -6,13 +6,14 @@ function setLoading(isLoading) {
         loader.classList.add('hidden')
     }
 
-    setInputEnabled(document.querySelector('input[type="submit"]'), !isLoading)
-    setInputEnabled(document.querySelector('textarea'), !isLoading)
+    document.querySelectorAll('form input').forEach(
+        (sb) => setInputEnabled(sb, !isLoading))
+
+    document.querySelectorAll('form textarea').forEach(
+        (ta) => setInputEnabled(ta, !isLoading))
 }
 
 function submitForm(oFormElement) {
-
-
     let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
 
     let xhr = new XMLHttpRequest();
@@ -41,34 +42,69 @@ function submitForm(oFormElement) {
             .append(resultsTable)
     }
 
+    xhr.onerror = function () {
+        console.log('xhr onerror triggered', xhr)
+        setLoading(false)
+        $('#results').append($('<span>&#9888;Unexpected GEOPHIRES error - could be caused by invalid GEOPHIRES parameters, i.e. Maximum Temperature > 400</span>'))
+    }
+
     xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
     xhr.send(JSON.stringify({
         'geophires_input_parameters': parsed_params
     }))
 
     setLoading(true)
+    $('#results').empty()
 
-    //let hash_params = new URLSearchParams()
-    //hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))
-    //setUrlHash(hash_params.toString())
+    let hashParams = new URLSearchParams()
+    hashParams.set('geophires_input_parameters', JSON.stringify(parsed_params))
+    setUrlHash(hashParams.toString())
 
     return false
 }
 
-let params_form = null
+let GUIDED_PARAMS_FORM = null
+let TEXT_INPUT_PARAMS_FORM = null
+
 $(document).ready(function () {
-    params_form = new GeophiresParametersForm(
+    GUIDED_PARAMS_FORM = new GeophiresParametersForm(
         $('#geophires_param_form'),
         function (params) {
-            $('textarea[name="geophires_input_parameters"]').val(JSON.stringify(params['geophires_input_parameters'], null, 4)).submit()
+            TEXT_INPUT_PARAMS_FORM.setInputParameters(params['geophires_input_parameters'])
+
+            $('textarea[name="geophires_input_parameters"]')
+                .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
+                .submit()
         }
     )
-    params_form.setInputParameters({
+
+    TEXT_INPUT_PARAMS_FORM = new GeophiresTextInputParameters(
+        $('#geophires_text_input_parameters'),
+        function (params) {
+            GUIDED_PARAMS_FORM.setInputParameters(params['geophires_input_parameters'])
+
+            $('textarea[name="geophires_input_parameters"]')
+                .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
+                .submit()
+        })
+
+
+    let defaultParams = {
         "End-Use Option": 2,
         "Reservoir Model": 1,
         "Time steps per year": 6,
         "Reservoir Depth": 3,
         "Gradient 1": 50,
-        "Maximum Temperature": 300
-    })
+        "Maximum Temperature": 400
+    }
+
+    console.log('URL hash is:', getUrlHash())
+    let paramsFromHash = new URLSearchParams(getUrlHash()).get('geophires_input_parameters')
+    console.log(`URL hash as search params: ${paramsFromHash}`)
+    if(paramsFromHash){
+        defaultParams = JSON.parse(paramsFromHash)
+    }
+
+    GUIDED_PARAMS_FORM.setInputParameters(defaultParams)
+    TEXT_INPUT_PARAMS_FORM.setInputParameters(defaultParams)
 })

@@ -49,3 +49,13 @@ function parseIfNumber(maybeNumber){
         return parsed
     }
 }
+
+function getUrlHash() {
+    return atob(new URL(location.href).hash.replace('#', ''))
+}
+
+function setUrlHash(urlHash) {
+    let url = new URL(location.href)
+    url.hash = btoa(urlHash)
+    location.href = url
+}
