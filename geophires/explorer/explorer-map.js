@@ -137,7 +137,8 @@ initMap().then(async () => {
                     "Time steps per year": 6,
                     "Reservoir Depth": 3,
                     "Gradient 1": facilityData.gradient_degC_per_km,
-                    "Maximum Temperature": facilityData.temp_3000m_degC
+                    //"Maximum Temperature": facilityData.temp_3000m_degC
+                    "Maximum Temperature": 400
                 })
 
                 let summaryTable = $('<table class="mui-table mui-table--bordered"></table>')
