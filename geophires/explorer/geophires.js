@@ -10,19 +10,19 @@ class GeophiresParametersForm {
         this.$elt = $formElt
 
         $(this.$elt).submit(function () {
-            let params_request = {
+            let paramsRequest = {
                 'geophires_input_parameters': {}
             }
 
 
             $.map($($formElt).find('.geophires-parameters input[type="text"]'), function (value, index) {
                 if (value.name) {
-                    params_request['geophires_input_parameters'][value.name] = parseIfNumber(value.value)
+                    paramsRequest['geophires_input_parameters'][value.name] = parseIfNumber(value.value)
                 }
             })
 
-            console.log('Constructed params request object:', JSON.stringify(params_request))
-            onSubmit(params_request)
+            console.log('Constructed params request object:', JSON.stringify(paramsRequest))
+            onSubmit(paramsRequest)
 
             return false
         })
@@ -101,7 +101,7 @@ class GeophiresParametersForm {
 }
 
 class GeophiresTextInputParameters {
-    constructor($formElt) {
+    constructor($formElt, onSubmit) {
         $($formElt).append($(`
             <textarea rows="13"></textarea>
             <input type="submit"
@@ -112,7 +112,11 @@ class GeophiresTextInputParameters {
 
         let _this = this
         $($formElt).submit(function () {
-            console.log('text input as params obj', _this.getParameters())
+            let requestParams = {
+                'geophires_input_parameters': _this.getParameters()
+            }
+            console.log('text input as params obj', requestParams)
+            onSubmit(requestParams)
             return false
         })
     }

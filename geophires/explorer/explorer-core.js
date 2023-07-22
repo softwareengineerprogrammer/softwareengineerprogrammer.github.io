@@ -40,7 +40,7 @@ function submitForm(oFormElement) {
     }
 
     xhr.onerror = function () {
-        console.log('xhr onerror triggered',xhr)
+        console.log('xhr onerror triggered', xhr)
         setLoading(false)
         $('#results').append($('<span>&#9888;Unexpected GEOPHIRES error - could be caused by invalid GEOPHIRES parameters, i.e. Maximum Temperature > 400</span>'))
     }
@@ -63,7 +63,6 @@ function submitForm(oFormElement) {
 let params_form = null
 let params_text_input = null
 $(document).ready(function () {
-    params_text_input = new GeophiresTextInputParameters($('#geophires_text_input_parameters'))
     params_form = new GeophiresParametersForm(
         $('#geophires_param_form'),
         function (params) {
@@ -74,6 +73,16 @@ $(document).ready(function () {
                 .submit()
         }
     )
+
+    params_text_input = new GeophiresTextInputParameters(
+        $('#geophires_text_input_parameters'),
+        function (params) {
+            params_form.setInputParameters(params['geophires_input_parameters'])
+
+            $('textarea[name="geophires_input_parameters"]')
+                .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
+                .submit()
+        })
 
     const defaultParams = {
         "End-Use Option": 2,
