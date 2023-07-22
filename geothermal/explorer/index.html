@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geothermal Direct-Use Heat Explorer</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="lib/jquery-3.7.0.min.js"></script>
+    <script src="lib/jquery.csv.js"></script>
+    <link href="lib/mui.min.css" rel="stylesheet" type="text/css"/>
+    <script src="lib/mui.min.js"></script>
+
+
+    <link href="explorer.css" rel="stylesheet" type="text/css"/>
+
+    <script src="util.js"></script>
+    <script type="module" src="explorer-map.js"></script>
+    <script src="explorer-core.js"></script>
+    <script src="geophires.js"></script>
+
+</head>
+<body>
+
+<div class="mui-container">
+    <div class="mui-panel">
+
+        <h1 class="mui--text-title">Geothermal Direct-Use Heat Explorer</h1>
+
+        <div class="mui--text-body1">
+            <p>Click a facility on the map to see a pre-computed
+                GEOPHIRES<sup><a href="https://github.com/softwareengineerprogrammer/python-geophires-x"
+                                 target="_blank">&#8505;</a></sup> result.
+                Modify the parameters and re-run to get a new result.</p>
+            <p>Red markers indicate unit temperature plus 15&#8451; is available at 3000m. Saturation of blue
+                markers
+                indicates how close temps at 3000m are to unit temperature - darker blue = closer to unit temp</p>
+        </div>
+    </div>
+    <div class="mui-panel">
+
+        <div id="map"></div>
+
+        <div id="geophires-ui" class="mui-row">
+            <div class="mui-col-lg-6">
+
+                <h3>GEOPHIRES Parameters</h3>
+
+                <ul class="mui-tabs__bar">
+                    <li class="mui--is-active"><a data-mui-toggle="tab" data-mui-controls="pane-default-1">Guided</a>
+                    </li>
+                    <li><a data-mui-toggle="tab" data-mui-controls="pane-default-2">Text</a></li>
+                    <li><a data-mui-toggle="tab" data-mui-controls="pane-default-3">JSON</a></li>
+                </ul>
+                <div class="mui-tabs__pane mui--is-active" id="pane-default-1">
+                    <form
+                            id="geophires_param_form"
+                            method="POST"
+                            action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
+                    >
+
+                    </form>
+                </div>
+                <div class="mui-tabs__pane" id="pane-default-2">
+                    <form id="geophires_text_input_parameters">
+                        <!--                    <textarea rows="13"
+                                                      id="geophires_text_input_parameters"
+                                            ></textarea>-->
+                    </form>
+                </div>
+                <div class="mui-tabs__pane" id="pane-default-3">
+                    <form
+                            method="POST"
+                            action="https://xi0du897va.execute-api.us-west-2.amazonaws.com/"
+                            onsubmit="return submitForm(this);">
+                    <textarea id="geophires_input_parameters"
+                              name="geophires_input_parameters"
+                              class="mui-textfield"
+                              rows="13"
+                    ></textarea>
+                        <input type="submit"
+                               value="Run GEOPHIRES"
+                               class="mui-btn mui-btn--primary mui-btn--raised"/>
+                    </form>
+                </div>
+            </div>
+
+            <div id="results-container" class="mui-col-lg-6">
+                <h3>GEOPHIRES Summary/Result</h3>
+                <span id="loading" class="hidden">Running...</span>
+                <div id="results">Click a facility on the map to see its GEOPHIRES summary</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- prettier-ignore -->
+<script>(g => {
+    var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
+        b = window;
+    b = b[c] || (b[c] = {});
+    var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
+        u = () => h || (h = new Promise(async (f, n) => {
+            await (a = m.createElement("script"));
+            e.set("libraries", [...r] + "");
+            for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+            e.set("callback", c + ".maps." + q);
+            a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+            d[q] = f;
+            a.onerror = () => h = n(Error(p + " could not load."));
+            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+            m.head.append(a)
+        }));
+    d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+})
+({key: "AIzaSyAfrygB1fSNIi8qb_1AAK-Upmy0ZPjX55k", v: "beta"});
+</script>
+</body>
+</html>
