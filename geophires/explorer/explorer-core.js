@@ -56,19 +56,29 @@ function submitForm(oFormElement) {
 }
 
 let params_form = null
+let params_text_input = null
 $(document).ready(function () {
+    params_text_input = new GeophiresTextInputParameters($('#geophires_text_input_parameters'))
     params_form = new GeophiresParametersForm(
         $('#geophires_param_form'),
         function (params) {
-            $('textarea[name="geophires_input_parameters"]').val(JSON.stringify(params['geophires_input_parameters'], null, 4)).submit()
+            params_text_input.setInputParameters(params['geophires_input_parameters'])
+
+            $('textarea[name="geophires_input_parameters"]')
+                .val(JSON.stringify(params['geophires_input_parameters'], null, 4))
+                .submit()
         }
     )
-    params_form.setInputParameters({
+
+    const defaultParams = {
         "End-Use Option": 2,
         "Reservoir Model": 1,
         "Time steps per year": 6,
         "Reservoir Depth": 3,
         "Gradient 1": 50,
-        "Maximum Temperature": 300
-    })
+        "Maximum Temperature": 400
+    }
+
+    params_form.setInputParameters(defaultParams)
+    params_text_input.setInputParameters(defaultParams)
 })

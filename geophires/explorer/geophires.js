@@ -54,13 +54,6 @@ class GeophiresParametersForm {
             `).append($('<td>').append(removeButton)))
         }
 
-        elt.append(`
-                <input type="submit"
-                           value="Run GEOPHIRES"
-                           class="mui-btn mui-btn--primary mui-btn--raised" />
-                            <div class="mui-divider" style="clear:both;"></div>
-            <br/>
-        `)
         tbl.append(`
             <tr>
                 <td colspan="3">
@@ -71,7 +64,7 @@ class GeophiresParametersForm {
             </tr>
 
             <tr>
-                <td colspan="3">Add Parameter</td>
+                <td colspan="3"><legend>Add Parameter</legend></td>
             </tr>
             <tr>
                 <td>Name</td>
@@ -90,12 +83,49 @@ class GeophiresParametersForm {
                 this_.setInputParameters(this_.inputParameters)
             }
         })
+
+        elt.append(`
+                <div class="mui-divider"></div>
+                <br/>
+                <input type="submit"
+                           value="Run GEOPHIRES"
+                           class="mui-btn mui-btn--primary mui-btn--raised" />
+                            <div class="mui-divider" style="clear:both;"></div>
+        `)
     }
 
     _removeInputParameter(paramName) {
         delete this.inputParameters[paramName]
         this.setInputParameters(this.inputParameters)
     }
+}
 
+class GeophiresTextInputParameters {
+    constructor($formElt) {
+        $($formElt).append($(`
+            <textarea rows="13"></textarea>
+            <input type="submit"
+            value="Run GEOPHIRES"
+             class="mui-btn mui-btn--primary mui-btn--raised" />
+        `))
+        this.$textareaElt = $($formElt).find('textarea')
+        //this.setInputParameters(inputParametersObj)
+    }
 
+    setInputParameters(inputParametersObj){
+        this.inputParameters = inputParametersObj
+
+        let txt = this.getParametersText()
+        $(this.$textareaElt).val(txt)
+        return txt
+    }
+
+    getParametersText(){
+        let txt = ''
+        for(let paramName in this.inputParameters){
+            let paramValue = this.inputParameters[paramName]
+            txt += `${paramName}, ${paramValue}\n`
+        }
+        return txt
+    }
 }
