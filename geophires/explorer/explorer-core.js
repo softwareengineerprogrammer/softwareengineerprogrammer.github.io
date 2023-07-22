@@ -11,8 +11,6 @@ function setLoading(isLoading) {
 }
 
 function submitForm(oFormElement) {
-
-
     let parsed_params = JSON.parse(oFormElement.querySelector('textarea[name="geophires_input_parameters"]').value)
 
     let xhr = new XMLHttpRequest();
@@ -41,12 +39,19 @@ function submitForm(oFormElement) {
             .append(resultsTable)
     }
 
+    xhr.onerror = function () {
+        console.log('xhr onerror triggered',xhr)
+        setLoading(false)
+        $('#results').append($('<span>&#9888;Unexpected GEOPHIRES error - could be caused by invalid GEOPHIRES parameters, i.e. Maximum Temperature > 400</span>'))
+    }
+
     xhr.open(oFormElement.method, oFormElement.getAttribute("action"))
     xhr.send(JSON.stringify({
         'geophires_input_parameters': parsed_params
     }))
 
     setLoading(true)
+    $('#results').empty()
 
     //let hash_params = new URLSearchParams()
     //hash_params.set('geophires_input_parameters', JSON.stringify(parsed_params))

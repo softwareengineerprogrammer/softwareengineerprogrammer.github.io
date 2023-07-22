@@ -78,7 +78,7 @@ class GeophiresParametersForm {
         elt.append(tbl)
 
         $("#add_param_btn").on('click', function () {
-            if($('#add_param_name').val()) {
+            if ($('#add_param_name').val()) {
                 this_.inputParameters[$('#add_param_name').val()] = $('#add_param_value').val()
                 this_.setInputParameters(this_.inputParameters)
             }
@@ -109,23 +109,48 @@ class GeophiresTextInputParameters {
              class="mui-btn mui-btn--primary mui-btn--raised" />
         `))
         this.$textareaElt = $($formElt).find('textarea')
-        //this.setInputParameters(inputParametersObj)
+
+        let _this = this
+        $($formElt).submit(function () {
+            console.log('text input as params obj', _this.getParameters())
+            return false
+        })
     }
 
-    setInputParameters(inputParametersObj){
+    setInputParameters(inputParametersObj) {
         this.inputParameters = inputParametersObj
 
-        let txt = this.getParametersText()
+        let txt = this._getParametersText()
         $(this.$textareaElt).val(txt)
         return txt
     }
 
-    getParametersText(){
+    _getParametersText() {
         let txt = ''
-        for(let paramName in this.inputParameters){
+        for (let paramName in this.inputParameters) {
             let paramValue = this.inputParameters[paramName]
             txt += `${paramName}, ${paramValue}\n`
         }
         return txt
+    }
+
+    getParameters() {
+        let params = {}
+
+        let lines = $(this.$textareaElt).val().split('\n')
+        for (let l in lines) {
+            let line = lines[l].split(',')
+
+            if (line && line.length >= 2) {
+                let paramName = line[0].trim()
+                let paramValue = parseIfNumber(line[1].trim())
+                params[paramName] = paramValue
+            } else {
+                console.log('Skipping text input line:', line)
+            }
+
+        }
+
+        return params
     }
 }
