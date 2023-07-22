@@ -66,6 +66,11 @@ function submitForm(oFormElement) {
 let GUIDED_PARAMS_FORM = null
 let TEXT_INPUT_PARAMS_FORM = null
 
+function setFormInputParameters(inputParameterObj){
+    GUIDED_PARAMS_FORM.setInputParameters(inputParameterObj)
+    TEXT_INPUT_PARAMS_FORM.setInputParameters(inputParameterObj)
+}
+
 $(document).ready(function () {
     GUIDED_PARAMS_FORM = new GeophiresParametersForm(
         $('#geophires_param_form'),
@@ -105,6 +110,5 @@ $(document).ready(function () {
         defaultParams = JSON.parse(paramsFromHash)
     }
 
-    GUIDED_PARAMS_FORM.setInputParameters(defaultParams)
-    TEXT_INPUT_PARAMS_FORM.setInputParameters(defaultParams)
+    setFormInputParameters(defaultParams)
 })

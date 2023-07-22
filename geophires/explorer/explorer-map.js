@@ -136,7 +136,7 @@ initMap().then(async () => {
 
                 infoWindow.open(marker.map, marker);
 
-                GUIDED_PARAMS_FORM.setInputParameters(
+                setFormInputParameters(
                     {
                     "End-Use Option": 2,
                     "Reservoir Model": 1,
