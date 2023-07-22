@@ -152,6 +152,7 @@ initMap().then(async () => {
                 $(summaryTable).append(getTbody(facilityData.geophires_summary))
 
                 $('#results').empty()
+                    //.append(infoTable.clone())
                     .append(summaryTable)
             });
 
