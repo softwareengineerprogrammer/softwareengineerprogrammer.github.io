@@ -11,9 +11,15 @@ async function initMap() {
         lat: 38.937677322387735,
         lng: -112.81371837200508
     }
+
+    const archerDanielMidlandPosition = {
+        lat:	41.42,
+        lng:	-97.29
+    }
+
     map = new Map(document.getElementById("map"), {
         zoom: 4.5,
-        center: graymontCricketPosition,
+        center: archerDanielMidlandPosition,
         mapId: "geophires_direct_use_heat_explorer",
         mapTypeId: 'terrain',
         streetViewControl: false,
