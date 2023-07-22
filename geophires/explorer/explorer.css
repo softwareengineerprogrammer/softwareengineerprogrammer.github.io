@@ -15,3 +15,7 @@
 .null-value-row {
     color: #d3d3d3;
 }
+
+#geophires-ui {
+    min-height: 625px;
+}
