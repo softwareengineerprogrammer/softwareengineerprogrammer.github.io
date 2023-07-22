@@ -64,7 +64,7 @@ class GeophiresParametersForm {
             </tr>
 
             <tr>
-                <td colspan="3"><legend>Add Parameter</legend></td>
+                <td colspan="3"><legend>Add Parameter:</legend></td>
             </tr>
             <tr>
                 <td>Name</td>

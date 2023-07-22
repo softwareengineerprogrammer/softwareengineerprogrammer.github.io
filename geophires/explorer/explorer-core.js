@@ -6,8 +6,11 @@ function setLoading(isLoading) {
         loader.classList.add('hidden')
     }
 
-    setInputEnabled(document.querySelector('input[type="submit"]'), !isLoading)
-    setInputEnabled(document.querySelector('textarea'), !isLoading)
+    document.querySelectorAll('form input').forEach(
+        (sb) => setInputEnabled(sb, !isLoading))
+
+    document.querySelectorAll('form textarea').forEach(
+        (ta) => setInputEnabled(ta, !isLoading))
 }
 
 function submitForm(oFormElement) {
