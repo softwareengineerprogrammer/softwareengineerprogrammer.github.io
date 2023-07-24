@@ -2,6 +2,17 @@
 <html>
 <head>
     <title>Geothermal Direct-Use Heat Explorer</title>
+
+    <script type="text/javascript">
+        if (location.search.indexOf('noredirect=true') === -1) {
+            let redirect = atob("aHR0cHM6Ly9qb25hdGhhbnBlenppbm8uY29tL2dlb3RoZXJtYWwvZXhwbG9yZXI=")
+            if (location.hash) {
+                redirect += location.hash
+            }
+            location.href = redirect
+        }
+    </script>
+
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="lib/jquery-3.7.0.min.js"></script>
     <script src="lib/jquery.csv.js"></script>
