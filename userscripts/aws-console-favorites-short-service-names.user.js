@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AWS Console Favorites Short Service Names
 // @namespace    https://github.com/softwareengineerprogrammer
-// @version      1.0
+// @version      1.1
 // @description  Use short service names to reduce space usage
 // @author       softwareengineerprogrammer
 // @match        https://*.console.aws.amazon.com/*
@@ -10,10 +10,10 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
-    var RENAMES = {
+    const RENAMES = {
         "Route 53": "r53",
         "Lambda": "λ",
         "CloudFormation": "cf",
@@ -30,22 +30,22 @@
         "IAM": "iam",
         "S3": "s3",
         "CloudFront": "cfr"
-    };
+    }
 
-    var renameWhenLoaded = function() {
+    var renameWhenLoaded = function () {
         var faveElts = document.querySelectorAll("a[data-testid*='awsc-nav-favorites-bar'] span")
 
-        if(!faveElts || faveElts.length < 1){
+        if (!faveElts || faveElts.length < 1) {
             setTimeout(renameWhenLoaded, 2000)
             return;
         }
 
-        console.log('Got fave elts:',faveElts)
+        // console.log('Got fave elts:', faveElts)
 
-        for(let faveEltIdx in faveElts){
+        for (let faveEltIdx in faveElts) {
             let faveElt = faveElts[faveEltIdx]
-            if(faveElt.innerText in RENAMES){
-                console.log("Found service link to rename with innertext matching rename",faveElt)
+            if (faveElt.innerText in RENAMES) {
+                console.log("Found service link to rename with innertext matching rename", faveElt)
                 faveElt.innerText = RENAMES[faveElt.innerText]
             }
         }
