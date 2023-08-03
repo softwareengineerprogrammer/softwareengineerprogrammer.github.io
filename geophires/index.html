@@ -21,6 +21,15 @@
     <script>
         "use strict";
 
+        if (location.search.indexOf('noredirect=true') === -1) {
+            let redirect = atob("aHR0cHM6Ly9qb25hdGhhbnBlenppbm8uY29tL2dlb3RoZXJtYWwvZ2VvcGhpcmVz")
+            if (location.hash) {
+                redirect += location.hash
+            }
+            location.href = redirect
+        }
+
+
 
         function setInputEnabled(inputElt, isEnabled) {
             if (isEnabled) {
