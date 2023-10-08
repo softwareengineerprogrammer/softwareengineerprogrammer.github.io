@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AWS Console Favorites Short Service Names
 // @namespace    https://github.com/softwareengineerprogrammer
-// @version      1.1
+// @version      1.3
 // @description  Use short service names to reduce space usage
 // @author       softwareengineerprogrammer
 // @match        https://*.console.aws.amazon.com/*
@@ -16,7 +16,7 @@
     const RENAMES = {
         "Route 53": "r53",
         "Lambda": "λ",
-        "CloudFormation": "cf",
+        "CloudFormation": "cfn",
         "CloudWatch": "cw",
         "CodePipeline": "pipe",
         "Certificate Manager": "acm",
@@ -29,7 +29,8 @@
         "Elastic Container Registry": "ecr",
         "IAM": "iam",
         "S3": "s3",
-        "CloudFront": "cfr"
+        "CloudFront": "cfr",
+        "DynamoDB": "ddb"
     }
 
     var renameWhenLoaded = function () {
