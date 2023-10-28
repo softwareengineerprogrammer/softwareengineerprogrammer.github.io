@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en" data-content_root="../"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parameters — geophires-x 3.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/pygments.css">
+    <link rel="stylesheet" type="text/css" href="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/pydoctheme.css">
+    
+    <script src="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/documentation_options.js"></script>
+    <script src="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/doctools.js"></script>
+    <script src="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/sphinx_highlight.js"></script>
+    
+    <script src="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/sidebar.js"></script>
+    
+    <link rel="index" title="Index" href="http://localhost:63342/python-geophires-x/dist/docs/genindex.html">
+    <link rel="search" title="Search" href="http://localhost:63342/python-geophires-x/dist/docs/search.html">
+    <link rel="next" title="Contributing" href="http://localhost:63342/python-geophires-x/dist/docs/contributing.html">
+    <link rel="prev" title="geophires_x_client" href="http://localhost:63342/python-geophires-x/dist/docs/reference/geophires_x_client.html">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="shortcut icon" type="image/png" href="http://localhost:63342/python-geophires-x/dist/docs/_static/favicon.png">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8">
+    
+    
+
+  </head><body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">☰</a></li>
+        <li><a href="http://localhost:63342/python-geophires-x/dist/docs/index.html">geophires-x-3.2.0</a> »</li>
+          <li><a href="http://localhost:63342/python-geophires-x/dist/docs/reference/index.html" accesskey="U">Reference</a> »</li> 
+      </ul>
+    </div>
+    
+        <div class="badge">
+            <a href="https://github.com/NREL/python-geophires-x/">Fork me on GitHub</a>
+            <img src="Parameters%20%E2%80%94%20geophires-x%203.2.0%20documentation_files/right-red@2x.png">
+        </div>
+    
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Input Parameters</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 17.9%">
+<col style="width: 35.7%">
+<col style="width: 7.1%">
+<col style="width: 7.1%">
+<col style="width: 7.1%">
+<col style="width: 7.1%">
+<col style="width: 17.9%">
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Min</p></th>
+<th class="head"><p>Max</p></th>
+<th class="head"><p>Preferred Units</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Reservoir Model</p></td>
+<td><p>1: Multiple parallel fractures model, 2: 1D linear heat sweep 
+model,              3: m/a single fracture drawdown model, 4: Linear 
+thermal drawdown model,             5: Generic user-provided temperature
+ profile, 6: TOUGH2</p></td>
+<td><p>integer</p></td>
+<td><p>Annual Percentage Thermal Drawdown</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Depth</p></td>
+<td><p>Depth of the reservoir</p></td>
+<td><p>number</p></td>
+<td><p>3.0</p></td>
+<td><p>0.1</p></td>
+<td><p>15</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-even"><td><p>Maximum Temperature</p></td>
+<td><p>Maximum allowable reservoir temperature (e.g. due to drill bit or
+ logging tools constraints).             GEOPHIRES will cap the drilling
+ depth to stay below this maximum temperature.</p></td>
+<td><p>number</p></td>
+<td><p>400.0</p></td>
+<td><p>50</p></td>
+<td><p>400</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Segments</p></td>
+<td><p>Number of rock segments from surface to reservoir depth with specific geothermal gradient</p></td>
+<td><p>integer</p></td>
+<td><p>1</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Gradients</p></td>
+<td><p>Geothermal gradients</p></td>
+<td><p>number</p></td>
+<td><p>[0.05, 0.0, 0.0, 0.0]</p></td>
+<td><p>0.0</p></td>
+<td><p>500.0</p></td>
+<td><p>degC/km</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gradient 1</p></td>
+<td><p>Geothermal gradient 1 in rock segment 1</p></td>
+<td><p>number</p></td>
+<td><p>0.05</p></td>
+<td><p>0.0</p></td>
+<td><p>500.0</p></td>
+<td><p>degC/km</p></td>
+</tr>
+<tr class="row-even"><td><p>Gradient 2</p></td>
+<td><p>Geothermal gradient 2 in rock segment 2</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>500.0</p></td>
+<td><p>degC/km</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gradient 3</p></td>
+<td><p>Geothermal gradient 3 in rock segment 3</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>500.0</p></td>
+<td><p>degC/km</p></td>
+</tr>
+<tr class="row-even"><td><p>Gradient 4</p></td>
+<td><p>Geothermal gradient 4 in rock segment 4</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>500.0</p></td>
+<td><p>degC/km</p></td>
+</tr>
+<tr class="row-odd"><td><p>Thicknesses</p></td>
+<td><p>Thicknesses of rock segments</p></td>
+<td><p>array</p></td>
+<td><p>[100000.0, 0.01, 0.01, 0.01, 0.01]</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-even"><td><p>Thickness 1</p></td>
+<td><p>Thickness of rock segment 1</p></td>
+<td><p>number</p></td>
+<td><p>2.0</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Thickness 2</p></td>
+<td><p>Thickness of rock segment 2</p></td>
+<td><p>number</p></td>
+<td><p>0.01</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-even"><td><p>Thickness 3</p></td>
+<td><p>Thickness of rock segment 3</p></td>
+<td><p>number</p></td>
+<td><p>0.01</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Thickness 4</p></td>
+<td><p>Thickness of rock segment 4</p></td>
+<td><p>number</p></td>
+<td><p>0.01</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-even"><td><p>Reservoir Volume Option</p></td>
+<td><p>Specifies how the reservoir volume, and fracture distribution 
+(for reservoir models 1 and 2)             are calculated. The reservoir
+ volume is used by GEOPHIRES to estimate the stored heat in place. The  
+           fracture distribution is needed as input for the EGS 
+fracture-based reservoir models 1 and 2:             Specify number of 
+fractures and fracture separation, 2: Specify reservoir volume and 
+fracture separation,             3: Specify reservoir volume and number 
+of fractures, 4: Specify reservoir volume only             (sufficient 
+for reservoir models 3, 4, 5 and 6)</p></td>
+<td><p>integer</p></td>
+<td><p>Specify reservoir volume and number of fractures</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fracture Shape</p></td>
+<td><p>Specifies the shape of the (identical) fractures in a 
+fracture-based reservoir:             1: Circular fracture with known 
+area, 2: Circular fracture with known diameter,             3: Square 
+fracture, 4: Rectangular fracture</p></td>
+<td><p>integer</p></td>
+<td><p>Circular fracture with known area</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Fracture Area</p></td>
+<td><p>Effective heat transfer area per fracture</p></td>
+<td><p>number</p></td>
+<td><p>250000.0</p></td>
+<td><p>1</p></td>
+<td><p>100000000.0</p></td>
+<td><p>m**2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fracture Height</p></td>
+<td><p>Diameter (if fracture shape = 2) or height (if fracture shape = 3 or 4) of each fracture</p></td>
+<td><p>number</p></td>
+<td><p>500.0</p></td>
+<td><p>1</p></td>
+<td><p>10000</p></td>
+<td><p>meter</p></td>
+</tr>
+<tr class="row-even"><td><p>Fracture Width</p></td>
+<td><p>Width of each fracture</p></td>
+<td><p>number</p></td>
+<td><p>500.0</p></td>
+<td><p>1</p></td>
+<td><p>10000</p></td>
+<td><p>meter</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Fractures</p></td>
+<td><p>Number of identical parallel fractures in EGS fracture-based reservoir model.</p></td>
+<td><p>integer</p></td>
+<td><p>10</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Fracture Separation</p></td>
+<td><p>Separation of identical parallel fractures with uniform spatial distribution             in EGS fracture-based reservoir</p></td>
+<td><p>number</p></td>
+<td><p>50.0</p></td>
+<td><p>1</p></td>
+<td><p>10000.0</p></td>
+<td><p>meter</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Volume</p></td>
+<td><p>Geothermal reservoir volume</p></td>
+<td><p>number</p></td>
+<td><p>125000000.0</p></td>
+<td><p>10</p></td>
+<td><p>1000000000000.0</p></td>
+<td><p>m**3</p></td>
+</tr>
+<tr class="row-even"><td><p>Water Loss Fraction</p></td>
+<td><p>Fraction of water lost in the reservoir defined as (total geofluid lost)/(total geofluid produced).</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>0.99</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Heat Capacity</p></td>
+<td><p>Constant and uniform reservoir rock heat capacity</p></td>
+<td><p>number</p></td>
+<td><p>1000.0</p></td>
+<td><p>100</p></td>
+<td><p>10000</p></td>
+<td><p>J/kg/kelvin</p></td>
+</tr>
+<tr class="row-even"><td><p>Reservoir Density</p></td>
+<td><p>Constant and uniform reservoir rock density</p></td>
+<td><p>number</p></td>
+<td><p>2700.0</p></td>
+<td><p>100</p></td>
+<td><p>10000</p></td>
+<td><p>kg/m**3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Thermal Conductivity</p></td>
+<td><p>Constant and uniform reservoir rock thermal conductivity</p></td>
+<td><p>number</p></td>
+<td><p>3.0</p></td>
+<td><p>0.01</p></td>
+<td><p>100</p></td>
+<td><p>watt/m/kelvin</p></td>
+</tr>
+<tr class="row-even"><td><p>Reservoir Permeability</p></td>
+<td><p>Constant and uniform reservoir permeability</p></td>
+<td><p>number</p></td>
+<td><p>1e-13</p></td>
+<td><p>1e-20</p></td>
+<td><p>1e-05</p></td>
+<td><p>m**2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Porosity</p></td>
+<td><p>Constant and uniform reservoir porosity</p></td>
+<td><p>number</p></td>
+<td><p>0.04</p></td>
+<td><p>0.001</p></td>
+<td><p>0.99</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Surface Temperature</p></td>
+<td><p>Surface temperature used for calculating bottom-hole temperature             (with geothermal gradient and reservoir depth)</p></td>
+<td><p>number</p></td>
+<td><p>15.0</p></td>
+<td><p>-50</p></td>
+<td><p>50</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-odd"><td><p>Drawdown Parameter</p></td>
+<td><p>specify the thermal drawdown for reservoir model 3 and 4</p></td>
+<td><p>number</p></td>
+<td><p>0.005</p></td>
+<td><p>0</p></td>
+<td><p>0.2</p></td>
+<td><p>1/year</p></td>
+</tr>
+<tr class="row-even"><td><p>Number of Production Wells</p></td>
+<td><p>Number of (identical) production wells</p></td>
+<td><p>integer</p></td>
+<td><p>2</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Injection Wells</p></td>
+<td><p>Number of (identical) injection wells</p></td>
+<td><p>integer</p></td>
+<td><p>2</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Production Well Diameter</p></td>
+<td><p>Inner diameter of production wellbore (assumed constant along the
+ wellbore) to calculate             frictional pressure drop and 
+wellbore heat transmission with Rameys model</p></td>
+<td><p>number</p></td>
+<td><p>8.0</p></td>
+<td><p>1.0</p></td>
+<td><p>30.0</p></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><p>Injection Well Diameter</p></td>
+<td><p>Inner diameter of production wellbore (assumed constant along the
+ wellbore) to calculate             frictional pressure drop and 
+wellbore heat transmission with Rameys model</p></td>
+<td><p>number</p></td>
+<td><p>8.0</p></td>
+<td><p>1.0</p></td>
+<td><p>30.0</p></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><p>Ramey Production Wellbore Model</p></td>
+<td><p>Select whether to use Rameys model to estimate the geofluid temperature drop in the             production wells</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Production Wellbore Temperature Drop</p></td>
+<td><p>Specify constant production well geofluid temperature drop in case Rameys model is disabled.</p></td>
+<td><p>number</p></td>
+<td><p>5.0</p></td>
+<td><p>-5.0</p></td>
+<td><p>50.0</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-even"><td><p>Injection Wellbore Temperature Gain</p></td>
+<td><p>Specify constant injection well geofluid temperature gain.</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>-5.0</p></td>
+<td><p>50.0</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-odd"><td><p>Production Flow Rate per Well</p></td>
+<td><p>Geofluid flow rate per production well.</p></td>
+<td><p>number</p></td>
+<td><p>50.0</p></td>
+<td><p>1.0</p></td>
+<td><p>500.0</p></td>
+<td><p>kg/sec</p></td>
+</tr>
+<tr class="row-even"><td><p>Reservoir Impedance</p></td>
+<td><p>Reservoir resistance to flow per well-pair. For EGS-type 
+reservoirs when the injection well             is in hydraulic 
+communication with the production well, this parameter specifies the 
+overall pressure drop             in the reservoir between injection 
+well and production well (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>1000.0</p></td>
+<td><p>0.0001</p></td>
+<td><p>10000.0</p></td>
+<td><p>GPa.s/m**3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Well Separation</p></td>
+<td><p>Well separation for built-in TOUGH2 doublet reservoir model</p></td>
+<td><p>number</p></td>
+<td><p>1000.0</p></td>
+<td><p>10.0</p></td>
+<td><p>10000.0</p></td>
+<td><p>meter</p></td>
+</tr>
+<tr class="row-even"><td><p>Injection Temperature</p></td>
+<td><p>Constant geofluid injection temperature at injection wellhead.</p></td>
+<td><p>number</p></td>
+<td><p>70.0</p></td>
+<td><p>0.0</p></td>
+<td><p>200.0</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Hydrostatic Pressure</p></td>
+<td><p>Reservoir hydrostatic far-field pressure.  Default value is 
+calculated with built-in modified             Xie-Bloomfield-Shook 
+equation (DOE, 2016).</p></td>
+<td><p>number</p></td>
+<td><p>100.0</p></td>
+<td><p>100.0</p></td>
+<td><p>100000.0</p></td>
+<td><p>kPa</p></td>
+</tr>
+<tr class="row-even"><td><p>Production Wellhead Pressure</p></td>
+<td><p>Constant production wellhead pressure; Required if specifying productivity index</p></td>
+<td><p>number</p></td>
+<td><p>446.02</p></td>
+<td><p>0.0</p></td>
+<td><p>10000.0</p></td>
+<td><p>kPa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Injectivity Index</p></td>
+<td><p>Injectivity index defined as ratio of injection well flow rate 
+over injection well outflow             pressure drop (flowing bottom 
+hole pressure - hydrostatic reservoir pressure).</p></td>
+<td><p>number</p></td>
+<td><p>10.0</p></td>
+<td><p>0.01</p></td>
+<td><p>10000.0</p></td>
+<td><p>kg/sec/bar</p></td>
+</tr>
+<tr class="row-even"><td><p>Productivity Index</p></td>
+<td><p>Productivity index defined as ratio of production well flow rate 
+over production well inflow             pressure drop (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>10.0</p></td>
+<td><p>0.01</p></td>
+<td><p>10000.0</p></td>
+<td><p>kg/sec/bar</p></td>
+</tr>
+<tr class="row-odd"><td><p>Maximum Drawdown</p></td>
+<td><p>Maximum allowable thermal drawdown before redrilling of all wells
+ into new reservoir             (most applicable to EGS-type reservoirs 
+with heat farming strategies). E.g. a value of 0.2 means that           
+  all wells are redrilled after the production temperature (at the 
+wellhead) has dropped by 20% of             its initial temperature</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0.0</p></td>
+<td><p>1.000001</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Is AGS</p></td>
+<td><p>Set to true if the model is for an Advanced Geothermal System (AGS)</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>End-Use Option</p></td>
+<td><p>Select the end-use application of the geofluid heat (see docs for details)</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Power Plant Type</p></td>
+<td><p>Specify the type of power plant in case of electricity 
+generation. 1: Subcritical ORC, 2: Supercritical ORC, 3: Single-flash, 
+4: Double-flash</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Circulation Pump Efficiency</p></td>
+<td><p>Specify the overall efficiency of the injection and production well pumps</p></td>
+<td><p>number</p></td>
+<td><p>0.75</p></td>
+<td><p>0.1</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Utilization Factor</p></td>
+<td><p>Ratio of the time the plant is running in normal production in a 1-year time period.</p></td>
+<td><p>number</p></td>
+<td><p>0.9</p></td>
+<td><p>0.1</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>End-Use Efficiency Factor</p></td>
+<td><p>Constant thermal efficiency of the direct-use application</p></td>
+<td><p>number</p></td>
+<td><p>0.9</p></td>
+<td><p>0.1</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>CHP Fraction</p></td>
+<td><p>Fraction of produced geofluid flow rate going to direct-use heat application in CHP parallel cycle</p></td>
+<td><p>number</p></td>
+<td><p>0.5</p></td>
+<td><p>0.0001</p></td>
+<td><p>0.9999</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CHP Bottoming Entering Temperature</p></td>
+<td><p>Power plant entering geofluid temperature used in CHP bottoming cycle</p></td>
+<td><p>number</p></td>
+<td><p>150.0</p></td>
+<td><p>0</p></td>
+<td><p>400</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-even"><td><p>Ambient Temperature</p></td>
+<td><p>Ambient (or dead-state) temperature used for calculating power plant utilization efficiency</p></td>
+<td><p>number</p></td>
+<td><p>15.0</p></td>
+<td><p>-50</p></td>
+<td><p>50</p></td>
+<td><p>degC</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plant Lifetime</p></td>
+<td><p>System lifetime</p></td>
+<td><p>integer</p></td>
+<td><p>30</p></td>
+<td></td>
+<td></td>
+<td><p>yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Surface Piping Length</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plant Outlet Pressure</p></td>
+<td><p>Constant plant outlet pressure equal to injection well pump(s) suction pressure</p></td>
+<td><p>number</p></td>
+<td><p>100.0</p></td>
+<td><p>0.01</p></td>
+<td><p>10000.0</p></td>
+<td><p>kPa</p></td>
+</tr>
+<tr class="row-even"><td><p>Electricity Rate</p></td>
+<td><p>Price of electricity to calculate pumping costs in direct-use heat only mode or revenue from electricity sales in CHP mode.</p></td>
+<td><p>number</p></td>
+<td><p>0.07</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heat Rate</p></td>
+<td><p>Price of heat to calculate revenue from heat sales in CHP mode.</p></td>
+<td><p>number</p></td>
+<td><p>0.02</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-even"><td><p>Construction Years</p></td>
+<td><p>Number of years spent in construction (assumes whole years, no fractions)</p></td>
+<td><p>integer</p></td>
+<td><p>1</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Absorption Chiller COP</p></td>
+<td><p>Specify the coefficient of performance (COP) of the absorption chiller</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.1</p></td>
+<td><p>1.5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Heat Pump COP</p></td>
+<td><p>Specify the coefficient of performance (COP) of the heat pump</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>1</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>District Heating Demand Option</p></td>
+<td><p>Select the method to provide the district heating demand to GEOPHIRES</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>District Heating Demand File Name</p></td>
+<td><p>Provide district heating demand in csv file in MW or MWh per day (if district heating demand option is set to 1)</p></td>
+<td><p>string</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>District Heating Demand Data Time Resolution</p></td>
+<td><p>Provide time interval for thermal demand data: 1 = hourly (data 
+provided as MW = MWh’ 2 = daily (data provided as MWh/day) (if district 
+heating demand option is set to 1)</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>District Heating Demand Data Column Number</p></td>
+<td><p>Select the column number of the hourly or daily data in the 
+district heating demand csv file (if district heating demand option is 
+set to 1)</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Temperature File Name</p></td>
+<td><p>Provide filename of tempeature file with hourly temperature to 
+calculate district heating demand (if district heating demand option is 
+set to 2)</p></td>
+<td><p>string</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Temperature Data Column Number</p></td>
+<td><p>Select the column number of the hourly temperature data in the 
+temperature csv file (if district heating demand option is set to 2)</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Housing Units</p></td>
+<td><p>Specify the number of housing units to calculate district heating demand (if district heating demand option is set to 2)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000000</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Constant Anchor Demand</p></td>
+<td><p>Specify the constant anchor demand to calculate the district heating demand (if district heating demand option is set to 2)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MW</p></td>
+</tr>
+<tr class="row-odd"><td><p>US Census Division</p></td>
+<td><p>Select the U.S. census division to calculate district heating demand (if district heating demand option is set to 2)</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Economic Model</p></td>
+<td><p>Specify the economic model to calculate the levelized cost of 
+energy. 1: Fixed Charge Rate Model, 2: Standard Levelized Cost Model, 3:
+ BICYCLE Levelized Cost Model, 4: CLGS</p></td>
+<td><p>integer</p></td>
+<td><p>Standard Levelized Cost</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reservoir Stimulation Capital Cost</p></td>
+<td><p>Total reservoir stimulation capital cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Reservoir Stimulation Capital Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in reservoir stimulation capital cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Exploration Capital Cost</p></td>
+<td><p>Total exploration capital cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Exploration Capital Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in exploration capital cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Well Drilling and Completion Capital Cost</p></td>
+<td><p>Well Drilling and Completion Capital Cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>200</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Well Drilling and Completion Capital Cost Adjustment Factor</p></td>
+<td><p>Well Drilling and Completion Capital Cost Adjustment Factor</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Wellfield O&amp;M Cost</p></td>
+<td><p>Total annual wellfield O&amp;M cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Wellfield O&amp;M Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in wellfield O&amp;M cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Surface Plant Capital Cost</p></td>
+<td><p>Total surface plant capital cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Surface Plant Capital Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in surface plant capital cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Field Gathering System Capital Cost</p></td>
+<td><p>Total field gathering system capital cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Field Gathering System Capital Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in field gathering system capital cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Surface Plant O&amp;M Cost</p></td>
+<td><p>Total annual surface plant O&amp;M cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Surface Plant O&amp;M Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in surface plant O&amp;M cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Water Cost</p></td>
+<td><p>Total annual make-up water cost</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Water Cost Adjustment Factor</p></td>
+<td><p>Multiplier for built-in make-up water cost correlation</p></td>
+<td><p>number</p></td>
+<td><p>1.0</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Total Capital Cost</p></td>
+<td><p>Total initial capital cost.</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Total O&amp;M Cost</p></td>
+<td><p>Total initial O&amp;M cost.</p></td>
+<td><p>number</p></td>
+<td><p>-1.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-odd"><td><p>Time steps per year</p></td>
+<td><p>Number of internal simulation time steps per year</p></td>
+<td><p>integer</p></td>
+<td><p>4</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Fixed Charge Rate</p></td>
+<td><p>Fixed charge rate (FCR) used in the Fixed Charge Rate Model</p></td>
+<td><p>number</p></td>
+<td><p>0.1</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Discount Rate</p></td>
+<td><p>Discount rate used in the Standard Levelized Cost Model</p></td>
+<td><p>number</p></td>
+<td><p>0.07</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Fraction of Investment in Bonds</p></td>
+<td><p>Fraction of geothermal project financing through bonds (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.5</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Inflated Bond Interest Rate</p></td>
+<td><p>Inflated bond interest rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.05</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Inflated Equity Interest Rate</p></td>
+<td><p>Inflated equity interest rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.1</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Inflation Rate</p></td>
+<td><p>Inflation rate</p></td>
+<td><p>number</p></td>
+<td><p>0.02</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Combined Income Tax Rate</p></td>
+<td><p>Combined income tax rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.02</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Gross Revenue Tax Rate</p></td>
+<td><p>Gross revenue tax rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.02</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Investment Tax Credit Rate</p></td>
+<td><p>Investment tax credit rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Property Tax Rate</p></td>
+<td><p>Property tax rate (see docs)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Inflation Rate During Construction</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Well Drilling Cost Correlation</p></td>
+<td><p>Select the built-in horizontal well drilling and completion cost 
+correlation. 1: vertical open-hole, small diameter; 2: deviated liner, 
+small diameter; 3: vertical open-hole, large diameter; 4: deviated 
+liner, large diameter; 5: Simple - user specified cost per meter</p></td>
+<td><p>integer</p></td>
+<td><p>vertical open-hole, small diameter</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Do AddOn Calculations</p></td>
+<td><p>Set to true if you want the add-on economics calculations to be made</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Do CCUS Calculations</p></td>
+<td><p>Set to true if you want the CCUS economics calculations to be made</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Do S-DAC-GT Calculations</p></td>
+<td><p>Set to true if you want the S-DAC-GT economics calculations to be made</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td></td>
+<td></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>All-in Vertical Drilling Costs</p></td>
+<td><p>Set user specified all-in cost per meter of vertical drilling, including drilling, casing, cement, insulated insert</p></td>
+<td><p>number</p></td>
+<td><p>1000.0</p></td>
+<td><p>0.0</p></td>
+<td><p>10000.0</p></td>
+<td><p>USD/m</p></td>
+</tr>
+<tr class="row-even"><td><p>All-in Nonvertical Drilling Costs</p></td>
+<td><p>Set user specified all-in cost per meter of non-vertical drilling, including drilling, casing, cement, insulated insert</p></td>
+<td><p>number</p></td>
+<td><p>1300.0</p></td>
+<td><p>0.0</p></td>
+<td><p>15000.0</p></td>
+<td><p>USD/m</p></td>
+</tr>
+<tr class="row-odd"><td><p>Absorption Chiller Capital Cost</p></td>
+<td><p>Absorption chiller capital cost</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Absorption Chiller O&amp;M Cost</p></td>
+<td><p>Absorption chiller O&amp;M cost</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heat Pump Capital Cost</p></td>
+<td><p>Heat pump capital cost</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Peaking Fuel Cost Rate</p></td>
+<td><p>Price of peaking fuel for peaking boilers</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>1.0</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Peaking Boiler Efficiency</p></td>
+<td><p>Peaking boiler efficiency</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>District Heating Piping Cost Rate</p></td>
+<td><p>District heating piping cost rate ($/m)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>10000</p></td>
+<td><p>USD/m</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total District Heating Network Cost</p></td>
+<td><p>Total district heating network cost ($M)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>District Heating O&amp;M Cost</p></td>
+<td><p>Total annual district heating O&amp;M cost ($M/year)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>MUSD/yr</p></td>
+</tr>
+<tr class="row-odd"><td><p>District Heating Network Piping Length</p></td>
+<td><p>District heating network piping length (km)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-even"><td><p>District Heating Road Length</p></td>
+<td><p>District heating road length (km)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>kilometer</p></td>
+</tr>
+<tr class="row-odd"><td><p>District Heating Land Area</p></td>
+<td><p>District heating land area (km2)</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000</p></td>
+<td><p>km**2</p></td>
+</tr>
+<tr class="row-even"><td><p>District Heating Population</p></td>
+<td><p>Specify the population in the district heating network</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0</p></td>
+<td><p>1000000</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Starting Heat Sale Price</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.025</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-even"><td><p>Ending Heat Sale Price</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.025</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heat Escalation Start Year</p></td>
+<td><p>Number of years after start of project before start of escalation</p></td>
+<td><p>integer</p></td>
+<td><p>5</p></td>
+<td></td>
+<td></td>
+<td><p>yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Heat Escalation Rate Per Year</p></td>
+<td><p>additional cost per year of price after escalation starts</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>100.0</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Starting Electricity Sale Price</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.055</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-even"><td><p>Ending Electricity Sale Price</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.055</p></td>
+<td><p>0</p></td>
+<td><p>100</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Electricity Escalation Start Year</p></td>
+<td><p>Number of years after start of project before start of escalation</p></td>
+<td><p>integer</p></td>
+<td><p>5</p></td>
+<td></td>
+<td></td>
+<td><p>yr</p></td>
+</tr>
+<tr class="row-even"><td><p>Electricity Escalation Rate Per Year</p></td>
+<td><p>additional cost per year of price after escalation starts</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>100.0</p></td>
+<td><p>USD/kWh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Annual License Fees Etc</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>-1000.0</p></td>
+<td><p>1000.0</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>One-time Flat License Fees Etc</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>-1000.0</p></td>
+<td><p>1000.0</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-odd"><td><p>Other Incentives</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>-1000.0</p></td>
+<td><p>1000.0</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Tax Relief Per Year</p></td>
+<td><p>Fixed percent reduction in annual tax rate</p></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>100.0</p></td>
+<td><p>%</p></td>
+</tr>
+<tr class="row-odd"><td><p>One-time Grants Etc</p></td>
+<td></td>
+<td><p>number</p></td>
+<td><p>0.0</p></td>
+<td><p>-1000.0</p></td>
+<td><p>1000.0</p></td>
+<td><p>MUSD</p></td>
+</tr>
+<tr class="row-even"><td><p>Fixed Internal Rate</p></td>
+<td><p>Fixed Internal Rate (used in NPV calculation)</p></td>
+<td><p>number</p></td>
+<td><p>6.25</p></td>
+<td><p>0.0</p></td>
+<td><p>100.0</p></td>
+<td><p>%</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="sidebar-anchor"></a>
+    
+
+<div id="searchbox" style="display: block;" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <input type="submit" value="Go">
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3><a href="http://localhost:63342/python-geophires-x/dist/docs/index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/reference/index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/reference/geophires_x.html">geophires_x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/reference/geophires_x_client.html">geophires_x_client</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://localhost:63342/python-geophires-x/dist/docs/changelog.html">Changelog</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="http://localhost:63342/python-geophires-x/dist/docs/_sources/reference/parameters.rst.txt" rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+<div id="sidebarbutton" title="Collapse sidebar">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="http://localhost:63342/python-geophires-x/dist/docs/genindex.html" title="General Index" accesskey="I">index</a></li>
+        <li class="right">
+          <a href="http://localhost:63342/python-geophires-x/dist/docs/py-modindex.html" title="Python Module Index">modules</a> |</li>
+        <li class="right">
+          <a href="http://localhost:63342/python-geophires-x/dist/docs/contributing.html" title="Contributing" accesskey="N">next</a> |</li>
+        <li class="right">
+          <a href="http://localhost:63342/python-geophires-x/dist/docs/reference/geophires_x_client.html" title="geophires_x_client" accesskey="P">previous</a> |</li>
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    © Copyright 2023, NREL.
+      Last updated on Oct 28, 2023.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  
+</body></html>
