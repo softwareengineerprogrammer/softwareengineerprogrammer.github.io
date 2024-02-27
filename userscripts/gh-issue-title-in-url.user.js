@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         GH Issue Title in URL
 // @namespace    http://github.com/softwareengineerprogrammer
-// @version      2024-02-22
+// @version      1.0
 // @description  Automatically add descriptive title query parameter to GitHub issue URLs to make them human-readable/referenceable
 // @author       softwareengineerprogrammer
 // @match        https://github.com/*/issues/*
 // @match        https://github.com/*/*/issues/*
 // @grant        none
+// @updateURL https://softwareengineerprogrammer.github.io/userscripts/gh-issue-title-in-url.user.js
+// @downloadURL https://softwareengineerprogrammer.github.io/userscripts/gh-issue-title-in-url.user.js
 // ==/UserScript==
 
 (function() {
