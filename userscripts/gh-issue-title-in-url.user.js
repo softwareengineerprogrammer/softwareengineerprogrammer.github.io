@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GH Issue Title in URL
 // @namespace    http://github.com/softwareengineerprogrammer
-// @version      1.1
+// @version      1.2
 // @description  Automatically add descriptive title query parameter to GitHub issue URLs to make them human-readable/referenceable
 // @author       softwareengineerprogrammer
 // @match        https://github.com/*/issues/*
@@ -34,8 +34,8 @@
         const customReplacements = new Map([
             [' ', '+'],
             ['`', ''],
-            ['<', 'gt'],
-            ['>', 'lt'],
+            ['<', 'lt'],
+            ['>', 'gt'],
             ['℃', 'C']
         ])
         customReplacements.forEach(function (value, key, map) {
