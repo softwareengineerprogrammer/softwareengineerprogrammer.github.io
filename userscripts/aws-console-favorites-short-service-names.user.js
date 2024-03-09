@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AWS Console Favorites Short Service Names
 // @namespace    https://github.com/softwareengineerprogrammer
-// @version      1.3
+// @version      1.4
 // @description  Use short service names to reduce space usage
 // @author       softwareengineerprogrammer
 // @match        https://*.console.aws.amazon.com/*
@@ -29,7 +29,7 @@
         "Elastic Container Registry": "ecr",
         "IAM": "iam",
         "S3": "s3",
-        "CloudFront": "cfr",
+        "CloudFront": "cdn",
         "DynamoDB": "ddb"
     }
 
@@ -37,11 +37,12 @@
         var faveElts = document.querySelectorAll("a[data-testid*='awsc-nav-favorites-bar'] span")
 
         if (!faveElts || faveElts.length < 1) {
+            console.debug('Didn\'t find fave elts, will retry', faveElts)
             setTimeout(renameWhenLoaded, 2000)
             return;
         }
 
-        // console.log('Got fave elts:', faveElts)
+        console.debug('Got fave elts:', faveElts)
 
         for (let faveEltIdx in faveElts) {
             let faveElt = faveElts[faveEltIdx]
@@ -50,6 +51,7 @@
                 faveElt.innerText = RENAMES[faveElt.innerText]
             }
         }
+
     }
 
     setTimeout(renameWhenLoaded, 2000)
