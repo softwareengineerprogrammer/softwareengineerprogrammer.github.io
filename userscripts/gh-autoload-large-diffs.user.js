@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Autoload Large Diffs
 // @namespace    http://github.com/softwareengineerprogrammer
-// @version      0.1
+// @version      0.2
 // @description  I want to see large diffs
 // @author       softwareengineerprogrammer
 // @match        https://github.com/*/*/pull/*/files*
@@ -13,8 +13,22 @@
 (function() {
     'use strict';
 
-    setTimeout(function(){
-        document.querySelectorAll('button.load-diff-button').forEach(it => {
+    const max_tries = 5
+
+    let autoloadLargeDiffs = function(tries){
+        let diffBtns = document.querySelectorAll('button.load-diff-button')
+
+        if(!diffBtns.length){
+            if(tries < max_tries){
+                setTimeout(function(){autoloadLargeDiffs(tries+1)}, 2000);
+            }else{
+                console.debug('did not find any large diff buttons')
+            }
+
+            return
+        }
+
+        diffBtns.forEach(it => {
             let doLoad = true;
             try{
                 let viewedElt = it.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector('form.js-toggle-user-reviewed-file-form input[value="viewed"]')
@@ -29,5 +43,6 @@
                 it.click()
             }
         });
-    }, 2000);
+    }
+    setTimeout(function(){autoloadLargeDiffs(0)}, 2000);
 })();
