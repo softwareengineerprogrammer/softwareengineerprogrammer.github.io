@@ -1,4 +1,134 @@
-There's nothing here. You might be looking for
-<a href="https://github.com/softwareengineerprogrammer">github.com/softwareengineerprogrammer</a>
-or <a href="https://softwareengineerprogrammer.github.io/GEOPHIRES">softwareengineerprogrammer.github.io/GEOPHIRES</a>
-instead.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineer Programmer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --accent-color: #00aaff;
+            --card-background: #2c2c2c;
+            --card-border: #444444;
+            --card-hover-border: var(--accent-color);
+        }
+
+        /* --- General Body & Layout --- */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        /* --- Main Content Container --- */
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+        }
+
+        /* --- Link Cards Layout --- */
+        .links-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap; /* Allows cards to stack on smaller screens */
+        }
+
+        /* --- Individual Link Card Styling --- */
+        .card {
+            background-color: var(--card-background);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-color);
+            width: 300px;
+            max-width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-hover-border);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0;
+            color: #b0b0b0;
+        }
+
+        /* --- Responsive Design Adjustments --- */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .tagline {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<main class="container">
+    <header>
+        <h1>softwareengineerprogrammer</h1>
+        <p class="tagline">This page is intentionally left blank. Mostly.</p>
+    </header>
+
+    <section class="links-container">
+        <a href="https://github.com/softwareengineerprogrammer" class="card" target="_blank" rel="noopener noreferrer">
+            <h2>GitHub Profile</h2>
+            <p>Explore my repositories, contributions, and open-source projects.</p>
+        </a>
+        <a href="https://softwareengineerprogrammer.github.io/GEOPHIRES" class="card" target="_blank" rel="noopener noreferrer">
+            <h2>GEOPHIRES Documentation</h2>
+            <p>Go to GEOPHIRES documentation.</p>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>
