@@ -1,23 +1,125 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>userscripts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Userscripts</title>
+    <style>
+        :root {
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --heading-color: #000;
+            --link-color: #0056b3;
+            --link-hover-color: #003d82;
+            --border-color: #dee2e6;
+            --item-background-color: #fff;
+            --item-hover-background-color: #f1f3f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+            "Segoe UI Symbol";
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--heading-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+            text-decoration: underline;
+        }
+
+        .userscript-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: userscript-counter;
+        }
+
+        .userscript-list li {
+            background-color: var(--item-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            counter-increment: userscript-counter;
+        }
+
+        .userscript-list li:hover {
+            background-color: var(--item-hover-background-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .userscript-list a {
+            display: block;
+            padding: 1.25rem 1.5rem;
+            font-size: 1.1rem;
+            font-family: inherit;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .userscript-list a::before {
+            content: counter(userscript-counter) ". ";
+            color: var(--text-color);
+            font-weight: 600;
+            margin-right: 0.75rem;
+        }
+
+        .userscript-list a:hover {
+            text-decoration: none;
+            color: var(--link-color);
+        }
+    </style>
 </head>
 <body>
-<h1>Userscripts</h1>
-<p>
-    To use, <a href="https://www.tampermonkey.net/" target="_blank">install Tampermonkey</a>, then click a userscript
-    link below.
-</p>
-<ol style="font-family: monospace;">
-    <li>
-        <a href="aws-console-favorites-short-service-names.user.js">aws-console-favorites-short-service-names.user.js</a>
-    </li>
-    <li>
-        <a href="gh-issue-title-in-url.user.js">gh-issue-title-in-url.user.js</a>
-    </li>
-    <li>
-        <a href="gh-autoload-large-diffs.user.js">gh-autoload-large-diffs.user.js</a>
-    </li>
-</ol>
+
+<main class="container">
+    <h1>Userscripts</h1>
+    <p>
+        To use, <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">install Tampermonkey</a>, then click a userscript
+        link below.
+    </p>
+
+    <ol class="userscript-list">
+        <li>
+            <a href="aws-console-favorites-short-service-names.user.js">AWS Console Favorites Short Service Names</a>
+        </li>
+        <li>
+            <a href="gh-issue-title-in-url.user.js">GitHub Issue Title in URL</a>
+        </li>
+        <li>
+            <a href="gh-autoload-large-diffs.user.js">GitHub Autoload Large Diffs</a>
+        </li>
+    </ol>
+</main>
+
 </body>
 </html>
