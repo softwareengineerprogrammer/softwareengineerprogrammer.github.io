@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickleball Open Play Simulation Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #6c757d;
+            --border-color: #e0e0e0;
+            --color-g1: #36a2eb; /* Blue */
+            --color-g2: #ff9f40; /* Orange */
+            --color-g3: #4bc0c0; /* Green */
+            --color-g4: #ff6384; /* Red */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Config Widget */
+        .config-widget {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .config-widget h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .config-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .config-item {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .config-footnote {
+            display: block;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .chart-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chart-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .canvas-container {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="header">
+        <h1>Pickleball Open Play Simulation Metrics</h1>
+        <p>Interactive Static Preview (Live WASM/WebWorker Engine Pending)</p>
+    </div>
+
+    <div class="config-widget">
+        <h3>Simulation Configuration Parameters</h3>
+        <div class="config-details">
+            <div class="config-item">Facility Open Time: 720 mins</div>
+            <div class="config-item">Player Stay Duration: Uniform Dist (30-240 mins, Avg: 135)</div>
+            <div class="config-item">Game Time: Normal Dist (Mean: 15 mins, StdDev: 5)</div>
+            <div class="config-item">Players per Game: 4</div>
+        </div>
+        <span class="config-footnote">* Players per court indicates how many players are simultaneously present on average</span>
+    </div>
+
+    <div class="charts-grid">
+        <!-- Chart 1: Avg Games -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">Average Games per Player</div>
+                <div class="chart-subtitle">(100 Sims/Scenario)</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="chartAvgGames"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 2: Avg Time -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">Average Play Time per Player</div>
+                <div class="chart-subtitle">(100 Sims/Scenario)</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="chartAvgTime"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 3: Std Dev Games -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">Std Dev: Games per Player</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="chartStdGames"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 4: Std Dev Time -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">Std Dev: Play Time</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="chartStdTime"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------------------------------------------------------
+    // 1. Data Generation (Mimicking Python Monte Carlo outputs)
+    // ---------------------------------------------------------
+    const courts = Array.from({length: 26}, (_, i) => i + 1);
+    
+    // Helper to generate asymptotic curves mimicking M/M/c pooling efficiencies
+    function generateCurve(baseline, asymptote, rate, courtsArray, noise = 0) {
+        return courtsArray.map(c => {
+            const val = asymptote - (asymptote - baseline) * Math.exp(-rate * c);
+            return val + (Math.random() * noise - noise/2);
+        });
+    }
+
+    const datasetsInfo = [
+        { label: '1-3 players/court', color: '#36a2eb', pointStyle: 'circle' },
+        { label: '4-7 players/court', color: '#ff9f40', pointStyle: 'rect' },
+        { label: '8-10 players/court', color: '#4bc0c0', pointStyle: 'triangle' },
+        { label: '11-14 players/court', color: '#ff6384', pointStyle: 'rectRot' }
+    ];
+
+    // Simulated data aligned with previous mathematical results
+    const dataAvgGames = [
+        generateCurve(1.5, 2.8, 0.15, courts),
+        generateCurve(3.5, 4.8, 0.20, courts),
+        generateCurve(5.2, 6.3, 0.25, courts),
+        generateCurve(6.5, 7.6, 0.30, courts)
+    ];
+
+    const dataAvgTime = [
+        generateCurve(25, 45, 0.15, courts),
+        generateCurve(55, 75, 0.20, courts),
+        generateCurve(80, 98, 0.25, courts),
+        generateCurve(105, 118, 0.30, courts)
+    ];
+
+    // StdDevs decrease as pooling efficiency smooths out variance
+    const dataStdGames = [
+        generateCurve(1.2, 0.6, 0.2, courts),
+        generateCurve(1.0, 0.5, 0.25, courts),
+        generateCurve(0.8, 0.4, 0.3, courts),
+        generateCurve(0.7, 0.35, 0.35, courts)
+    ];
+
+    const dataStdTime = [
+        generateCurve(20, 12, 0.2, courts),
+        generateCurve(16, 10, 0.25, courts),
+        generateCurve(14, 8, 0.3, courts),
+        generateCurve(12, 7, 0.35, courts)
+    ];
+
+    // ---------------------------------------------------------
+    // 2. Chart Configuration Helpers
+    // ---------------------------------------------------------
+    function createDatasets(dataMatrix, isDashed = false) {
+        return datasetsInfo.map((info, idx) => ({
+            label: info.label,
+            data: dataMatrix[idx],
+            borderColor: info.color,
+            backgroundColor: info.color,
+            pointStyle: info.pointStyle,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            fill: false,
+            tension: 0.3, // slight curve smoothing
+            borderDash: isDashed ? [5, 5] : []
+        }));
+    }
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { usePointStyle: true, boxWidth: 8, font: { size: 12 } }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                titleColor: '#333',
+                bodyColor: '#666',
+                borderColor: '#e0e0e0',
+                borderWidth: 1,
+                padding: 10,
+                boxPadding: 4,
+                usePointStyle: true
+            }
+        },
+        scales: {
+            x: {
+                title: { display: true, text: 'Number of Courts', font: { weight: 'bold' } },
+                grid: { color: '#f0f0f0' }
+            },
+            y: {
+                grid: { color: '#f0f0f0' }
+            }
+        }
+    };
+
+    // ---------------------------------------------------------
+    // 3. Render Charts
+    // ---------------------------------------------------------
+    
+    // Avg Games Chart
+    new Chart(document.getElementById('chartAvgGames'), {
+        type: 'line',
+        data: { labels: courts, datasets: createDatasets(dataAvgGames) },
+        options: {
+            ...commonOptions,
+            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Avg Games' } } }
+        }
+    });
+
+    // Avg Time Chart
+    new Chart(document.getElementById('chartAvgTime'), {
+        type: 'line',
+        data: { labels: courts, datasets: createDatasets(dataAvgTime) },
+        options: {
+            ...commonOptions,
+            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Avg Minutes Playing' } } }
+        }
+    });
+
+    // Std Dev Games Chart
+    new Chart(document.getElementById('chartStdGames'), {
+        type: 'line',
+        data: { labels: courts, datasets: createDatasets(dataStdGames, true) },
+        options: {
+            ...commonOptions,
+            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Standard Deviation (Games)' } } }
+        }
+    });
+
+    // Std Dev Time Chart
+    new Chart(document.getElementById('chartStdTime'), {
+        type: 'line',
+        data: { labels: courts, datasets: createDatasets(dataStdTime, true) },
+        options: {
+            ...commonOptions,
+            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Standard Deviation (Minutes)' } } }
+        }
+    });
+</script>
+
+</body>
+</html>
