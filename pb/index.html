@@ -3,354 +3,2393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickleball Open Play Simulation Metrics</title>
+    <title>Pickleball Open Play Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-muted: #6c757d;
-            --border-color: #e0e0e0;
-            --color-g1: #36a2eb; /* Blue */
-            --color-g2: #ff9f40; /* Orange */
-            --color-g3: #4bc0c0; /* Green */
-            --color-g4: #ff6384; /* Red */
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --surface-subtle: #f8fafc;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --danger: #ef4444;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 48px;
         }
 
-        .dashboard-container {
-            max-width: 1400px;
+        /* Top App Header */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar-inner {
+            max-width: 1440px;
             margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            margin-top: 5px;
-            font-size: 14px;
-        }
-
-        /* Config Widget */
-        .config-widget {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .config-widget h3 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .config-details {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            font-weight: 500;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
         }
 
-        .config-item {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #e9ecef;
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
         }
 
-        .config-footnote {
-            display: block;
-            margin-top: 12px;
-            font-size: 12px;
+        .container {
+            max-width: 1440px;
+            margin: 20px auto 0;
+            padding: 0 24px;
+        }
+
+        /* Main Control Panel */
+        .control-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 22px 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Row 1: User-Friendly Mode Cards */
+        .mode-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .mode-card {
+            border: 1.5px solid var(--border);
+            background: var(--surface-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            font-family: inherit;
+        }
+
+        .mode-card:hover:not(.active) {
+            border-color: var(--border-strong);
+            background: #f1f5f9;
+        }
+
+        .mode-card.active {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        .mode-card-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mode-card.active .mode-card-title {
+            color: var(--primary);
+        }
+
+        .mode-card-desc {
+            font-size: 0.79rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Row 2: Sliders & Segmented Options Grid */
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 18px;
+            align-items: end;
+        }
+
+        .col-span-3 {
+            grid-column: span 3;
+        }
+
+        @media (max-width: 1150px) {
+            .col-span-3 {
+                grid-column: span 6;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .col-span-3 {
+                grid-column: span 12;
+            }
+        }
+
+        .control-block {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .control-block.hidden {
+            display: none;
+        }
+
+        .control-label {
+            font-size: 0.75rem;
+            font-weight: 600;
             color: var(--text-muted);
-            font-style: italic;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-label .label-title {
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .control-label span.val-badge {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.78rem;
+            background: var(--primary-soft);
+            padding: 2px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Segmented Toggle Buttons */
+        .segmented {
+            display: flex;
+            background: var(--bg);
+            padding: 3px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            gap: 3px;
+            width: 100%;
+        }
+
+        .segmented button {
+            flex: 1 1 auto;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 7px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .segmented button:hover:not(.active) {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .segmented button.active {
+            background: var(--surface);
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Slider + Number Hybrid Input */
+        .range-hybrid {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 5px 10px;
+            height: 38px;
+        }
+
+        .range-hybrid input[type="range"] {
+            flex: 1;
+            accent-color: var(--primary);
+            cursor: pointer;
+            height: 5px;
+            min-width: 60px;
+        }
+
+        .range-hybrid input[type="number"] {
+            width: 58px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 3px 6px;
+            font-family: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        /* Action Bar & Advanced Drawer Toggle */
+        .toolbar-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .action-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            padding: 9px 18px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 2px rgba(37, 99, 235, 0.25);
+            transition: background 0.15s, transform 0.05s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--surface-subtle);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg);
+            color: var(--text);
+            border-color: var(--border-strong);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Progress & Status Pill */
+        .status-cluster {
+            flex: 1;
+            min-width: 240px;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            border-radius: 999px;
+            transition: width 0.08s linear;
+        }
+
+        .status-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.77rem;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Collapsible Advanced Drawer */
+        .advanced-drawer {
+            display: none;
+            margin-top: 16px;
+            padding: 16px 18px;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        .advanced-drawer.open {
+            display: block;
+        }
+
+        .adv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .adv-header h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
+        }
+
+        .adv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+        }
+
+        .adv-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .adv-field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .adv-field input {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.86rem;
+            font-weight: 500;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .adv-hint {
+            margin-top: 10px;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        /* KPI + Animated Mascot Ribbon (Strictly Fixed Height — Never Jumps) */
+        .summary-ribbon {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 980px) {
+            .summary-ribbon {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cute SVG Player Mood Card — Locked 108px Height */
+        .mascot-card {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            height: 108px;
+            min-height: 108px;
+            max-height: 108px;
+            transition: border-color 0.2s, background-color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mascot-stage {
+            width: 76px;
+            height: 80px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mascot-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+            min-width: 0;
+            flex: 1;
+            height: 82px;
+            overflow: hidden;
+        }
+
+        .mascot-badge {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 7px;
+            border-radius: 999px;
+            width: fit-content;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .mascot-headline {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mascot-sub {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.6em; /* Reserves exact 2-line vertical space at all times */
+        }
+
+        /* SVG Character Keyframe Animations */
+        @keyframes bounceHappy {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(2deg); }
+        }
+
+        @keyframes swayCalm {
+            0%, 100% { transform: translateY(0px) rotate(-0.8deg); }
+            50% { transform: translateY(-1.5px) rotate(1deg); }
+        }
+
+        @keyframes tapFoot {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-14deg) translateY(-2px); }
+        }
+
+        @keyframes slumpSad {
+            0%, 100% { transform: translateY(2.5px) rotate(-2deg); }
+            50% { transform: translateY(4px) rotate(-3.5deg); }
+        }
+
+        @keyframes shiverCry {
+            0%, 100% { transform: translate(0px, 3.5px) rotate(-3deg); }
+            25% { transform: translate(-1.2px, 4px) rotate(-4deg); }
+            75% { transform: translate(1.2px, 3.5px) rotate(-2deg); }
+        }
+
+        @keyframes tearFall {
+            0% { transform: translateY(0px); opacity: 0.95; }
+            80% { opacity: 0.95; }
+            100% { transform: translateY(13px); opacity: 0; }
+        }
+
+        @keyframes paddleWave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-16deg); }
+        }
+
+        #mascotSvg .char-body {
+            transform-origin: 50px 75px;
+            transition: transform 0.25s ease;
+        }
+
+        #mascotSvg .paddle-arm {
+            transform-origin: 70px 52px;
+            transition: transform 0.25s ease;
+        }
+
+        #mascotSvg .right-foot {
+            transform-origin: 58px 86px;
+        }
+
+        #mascotSvg .tear {
+            opacity: 0;
+        }
+
+        /* Mood-Specific Animation Bindings */
+        .mood-neutral #mascotSvg .char-body {
+            animation: none;
+        }
+
+        .mood-ecstatic #mascotSvg .char-body {
+            animation: bounceHappy 0.65s infinite ease-in-out;
+        }
+        .mood-ecstatic #mascotSvg .paddle-arm {
+            animation: paddleWave 0.65s infinite ease-in-out;
+        }
+
+        .mood-happy #mascotSvg .char-body {
+            animation: swayCalm 1.6s infinite ease-in-out;
+        }
+
+        .mood-impatient #mascotSvg .right-foot {
+            animation: tapFoot 0.45s infinite ease-in-out;
+        }
+
+        .mood-sad #mascotSvg .char-body {
+            animation: slumpSad 2.2s infinite ease-in-out;
+        }
+        .mood-sad #mascotSvg .paddle-arm {
+            transform: rotate(28deg) translateY(4px);
+        }
+
+        .mood-crying #mascotSvg .char-body {
+            animation: shiverCry 0.35s infinite linear;
+        }
+        .mood-crying #mascotSvg .paddle-arm {
+            transform: rotate(52deg) translate(4px, 10px);
+        }
+        .mood-crying #mascotSvg .tear-1 {
+            animation: tearFall 0.9s infinite linear;
+        }
+        .mood-crying #mascotSvg .tear-2 {
+            animation: tearFall 0.9s 0.45s infinite linear;
+        }
+
+        /* KPI Summary Cards — Locked 108px Height */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        @media (max-width: 720px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+            height: 108px;
+            min-height: 108px;
+            max-height: 108px;
+            overflow: hidden;
+        }
+
+        .kpi-card .kpi-title {
+            font-size: 0.73rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kpi-card .kpi-value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kpi-card .kpi-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Charts Grid */
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        #stdSection {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .section-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 8px 0 14px;
+            padding: 0 4px;
+        }
+
+        .section-banner h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-banner span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         .chart-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-            height: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px 18px 14px;
+            box-shadow: var(--shadow-sm);
+            height: 390px;
+            position: relative;
             display: flex;
             flex-direction: column;
         }
 
         .chart-header {
-            text-align: center;
-            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
         }
 
-        .chart-title {
-            font-size: 16px;
-            font-weight: 600;
+        .chart-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
         }
 
-        .chart-subtitle {
-            font-size: 12px;
+        .chart-header p {
+            font-size: 0.76rem;
             color: var(--text-muted);
         }
 
-        .canvas-container {
+        .canvas-wrap {
+            flex: 1;
             position: relative;
-            flex-grow: 1;
-            width: 100%;
+            min-height: 0;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 12px;
+            }
             .charts-grid {
                 grid-template-columns: 1fr;
+            }
+            .chart-card {
+                height: 330px;
+            }
+            .segmented {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    <div class="header">
-        <h1>Pickleball Open Play Simulation Metrics</h1>
-        <p>Interactive Static Preview (Live WASM/WebWorker Engine Pending)</p>
-    </div>
-
-    <div class="config-widget">
-        <h3>Simulation Configuration Parameters</h3>
-        <div class="config-details">
-            <div class="config-item">Facility Open Time: 720 mins</div>
-            <div class="config-item">Player Stay Duration: Uniform Dist (30-240 mins, Avg: 135)</div>
-            <div class="config-item">Game Time: Normal Dist (Mean: 15 mins, StdDev: 5)</div>
-            <div class="config-item">Players per Game: 4</div>
-        </div>
-        <span class="config-footnote">* Players per court indicates how many players are simultaneously present on average</span>
-    </div>
-
-    <div class="charts-grid">
-        <!-- Chart 1: Avg Games -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <div class="chart-title">Average Games per Player</div>
-                <div class="chart-subtitle">(100 Sims/Scenario)</div>
-            </div>
-            <div class="canvas-container">
-                <canvas id="chartAvgGames"></canvas>
-            </div>
-        </div>
-
-        <!-- Chart 2: Avg Time -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <div class="chart-title">Average Play Time per Player</div>
-                <div class="chart-subtitle">(100 Sims/Scenario)</div>
-            </div>
-            <div class="canvas-container">
-                <canvas id="chartAvgTime"></canvas>
-            </div>
-        </div>
-
-        <!-- Chart 3: Std Dev Games -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <div class="chart-title">Std Dev: Games per Player</div>
-            </div>
-            <div class="canvas-container">
-                <canvas id="chartStdGames"></canvas>
-            </div>
-        </div>
-
-        <!-- Chart 4: Std Dev Time -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <div class="chart-title">Std Dev: Play Time</div>
-            </div>
-            <div class="canvas-container">
-                <canvas id="chartStdTime"></canvas>
+<!-- Clean Top Header -->
+<nav class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-icon">PB</div>
+            <div class="brand-text">
+                <h1>Pickleball Open Play Simulator</h1>
             </div>
         </div>
     </div>
-</div>
+</nav>
 
+<main class="container">
+    <!-- Focused Control Panel -->
+    <section class="control-panel">
+        <form id="simForm" autocomplete="off" onsubmit="return false;">
+
+            <!-- Row 1: User-Friendly Mode Cards -->
+            <div class="mode-selector-grid" id="modeCards">
+                <button type="button" class="mode-card active" data-val="fixed_courts">
+                    <div class="mode-card-title">
+                        <span>Fixed Number of Courts (Players on X-Axis)</span>
+                    </div>
+                    <div class="mode-card-desc">
+                        "We have a set number of courts — how long will I wait per game as more players show up?"
+                    </div>
+                </button>
+
+                <button type="button" class="mode-card" data-val="variable_courts">
+                    <div class="mode-card-title">
+                        <span>Variable Number of Courts (Courts on X-Axis)</span>
+                    </div>
+                    <div class="mode-card-desc">
+                        "How do wait times and games played scale from 1 up to N courts at different crowd densities?"
+                    </div>
+                </button>
+            </div>
+
+            <!-- Row 2: Sliders & Segmented Controls -->
+            <div class="controls-row">
+
+                <!-- Dynamic Court Slider -->
+                <div class="control-block col-span-3" id="fixedCourtsBlock">
+                    <div class="control-label">
+                        <span class="label-title">Number of Courts</span>
+                        <span class="val-badge" id="fixedCourtsBadge">8 Courts</span>
+                    </div>
+                    <div class="range-hybrid">
+                        <input type="range" id="fixedCourtsRange" min="1" max="32" value="8" autocomplete="off">
+                        <input type="number" id="fixedCourts" min="1" max="60" value="8" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="control-block col-span-3 hidden" id="maxCourtsBlock">
+                    <div class="control-label">
+                        <span class="label-title">Max Courts on X-Axis</span>
+                        <span class="val-badge" id="maxCourtsBadge">26 Courts</span>
+                    </div>
+                    <div class="range-hybrid">
+                        <input type="range" id="maxCourtsRange" min="4" max="40" value="26" autocomplete="off">
+                        <input type="number" id="maxCourts" min="2" max="60" value="26" autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Dynamic Player Count Slider -->
+                <div class="control-block col-span-3">
+                    <div class="control-label">
+                        <span class="label-title" id="maxDensityTitle">Max Players</span>
+                        <span class="val-badge" id="maxDensityBadge">80 Players</span>
+                    </div>
+                    <div class="range-hybrid">
+                        <input type="range" id="maxDensityRange" min="8" max="160" value="80" autocomplete="off">
+                        <input type="number" id="maxDensity" min="4" max="300" value="80" autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Players Per Game Format -->
+                <div class="control-block col-span-3">
+                    <div class="control-label">
+                        <span class="label-title">Players / Game Format</span>
+                    </div>
+                    <div class="segmented" id="ppgSegmented">
+                        <button type="button" data-val="4" class="active">4 (Doubles)</button>
+                        <button type="button" data-val="3">3 (Canadian)</button>
+                        <button type="button" data-val="2">2 (Singles)</button>
+                        <button type="button" data-val="all">All</button>
+                    </div>
+                </div>
+
+                <!-- Standard Deviation Visualization -->
+                <div class="control-block col-span-3">
+                    <div class="control-label">
+                        <span><span class="label-title">Spread / Error</span> (&plusmn;1&sigma;)</span>
+                    </div>
+                    <div class="segmented" id="stdSegmented">
+                        <button type="button" data-val="whiskers" class="active">Whiskers</button>
+                        <button type="button" data-val="separate">Separate Charts</button>
+                        <button type="button" data-val="none">Clean Lines</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Collapsible Advanced Parameters Drawer -->
+            <div class="advanced-drawer" id="advDrawer">
+                <div class="adv-header">
+                    <h4>Advanced Simulation &amp; Timing Parameters</h4>
+                    <button type="button" class="btn-secondary" id="resetDefaultsBtn" style="padding: 4px 10px; font-size: 0.75rem;">
+                        Reset Defaults
+                    </button>
+                </div>
+                <div class="adv-grid">
+                    <div class="adv-field">
+                        <label for="opMinutes">Facility Open Duration (Mins)</label>
+                        <input type="number" id="opMinutes" value="720" min="60" max="1440" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="minStay">Min Player Stay (Mins)</label>
+                        <input type="number" id="minStay" value="30" min="15" max="600" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="maxStay">Max Player Stay (Mins)</label>
+                        <input type="number" id="maxStay" value="240" min="30" max="600" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="meanGame">Mean Game Length (Mins)</label>
+                        <input type="number" id="meanGame" value="15" min="5" max="60" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="stdGame">Game Length StdDev (Mins)</label>
+                        <input type="number" id="stdGame" value="5" min="0" max="30" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="simsPerConfig">Monte Carlo Sims / Point</label>
+                        <input type="number" id="simsPerConfig" value="100" min="10" max="1000" autocomplete="off">
+                    </div>
+                    <div class="adv-field">
+                        <label for="workerCount">CPU Worker Threads</label>
+                        <input type="number" id="workerCount" value="8" min="1" max="32" autocomplete="off">
+                    </div>
+                </div>
+                <p class="adv-hint">
+                    Players arrive uniformly across the operating day and stay between Min Stay and Max Stay minutes. A player only joins a court if their remaining stay is at least the Mean Game length.
+                </p>
+            </div>
+
+            <!-- Bottom Action Bar -->
+            <div class="toolbar-footer">
+                <div class="action-left">
+                    <button type="button" class="btn-primary" id="runBtn">
+                        <span>Run Simulation</span>
+                    </button>
+                    <button type="button" class="btn-danger" id="cancelBtn">Stop</button>
+                    <button type="button" class="btn-secondary" id="toggleAdvBtn">
+                        <span id="advBtnText">Advanced Parameters &#9662;</span>
+                    </button>
+                </div>
+
+                <div class="status-cluster">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressBar"></div>
+                    </div>
+                    <div class="status-meta">
+                        <span id="statusText">Ready</span>
+                        <span id="perfText"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Mascot Mood Widget + KPI Summary Ribbon (Fixed 108px Height) -->
+    <section class="summary-ribbon">
+        <!-- Cute Animated SVG Pickleball Character (Neutral by default until a point is hovered/selected) -->
+        <div class="mascot-card mood-neutral" id="mascotCard">
+            <div class="mascot-stage">
+                <svg id="mascotSvg" viewBox="0 0 100 100" width="74" height="74" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ground Shadow -->
+                    <ellipse cx="48" cy="91" rx="22" ry="4.5" fill="rgba(15, 23, 42, 0.1)" />
+
+                    <g class="char-body">
+                        <!-- Left Foot -->
+                        <rect x="33" y="80" width="9" height="10" rx="4.5" fill="#334155" />
+                        <!-- Right Foot (taps when impatient) -->
+                        <g class="right-foot">
+                            <rect x="53" y="80" width="9" height="10" rx="4.5" fill="#334155" />
+                        </g>
+
+                        <!-- Cute Pickleball Character Body -->
+                        <circle cx="48" cy="54" r="28" fill="#a3e635" stroke="#4d7c0f" stroke-width="2.5" />
+                        <!-- Pickleball Wiffle Holes (Subtle) -->
+                        <circle cx="30" cy="40" r="2.2" fill="#65a30d" opacity="0.45" />
+                        <circle cx="65" cy="40" r="2.2" fill="#65a30d" opacity="0.45" />
+                        <circle cx="26" cy="58" r="2.2" fill="#65a30d" opacity="0.45" />
+                        <circle cx="68" cy="64" r="2.2" fill="#65a30d" opacity="0.45" />
+
+                        <!-- Athletic Sweatband -->
+                        <path d="M 22 43 Q 48 36 74 43 L 73 36 Q 48 29 23 36 Z" fill="#2563eb" />
+                        <path d="M 22.5 39.5 Q 48 32.5 73.5 39.5" stroke="#ffffff" stroke-width="2" fill="none" />
+
+                        <!-- Rosy Cheeks -->
+                        <ellipse id="cheekLeft" cx="32" cy="58" rx="4.2" ry="2.5" fill="#fb7185" opacity="0.4" />
+                        <ellipse id="cheekRight" cx="64" cy="58" rx="4.2" ry="2.5" fill="#fb7185" opacity="0.4" />
+
+                        <!-- Eyebrows (Dynamic) -->
+                        <path id="browLeft" d="M 33 45 Q 38 44 42 45" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" fill="none" />
+                        <path id="browRight" d="M 54 45 Q 58 44 63 45" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" fill="none" />
+
+                        <!-- Eyes -->
+                        <g id="eyesNormal">
+                            <circle cx="38" cy="51" r="3.6" fill="#0f172a" />
+                            <circle cx="58" cy="51" r="3.6" fill="#0f172a" />
+                            <circle id="sparkleLeft" cx="36.8" cy="49.6" r="1.3" fill="#ffffff" />
+                            <circle id="sparkleRight" cx="56.8" cy="49.6" r="1.3" fill="#ffffff" />
+                        </g>
+
+                        <!-- Animated Teardrops (Visible when Crying) -->
+                        <path class="tear tear-1" d="M 36 55 Q 34 60 36 62 Q 38 60 36 55 Z" fill="#38bdf8" />
+                        <path class="tear tear-2" d="M 60 55 Q 58 60 60 62 Q 62 60 60 55 Z" fill="#38bdf8" />
+
+                        <!-- Mouth (Neutral by default) -->
+                        <path id="mascotMouth" d="M 41 62 Q 48 64 55 62" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round" fill="none" />
+
+                        <!-- Left Hand -->
+                        <circle cx="20" cy="60" r="4.5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" />
+
+                        <!-- Right Arm + Pickleball Paddle -->
+                        <g class="paddle-arm">
+                            <rect x="74" y="46" width="4.5" height="11" rx="2" transform="rotate(20 76 50)" fill="#94a3b8" stroke="#334155" stroke-width="1.5" />
+                            <rect x="74" y="24" width="18" height="23" rx="7" transform="rotate(20 83 35)" fill="#ef4444" stroke="#991b1b" stroke-width="2" />
+                            <rect x="77" y="27" width="12" height="17" rx="4" transform="rotate(20 83 35)" fill="#fca5a5" opacity="0.35" />
+                            <circle cx="74" cy="54" r="4.5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="mascot-info">
+                <span class="mascot-badge" id="mascotBadge" style="background: #f1f5f9; color: #475569;">Player Reaction</span>
+                <div class="mascot-headline" id="mascotHeadline">Inspect a Datapoint</div>
+                <div class="mascot-sub" id="mascotSub">Hover or tap any point on the charts to see the wait time and player mood.</div>
+            </div>
+        </div>
+
+        <!-- Live KPI Summary Cards (3 Clean Cards) -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-title" id="kpiSelectedTitle">Selected Point Wait</span>
+                <span class="kpi-value" id="kpiSelectedValue">Select a point</span>
+                <span class="kpi-sub" id="kpiSelectedSub">Hover any chart curve to inspect</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-title">Full-Court Capacity</span>
+                <span class="kpi-value" id="kpiCapacity">32 Players</span>
+                <span class="kpi-sub" id="kpiCapacitySub">8 courts &times; 4 players/court active</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-title">Expected Stay Duration</span>
+                <span class="kpi-value" id="kpiMeanStay">135 mins</span>
+                <span class="kpi-sub" id="kpiStaySub">Uniform 30–240 mins (~15m/game)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Primary Mean Charts ("Average Wait Time Between Games" First) -->
+    <section class="charts-grid">
+        <!-- 1. Average Wait Time Between Games -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3 id="titleWaitPerGame">Average Wait Time Between Games</h3>
+                    <p>Minutes waiting in the paddle queue for your next game (truncated to min players required)</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartWaitPerGame"></canvas>
+            </div>
+        </div>
+
+        <!-- 2. Average Games per Player -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3 id="titleGames">Average Games per Player</h3>
+                    <p>Total games completed during a player's visit</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartGames"></canvas>
+            </div>
+        </div>
+
+        <!-- 3. Average Play Time per Player -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3 id="titlePlayTime">Average Play Time per Player</h3>
+                    <p>Cumulative active court time during visit (minutes)</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartPlayTime"></canvas>
+            </div>
+        </div>
+
+        <!-- 4. Average Total Wait Time -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3 id="titleTotalWait">Average Total Wait Time</h3>
+                    <p>Cumulative time spent waiting off-court during visit (minutes)</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartTotalWait"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Optional Separate Standard Deviation Charts -->
+    <section id="stdSection">
+        <div class="section-banner">
+            <h2>Standard Deviation Metrics (1&sigma; Variation Across Simulations)</h2>
+            <span>Measures player-to-player &amp; day-to-day volatility</span>
+        </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Std Dev: Wait Time Between Games</h3>
+                        <p>1&sigma; spread in per-game queue wait (minutes)</p>
+                    </div>
+                </div>
+                <div class="canvas-wrap">
+                    <canvas id="chartStdWaitPerGame"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Std Dev: Games per Player</h3>
+                        <p>1&sigma; spread in games played</p>
+                    </div>
+                </div>
+                <div class="canvas-wrap">
+                    <canvas id="chartStdGames"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Std Dev: Play Time per Player</h3>
+                        <p>1&sigma; spread in active court minutes</p>
+                    </div>
+                </div>
+                <div class="canvas-wrap">
+                    <canvas id="chartStdPlayTime"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Std Dev: Total Wait Time</h3>
+                        <p>1&sigma; spread in cumulative wait minutes</p>
+                    </div>
+                </div>
+                <div class="canvas-wrap">
+                    <canvas id="chartStdTotalWait"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- =====================================================================
+     INLINE WEB WORKER SOURCE (Zero-Allocation TypedArray Engine)
+     ===================================================================== -->
+<script id="worker-code" type="javascript/worker">
+    let maxP = 0;
+    let arrivalTime, departureTime, gamesPlayed, totalPlayTime, isPlaying, queuePos;
+    let waitQueue, activeIndices;
+
+    let maxE = 0;
+    let heapTime, heapSeq, heapType, heapPayload;
+    let heapSize = 0;
+
+    let maxG = 0;
+    let gameSlots;
+
+    function ensurePlayerCapacity(n) {
+      if (n <= maxP) return;
+      maxP = Math.max(n + 256, maxP * 2, 2048);
+      arrivalTime   = new Float64Array(maxP);
+      departureTime = new Float64Array(maxP);
+      gamesPlayed   = new Int32Array(maxP);
+      totalPlayTime = new Float64Array(maxP);
+      isPlaying     = new Uint8Array(maxP);
+      queuePos      = new Int32Array(maxP);
+      waitQueue     = new Int32Array(maxP);
+      activeIndices = new Int32Array(maxP);
+    }
+
+    function ensureEventCapacity(n) {
+      if (n <= maxE) return;
+      maxE = Math.max(n + 512, maxE * 2, 8192);
+      const newTime    = new Float64Array(maxE);
+      const newSeq     = new Int32Array(maxE);
+      const newType    = new Uint8Array(maxE);
+      const newPayload = new Int32Array(maxE);
+      if (heapTime) {
+        newTime.set(heapTime);
+        newSeq.set(heapSeq);
+        newType.set(heapType);
+        newPayload.set(heapPayload);
+      }
+      heapTime    = newTime;
+      heapSeq     = newSeq;
+      heapType    = newType;
+      heapPayload = newPayload;
+    }
+
+    function ensureGameCapacity(totalSlotsNeeded) {
+      if (totalSlotsNeeded <= maxG) return;
+      maxG = Math.max(totalSlotsNeeded + 1024, maxG * 2, 8192);
+      const next = new Int32Array(maxG);
+      if (gameSlots) next.set(gameSlots);
+      gameSlots = next;
+    }
+
+    function heapPush(time, seq, type, payload) {
+      if (heapSize + 1 >= maxE) ensureEventCapacity(heapSize + 1);
+      let i = heapSize++;
+      while (i > 0) {
+        const p = (i - 1) >> 1;
+        const pt = heapTime[p];
+        if (time < pt || (time === pt && seq < heapSeq[p])) {
+          heapTime[i]    = pt;
+          heapSeq[i]     = heapSeq[p];
+          heapType[i]    = heapType[p];
+          heapPayload[i] = heapPayload[p];
+          i = p;
+        } else {
+          break;
+        }
+      }
+      heapTime[i]    = time;
+      heapSeq[i]     = seq;
+      heapType[i]    = type;
+      heapPayload[i] = payload;
+    }
+
+    let hasSpare = false;
+    let spare = 0.0;
+
+    function randGauss(mean, std) {
+      if (hasSpare) {
+        hasSpare = false;
+        return mean + std * spare;
+      }
+      let u, v, s;
+      do {
+        u = Math.random() * 2.0 - 1.0;
+        v = Math.random() * 2.0 - 1.0;
+        s = u * u + v * v;
+      } while (s >= 1.0 || s === 0.0);
+      const mul = Math.sqrt(-2.0 * Math.log(s) / s);
+      spare = v * mul;
+      hasSpare = true;
+      return mean + std * (u * mul);
+    }
+
+    // Event Types: 0 = arrival, 1 = game_finish, 2 = departure
+    function simulateDayFast(numCourts, numPlayers, opMinutes, minStay, maxStay, meanGame, stdGame, playersPerGame) {
+      if (numPlayers <= 0) {
+        return { meanGames: 0, meanTime: 0, meanWait: 0, meanWaitPerGame: 0 };
+      }
+
+      ensurePlayerCapacity(numPlayers);
+      ensureEventCapacity(numPlayers * 3 + 64);
+
+      heapSize = 0;
+      let seq = 0;
+      const staySpan = Math.max(1, maxStay - minStay);
+
+      for (let i = 0; i < numPlayers; i++) {
+        const arr = Math.random() * opMinutes;
+        const dep = arr + minStay + Math.random() * staySpan;
+        arrivalTime[i]   = arr;
+        departureTime[i] = dep;
+        gamesPlayed[i]   = 0;
+        totalPlayTime[i] = 0.0;
+        isPlaying[i]     = 0;
+        queuePos[i]      = -1;
+
+        heapPush(arr, seq++, 0, i);
+        heapPush(dep, seq++, 2, i);
+      }
+
+      let waitLen = 0;
+      let availableCourts = numCourts;
+      let gameCount = 0;
+
+      function removeFromQueueAt(qIdx) {
+        const pId = waitQueue[qIdx];
+        queuePos[pId] = -1;
+        waitLen--;
+        for (let k = qIdx; k < waitLen; k++) {
+          const moved = waitQueue[k + 1];
+          waitQueue[k] = moved;
+          queuePos[moved] = k;
+        }
+      }
+
+      function tryStartGame(currentTime) {
+        if (availableCourts <= 0 || waitLen < playersPerGame) return;
+
+        let activeCount = 0;
+        for (let q = 0; q < waitLen; q++) {
+          const pid = waitQueue[q];
+          if ((departureTime[pid] - currentTime) >= meanGame) {
+            activeIndices[activeCount++] = pid;
+          }
+        }
+
+        let offset = 0;
+        while (availableCourts > 0 && (activeCount - offset) >= playersPerGame) {
+          availableCourts--;
+          const gIdx = gameCount++;
+          const baseSlot = gIdx * playersPerGame;
+          ensureGameCapacity(baseSlot + playersPerGame);
+
+          let gTime = randGauss(meanGame, stdGame);
+          if (gTime < 5.0) gTime = 5.0;
+          const finishTime = currentTime + gTime;
+
+          for (let m = 0; m < playersPerGame; m++) {
+            const pid = activeIndices[offset + m];
+            gameSlots[baseSlot + m] = pid;
+            isPlaying[pid] = 1;
+            gamesPlayed[pid] += 1;
+            totalPlayTime[pid] += gTime;
+
+            const qIdx = queuePos[pid];
+            if (qIdx !== -1) removeFromQueueAt(qIdx);
+          }
+
+          offset += playersPerGame;
+          heapPush(finishTime, seq++, 1, baseSlot);
+        }
+      }
+
+      while (heapSize > 0) {
+        const currentTime = heapTime[0];
+        const eType       = heapType[0];
+        const payload     = heapPayload[0];
+
+        heapSize--;
+        if (heapSize > 0) {
+          const lastT = heapTime[heapSize];
+          const lastS = heapSeq[heapSize];
+          const lastY = heapType[heapSize];
+          const lastP = heapPayload[heapSize];
+
+          let i = 0;
+          const half = heapSize >> 1;
+          while (i < half) {
+            let left = (i << 1) + 1;
+            let right = left + 1;
+            let best = left;
+
+            if (right < heapSize) {
+              const rt = heapTime[right], lt = heapTime[left];
+              if (rt < lt || (rt === lt && heapSeq[right] < heapSeq[left])) {
+                best = right;
+              }
+            }
+
+            const bt = heapTime[best];
+            if (bt < lastT || (bt === lastT && heapSeq[best] < lastS)) {
+              heapTime[i]    = bt;
+              heapSeq[i]     = heapSeq[best];
+              heapType[i]    = heapType[best];
+              heapPayload[i] = heapPayload[best];
+              i = best;
+            } else {
+              break;
+            }
+          }
+          heapTime[i]    = lastT;
+          heapSeq[i]     = lastS;
+          heapType[i]    = lastY;
+          heapPayload[i] = lastP;
+        }
+
+        if (eType === 0) {
+          const pid = payload;
+          if (currentTime < departureTime[pid]) {
+            queuePos[pid] = waitLen;
+            waitQueue[waitLen++] = pid;
+            tryStartGame(currentTime);
+          }
+        } else if (eType === 1) {
+          const baseSlot = payload;
+          availableCourts++;
+          for (let m = 0; m < playersPerGame; m++) {
+            const pid = gameSlots[baseSlot + m];
+            isPlaying[pid] = 0;
+            if (currentTime < departureTime[pid]) {
+              queuePos[pid] = waitLen;
+              waitQueue[waitLen++] = pid;
+            }
+          }
+          tryStartGame(currentTime);
+        } else {
+          const pid = payload;
+          if (isPlaying[pid] === 0) {
+            const qIdx = queuePos[pid];
+            if (qIdx !== -1) removeFromQueueAt(qIdx);
+          }
+        }
+      }
+
+      let sumGames = 0;
+      let sumTime = 0.0;
+      let sumWait = 0.0;
+      let sumWaitPerGame = 0.0;
+
+      for (let i = 0; i < numPlayers; i++) {
+        const g = gamesPlayed[i];
+        const playT = totalPlayTime[i];
+        const stayT = departureTime[i] - arrivalTime[i];
+        const waitT = Math.max(0.0, stayT - playT);
+
+        sumGames += g;
+        sumTime  += playT;
+        sumWait  += waitT;
+        sumWaitPerGame += waitT / (g + 1);
+      }
+
+      return {
+        meanGames: sumGames / numPlayers,
+        meanTime: sumTime / numPlayers,
+        meanWait: sumWait / numPlayers,
+        meanWaitPerGame: sumWaitPerGame / numPlayers
+      };
+    }
+
+    self.onmessage = function(e) {
+      const {
+        jobId,
+        sIdx,
+        xIdx,
+        targetSimultaneousTotal,
+        courts,
+        simsPerConfig,
+        opMinutes,
+        minStay,
+        maxStay,
+        meanGame,
+        stdGame,
+        playersPerGame
+      } = e.data;
+
+      const meanStay = (minStay + maxStay) * 0.5;
+      const dailyMean = targetSimultaneousTotal * (opMinutes / meanStay);
+      const dailyStd = dailyMean * 0.1;
+
+      const cGames       = new Float64Array(simsPerConfig);
+      const cTime        = new Float64Array(simsPerConfig);
+      const cWait        = new Float64Array(simsPerConfig);
+      const cWaitPerGame = new Float64Array(simsPerConfig);
+
+      for (let s = 0; s < simsPerConfig; s++) {
+        const dailyPlayers = Math.max(playersPerGame, Math.trunc(randGauss(dailyMean, dailyStd)));
+        const res = simulateDayFast(
+          courts,
+          dailyPlayers,
+          opMinutes,
+          minStay,
+          maxStay,
+          meanGame,
+          stdGame,
+          playersPerGame
+        );
+        cGames[s]       = res.meanGames;
+        cTime[s]        = res.meanTime;
+        cWait[s]        = res.meanWait;
+        cWaitPerGame[s] = res.meanWaitPerGame;
+      }
+
+      self.postMessage(
+        {
+          jobId,
+          sIdx,
+          xIdx,
+          cGamesBuffer: cGames.buffer,
+          cTimeBuffer: cTime.buffer,
+          cWaitBuffer: cWait.buffer,
+          cWaitPerGameBuffer: cWaitPerGame.buffer
+        },
+        [cGames.buffer, cTime.buffer, cWait.buffer, cWaitPerGame.buffer]
+      );
+    };
+</script>
+
+<!-- =====================================================================
+     MAIN THREAD UI, MASCOT & CHART CONTROLLER
+     ===================================================================== -->
 <script>
-    // ---------------------------------------------------------
-    // 1. Data Generation (Mimicking Python Monte Carlo outputs)
-    // ---------------------------------------------------------
-    const courts = Array.from({length: 26}, (_, i) => i + 1);
-    
-    // Helper to generate asymptotic curves mimicking M/M/c pooling efficiencies
-    function generateCurve(baseline, asymptote, rate, courtsArray, noise = 0) {
-        return courtsArray.map(c => {
-            const val = asymptote - (asymptote - baseline) * Math.exp(-rate * c);
-            return val + (Math.random() * noise - noise/2);
-        });
+    const detectedCores = navigator.hardwareConcurrency || 4;
+    const defaultThreads = Math.min(12, Math.max(2, detectedCores));
+
+    const uiState = {
+        simMode: 'fixed_courts',
+        playersPerGame: '4',
+        stdDisplay: 'whiskers'
+    };
+
+    let workerPool = [];
+    let workerBlobUrl = null;
+    let currentJobId = 0;
+    let isRunning = false;
+    let charts = {};
+    let latestSimSnapshot = null;
+
+    // --- Reset Mascot & Selected KPI Card to Default Neutral State ---
+    function setMascotNeutral() {
+        const card = document.getElementById('mascotCard');
+        const badge = document.getElementById('mascotBadge');
+        const headline = document.getElementById('mascotHeadline');
+        const sub = document.getElementById('mascotSub');
+        const mouth = document.getElementById('mascotMouth');
+        const browL = document.getElementById('browLeft');
+        const browR = document.getElementById('browRight');
+        const cheekL = document.getElementById('cheekLeft');
+        const cheekR = document.getElementById('cheekRight');
+
+        card.classList.remove('mood-ecstatic', 'mood-happy', 'mood-impatient', 'mood-sad', 'mood-crying');
+        card.classList.add('mood-neutral');
+        card.style.borderColor = '#e2e8f0';
+        card.style.backgroundColor = '#ffffff';
+
+        badge.style.background = '#f1f5f9';
+        badge.style.color = '#475569';
+        badge.textContent = 'Player Reaction';
+        headline.textContent = 'Inspect a Datapoint';
+        sub.textContent = 'Hover or tap any point on the charts to see the wait time and player mood.';
+
+        // Calm neutral expression
+        mouth.setAttribute('d', 'M 41 62 Q 48 64 55 62');
+        browL.setAttribute('d', 'M 33 45 Q 38 44 42 45');
+        browR.setAttribute('d', 'M 54 45 Q 58 44 63 45');
+        cheekL.setAttribute('opacity', '0.4');
+        cheekR.setAttribute('opacity', '0.4');
+
+        document.getElementById('kpiSelectedTitle').textContent = 'Selected Point Wait';
+        document.getElementById('kpiSelectedValue').textContent = 'Select a point';
+        document.getElementById('kpiSelectedSub').textContent = 'Hover any chart curve to inspect';
     }
 
-    const datasetsInfo = [
-        { label: '1-3 players/court', color: '#36a2eb', pointStyle: 'circle' },
-        { label: '4-7 players/court', color: '#ff9f40', pointStyle: 'rect' },
-        { label: '8-10 players/court', color: '#4bc0c0', pointStyle: 'triangle' },
-        { label: '11-14 players/court', color: '#ff6384', pointStyle: 'rectRot' }
-    ];
+    // --- Animated SVG Mascot Mood Controller (Triggered on Datapoint Hover/Click) ---
+    function setMascotMood(waitMins, gamesPlayed, contextLabel) {
+        const card = document.getElementById('mascotCard');
+        const badge = document.getElementById('mascotBadge');
+        const headline = document.getElementById('mascotHeadline');
+        const sub = document.getElementById('mascotSub');
+        const mouth = document.getElementById('mascotMouth');
+        const browL = document.getElementById('browLeft');
+        const browR = document.getElementById('browRight');
+        const cheekL = document.getElementById('cheekLeft');
+        const cheekR = document.getElementById('cheekRight');
 
-    // Simulated data aligned with previous mathematical results
-    const dataAvgGames = [
-        generateCurve(1.5, 2.8, 0.15, courts),
-        generateCurve(3.5, 4.8, 0.20, courts),
-        generateCurve(5.2, 6.3, 0.25, courts),
-        generateCurve(6.5, 7.6, 0.30, courts)
-    ];
+        card.classList.remove('mood-neutral', 'mood-ecstatic', 'mood-happy', 'mood-impatient', 'mood-sad', 'mood-crying');
 
-    const dataAvgTime = [
-        generateCurve(25, 45, 0.15, courts),
-        generateCurve(55, 75, 0.20, courts),
-        generateCurve(80, 98, 0.25, courts),
-        generateCurve(105, 118, 0.30, courts)
-    ];
+        // Update Selected Point KPI Card
+        document.getElementById('kpiSelectedTitle').textContent = contextLabel || 'Selected Point';
+        document.getElementById('kpiSelectedValue').textContent = `${waitMins.toFixed(1)}m wait / game`;
+        document.getElementById('kpiSelectedSub').textContent = `${gamesPlayed.toFixed(1)} avg games played per visit`;
 
-    // StdDevs decrease as pooling efficiency smooths out variance
-    const dataStdGames = [
-        generateCurve(1.2, 0.6, 0.2, courts),
-        generateCurve(1.0, 0.5, 0.25, courts),
-        generateCurve(0.8, 0.4, 0.3, courts),
-        generateCurve(0.7, 0.35, 0.35, courts)
-    ];
+        // Saddest state: <= 1.25 games per session OR >= 35m wait per game
+        if (gamesPlayed <= 1.25 || waitMins >= 35) {
+            card.classList.add('mood-crying');
+            card.style.borderColor = '#fca5a5';
+            card.style.backgroundColor = '#fff1f2';
+            badge.style.background = '#fee2e2';
+            badge.style.color = '#b91c1c';
+            badge.textContent = `${contextLabel} · Heartbroken`;
+            headline.textContent = gamesPlayed <= 1.25
+                ? `Only ${gamesPlayed.toFixed(1)} Game Played!`
+                : `${waitMins.toFixed(0)}m Wait Per Game!`;
+            sub.textContent = `Waiting ${waitMins.toFixed(1)}m per game (${gamesPlayed.toFixed(1)} games total). Time to add courts!`;
 
-    const dataStdTime = [
-        generateCurve(20, 12, 0.2, courts),
-        generateCurve(16, 10, 0.25, courts),
-        generateCurve(14, 8, 0.3, courts),
-        generateCurve(12, 7, 0.35, courts)
-    ];
+            mouth.setAttribute('d', 'M 39 67 Q 48 56 57 67');
+            browL.setAttribute('d', 'M 32 47 Q 37 44 42 42');
+            browR.setAttribute('d', 'M 54 42 Q 59 44 64 47');
+            cheekL.setAttribute('opacity', '0.15');
+            cheekR.setAttribute('opacity', '0.15');
+        } else if (waitMins >= 20 || gamesPlayed < 2.5) {
+            card.classList.add('mood-sad');
+            card.style.borderColor = '#fdba74';
+            card.style.backgroundColor = '#fff7ed';
+            badge.style.background = '#ffedd5';
+            badge.style.color = '#c2410c';
+            badge.textContent = `${contextLabel} · Bummed Out`;
+            headline.textContent = `Long ${waitMins.toFixed(1)}m Queue Wait`;
+            sub.textContent = `Players average ${gamesPlayed.toFixed(1)} games and spend a lot of time staring at the paddle rack.`;
 
-    // ---------------------------------------------------------
-    // 2. Chart Configuration Helpers
-    // ---------------------------------------------------------
-    function createDatasets(dataMatrix, isDashed = false) {
-        return datasetsInfo.map((info, idx) => ({
-            label: info.label,
-            data: dataMatrix[idx],
-            borderColor: info.color,
-            backgroundColor: info.color,
-            pointStyle: info.pointStyle,
-            pointRadius: 4,
-            pointHoverRadius: 7,
-            fill: false,
-            tension: 0.3, // slight curve smoothing
-            borderDash: isDashed ? [5, 5] : []
-        }));
+            mouth.setAttribute('d', 'M 40 65 Q 48 59 56 65');
+            browL.setAttribute('d', 'M 33 46 Q 38 44 42 43');
+            browR.setAttribute('d', 'M 54 43 Q 58 44 63 46');
+            cheekL.setAttribute('opacity', '0.25');
+            cheekR.setAttribute('opacity', '0.25');
+        } else if (waitMins >= 11) {
+            card.classList.add('mood-impatient');
+            card.style.borderColor = '#fde047';
+            card.style.backgroundColor = '#fefce8';
+            badge.style.background = '#fef9c3';
+            badge.style.color = '#a16207';
+            badge.textContent = `${contextLabel} · Restless`;
+            headline.textContent = `${waitMins.toFixed(1)}m Wait Between Games`;
+            sub.textContent = `Playable (${gamesPlayed.toFixed(1)} games/visit), but the paddle queue is backing up.`;
+
+            mouth.setAttribute('d', 'M 40 63 L 56 62');
+            browL.setAttribute('d', 'M 33 43 L 42 46');
+            browR.setAttribute('d', 'M 54 46 L 63 43');
+            cheekL.setAttribute('opacity', '0.35');
+            cheekR.setAttribute('opacity', '0.35');
+        } else if (waitMins >= 5.5) {
+            card.classList.add('mood-happy');
+            card.style.borderColor = '#bbf7d0';
+            card.style.backgroundColor = '#ffffff';
+            badge.style.background = '#dcfce7';
+            badge.style.color = '#15803d';
+            badge.textContent = `${contextLabel} · Happy Rotation`;
+            headline.textContent = `Smooth ${waitMins.toFixed(1)}m Breather`;
+            sub.textContent = `Great flow! ${gamesPlayed.toFixed(1)} games per visit with just enough time for water.`;
+
+            mouth.setAttribute('d', 'M 39 61 Q 48 68 57 61');
+            browL.setAttribute('d', 'M 33 45 Q 38 42 42 45');
+            browR.setAttribute('d', 'M 54 45 Q 58 42 63 45');
+            cheekL.setAttribute('opacity', '0.6');
+            cheekR.setAttribute('opacity', '0.6');
+        } else {
+            card.classList.add('mood-ecstatic');
+            card.style.borderColor = '#86efac';
+            card.style.backgroundColor = '#f0fdf4';
+            badge.style.background = '#dcfce7';
+            badge.style.color = '#15803d';
+            badge.textContent = `${contextLabel} · Court Heaven!`;
+            headline.textContent = `Instant Play (${waitMins.toFixed(1)}m Wait)!`;
+            sub.textContent = `Non-stop action — ${gamesPlayed.toFixed(1)} games per session with open courts ready!`;
+
+            mouth.setAttribute('d', 'M 37 60 Q 48 72 59 60');
+            browL.setAttribute('d', 'M 33 44 Q 38 40 42 44');
+            browR.setAttribute('d', 'M 54 44 Q 58 40 63 44');
+            cheekL.setAttribute('opacity', '0.8');
+            cheekR.setAttribute('opacity', '0.8');
+        }
     }
 
-    const commonOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-            mode: 'index',
-            intersect: false,
-        },
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { usePointStyle: true, boxWidth: 8, font: { size: 12 } }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                titleColor: '#333',
-                bodyColor: '#666',
-                borderColor: '#e0e0e0',
-                borderWidth: 1,
-                padding: 10,
-                boxPadding: 4,
-                usePointStyle: true
+    // Subtle Vertical +/- 1 Std Dev Whisker Plugin
+    const whiskerPlugin = {
+        id: 'whiskerErrorBars',
+        afterDatasetsDraw(chart, args, pluginOptions) {
+            if (!pluginOptions || !pluginOptions.enabled) return;
+
+            const { ctx, chartArea, scales: { y } } = chart;
+            if (!y || !chartArea) return;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+            ctx.clip();
+
+            const datasets = chart.data.datasets;
+            const capHalfWidth = 3;
+
+            for (let dIdx = 0; dIdx < datasets.length; dIdx++) {
+                if (!chart.isDatasetVisible(dIdx)) continue;
+                const ds = datasets[dIdx];
+                if (!ds.stdValues || ds.stdValues.length === 0) continue;
+
+                const meta = chart.getDatasetMeta(dIdx);
+                const totalPts = meta.data.length;
+                const stride = totalPts > 60 ? 3 : (totalPts > 30 ? 2 : 1);
+
+                ctx.strokeStyle = ds.borderColor || '#334155';
+                ctx.lineWidth = 1.15;
+                ctx.globalAlpha = 0.45;
+
+                for (let i = 0; i < totalPts; i += stride) {
+                    const pt = meta.data[i];
+                    if (!pt || pt.skip) continue;
+
+                    const meanVal = ds.data[i];
+                    const stdVal = ds.stdValues[i];
+                    if (meanVal == null || stdVal == null || stdVal <= 0) continue;
+
+                    const xPos = pt.x;
+                    const yTop = y.getPixelForValue(meanVal + stdVal);
+                    const yBot = y.getPixelForValue(Math.max(0, meanVal - stdVal));
+
+                    ctx.beginPath();
+                    ctx.moveTo(xPos, yTop);
+                    ctx.lineTo(xPos, yBot);
+                    ctx.moveTo(xPos - capHalfWidth, yTop);
+                    ctx.lineTo(xPos + capHalfWidth, yTop);
+                    ctx.moveTo(xPos - capHalfWidth, yBot);
+                    ctx.lineTo(xPos + capHalfWidth, yBot);
+                    ctx.stroke();
+                }
             }
-        },
-        scales: {
-            x: {
-                title: { display: true, text: 'Number of Courts', font: { weight: 'bold' } },
-                grid: { color: '#f0f0f0' }
-            },
-            y: {
-                grid: { color: '#f0f0f0' }
-            }
+            ctx.restore();
         }
     };
 
-    // ---------------------------------------------------------
-    // 3. Render Charts
-    // ---------------------------------------------------------
-    
-    // Avg Games Chart
-    new Chart(document.getElementById('chartAvgGames'), {
-        type: 'line',
-        data: { labels: courts, datasets: createDatasets(dataAvgGames) },
-        options: {
-            ...commonOptions,
-            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Avg Games' } } }
-        }
-    });
+    Chart.register(whiskerPlugin);
 
-    // Avg Time Chart
-    new Chart(document.getElementById('chartAvgTime'), {
-        type: 'line',
-        data: { labels: courts, datasets: createDatasets(dataAvgTime) },
-        options: {
-            ...commonOptions,
-            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Avg Minutes Playing' } } }
-        }
-    });
+    const PPG_SERIES_META = {
+        2: { label: '2 Players/Game (Singles)',  color: '#0ea5e9', pointStyle: 'circle', minPlayers: 2 },
+        3: { label: '3 Players/Game (Canadian)', color: '#f59e0b', pointStyle: 'triangle', minPlayers: 3 },
+        4: { label: '4 Players/Game (Doubles)',  color: '#10b981', pointStyle: 'rectRounded', minPlayers: 4 }
+    };
 
-    // Std Dev Games Chart
-    new Chart(document.getElementById('chartStdGames'), {
-        type: 'line',
-        data: { labels: courts, datasets: createDatasets(dataStdGames, true) },
-        options: {
-            ...commonOptions,
-            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Standard Deviation (Games)' } } }
-        }
-    });
+    function buildDensityGroups(maxDensity) {
+        const base = [
+            { label: '1–3 players/court',  low: 1,  high: 3,  color: '#2563eb', pointStyle: 'circle' },
+            { label: '4–7 players/court',  low: 4,  high: 7,  color: '#10b981', pointStyle: 'rectRounded' },
+            { label: '8–10 players/court', low: 8,  high: 10, color: '#f59e0b', pointStyle: 'triangle' },
+            { label: `11–${Math.max(14, maxDensity)} players/court`, low: 11, high: Math.max(14, maxDensity), color: '#ef4444', pointStyle: 'rectRot' }
+        ];
+        return base.filter(g => g.low <= maxDensity);
+    }
 
-    // Std Dev Time Chart
-    new Chart(document.getElementById('chartStdTime'), {
-        type: 'line',
-        data: { labels: courts, datasets: createDatasets(dataStdTime, true) },
-        options: {
-            ...commonOptions,
-            scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Standard Deviation (Minutes)' } } }
+    function computeMeanAndStd(arrays) {
+        let count = 0;
+        let sum = 0;
+        for (let a = 0; a < arrays.length; a++) {
+            const arr = arrays[a];
+            if (!arr) continue;
+            for (let i = 0; i < arr.length; i++) {
+                sum += arr[i];
+                count++;
+            }
         }
+        if (count === 0) return { mean: 0, std: 0 };
+        const mean = sum / count;
+
+        let sumSq = 0;
+        for (let a = 0; a < arrays.length; a++) {
+            const arr = arrays[a];
+            if (!arr) continue;
+            for (let i = 0; i < arr.length; i++) {
+                const diff = arr[i] - mean;
+                sumSq += diff * diff;
+            }
+        }
+        return { mean, std: Math.sqrt(sumSq / count) };
+    }
+
+    function createChart(canvasId, yLabel, isStdChart = false) {
+        const canvasEl = document.getElementById(canvasId);
+        const ctx = canvasEl.getContext('2d');
+
+        // Return mascot to calm neutral placeholder when cursor leaves the chart
+        canvasEl.addEventListener('mouseleave', () => {
+            setMascotNeutral();
+        });
+
+        return new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 180 },
+                interaction: { mode: 'index', intersect: false },
+                onHover: (event, activeElements, chart) => {
+                    if (!activeElements || activeElements.length === 0 || !latestSimSnapshot) return;
+                    const dataIndex = activeElements[0].index;
+                    const dsIndex = activeElements[0].datasetIndex;
+                    const s = latestSimSnapshot.seriesList[dsIndex] || latestSimSnapshot.seriesList[latestSimSnapshot.seriesList.length - 1];
+                    if (!s) return;
+
+                    const wVal = s.avgWPG[dataIndex];
+                    const gVal = s.avgGames[dataIndex];
+                    const xVal = chart.data.labels[dataIndex];
+                    if (wVal != null && gVal != null) {
+                        const unit = latestSimSnapshot.config.simMode === 'fixed_courts' ? `${xVal} Players` : `${xVal} Courts`;
+                        setMascotMood(wVal, gVal, `At ${unit}`);
+                    }
+                },
+                plugins: {
+                    whiskerErrorBars: { enabled: !isStdChart },
+                    title: { display: false },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            boxWidth: 12,
+                            boxHeight: 12,
+                            usePointStyle: true,
+                            font: { family: "'Inter', sans-serif", size: 11, weight: '600' },
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                        titleFont: { family: "'Inter', sans-serif", size: 12, weight: '700' },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: (context) => {
+                                const val = context.parsed.y;
+                                if (val == null) return null;
+                                if (!isStdChart && context.dataset.stdValues) {
+                                    const s = context.dataset.stdValues[context.dataIndex] ?? 0;
+                                    return ` ${context.dataset.label}: ${val.toFixed(2)} (±${s.toFixed(2)})`;
+                                }
+                                return ` ${context.dataset.label}: ${val.toFixed(2)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b' },
+                        title: {
+                            display: true,
+                            text: 'Simultaneous Players',
+                            font: { family: "'Inter', sans-serif", size: 11, weight: '600' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b' },
+                        title: {
+                            display: true,
+                            text: yLabel,
+                            font: { family: "'Inter', sans-serif", size: 11, weight: '600' },
+                            color: '#475569'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function initCharts() {
+        charts.waitPerGame = createChart('chartWaitPerGame', 'Minutes Waiting / Game', false);
+        charts.games       = createChart('chartGames', 'Games Played', false);
+        charts.playTime    = createChart('chartPlayTime', 'Minutes Playing', false);
+        charts.totalWait   = createChart('chartTotalWait', 'Total Minutes Waiting', false);
+
+        charts.stdWaitPerGame = createChart('chartStdWaitPerGame', 'Std Dev (Minutes)', true);
+        charts.stdGames       = createChart('chartStdGames', 'Std Dev (Games)', true);
+        charts.stdPlayTime    = createChart('chartStdPlayTime', 'Std Dev (Minutes)', true);
+        charts.stdTotalWait   = createChart('chartStdTotalWait', 'Std Dev (Minutes)', true);
+    }
+
+    function applyStdDisplayPreference() {
+        const stdSection = document.getElementById('stdSection');
+        const showWhiskers = (uiState.stdDisplay === 'whiskers');
+
+        stdSection.style.display = (uiState.stdDisplay === 'separate') ? 'block' : 'none';
+
+        for (const key of ['waitPerGame', 'games', 'playTime', 'totalWait']) {
+            if (charts[key]) {
+                charts[key].options.plugins.whiskerErrorBars.enabled = showWhiskers;
+                charts[key].update('none');
+            }
+        }
+
+        if (uiState.stdDisplay === 'separate') {
+            for (const key of ['stdWaitPerGame', 'stdGames', 'stdPlayTime', 'stdTotalWait']) {
+                if (charts[key]) {
+                    charts[key].resize();
+                    charts[key].update('none');
+                }
+            }
+        }
+    }
+
+    function syncModeUI() {
+        const fixedBlock = document.getElementById('fixedCourtsBlock');
+        const maxCourtsBlock = document.getElementById('maxCourtsBlock');
+        const maxDensityTitle = document.getElementById('maxDensityTitle');
+        const maxDensityInput = document.getElementById('maxDensity');
+        const maxDensityRange = document.getElementById('maxDensityRange');
+        const maxDensityBadge = document.getElementById('maxDensityBadge');
+
+        if (uiState.simMode === 'fixed_courts') {
+            fixedBlock.classList.remove('hidden');
+            maxCourtsBlock.classList.add('hidden');
+            maxDensityTitle.textContent = 'Max Players';
+            maxDensityRange.min = 8;
+            maxDensityRange.max = 160;
+            if (parseInt(maxDensityInput.value, 10) <= 24) {
+                maxDensityInput.value = 80;
+                maxDensityRange.value = 80;
+            }
+            maxDensityBadge.textContent = `${maxDensityInput.value} Players`;
+        } else {
+            fixedBlock.classList.add('hidden');
+            maxCourtsBlock.classList.remove('hidden');
+            maxDensityTitle.textContent = 'Max Players / Court';
+            maxDensityRange.min = 4;
+            maxDensityRange.max = 24;
+            if (parseInt(maxDensityInput.value, 10) > 24) {
+                maxDensityInput.value = 14;
+                maxDensityRange.value = 14;
+            }
+            maxDensityBadge.textContent = `${maxDensityInput.value} / Court`;
+        }
+    }
+
+    function ensureWorkerPool(targetSize) {
+        if (!workerBlobUrl) {
+            const code = document.getElementById('worker-code').textContent;
+            const blob = new Blob([code], { type: 'application/javascript' });
+            workerBlobUrl = URL.createObjectURL(blob);
+        }
+        while (workerPool.length > targetSize) {
+            workerPool.pop().terminate();
+        }
+        while (workerPool.length < targetSize) {
+            workerPool.push(new Worker(workerBlobUrl));
+        }
+    }
+
+    function stopSimulation() {
+        if (!isRunning) return;
+        currentJobId++;
+        for (const w of workerPool) w.terminate();
+        workerPool = [];
+        isRunning = false;
+        document.getElementById('runBtn').disabled = false;
+        document.getElementById('cancelBtn').style.display = 'none';
+        document.getElementById('statusText').textContent = 'Simulation stopped.';
+    }
+
+    function makeDataset(meta, dataArr, stdArr, isDashed = false, xCount = 25) {
+        const ptRadius = xCount > 45 ? 1.8 : 3.2;
+        return {
+            label: meta.label,
+            data: dataArr.map(v => (v == null ? null : Number(v.toFixed(2)))),
+            stdValues: stdArr ? stdArr.map(s => (s == null ? null : Number(s.toFixed(2)))) : undefined,
+            borderColor: meta.color,
+            backgroundColor: meta.color,
+            pointStyle: meta.pointStyle,
+            pointRadius: ptRadius,
+            pointHoverRadius: 5,
+            borderWidth: 2.2,
+            borderDash: isDashed ? [5, 4] : undefined,
+            tension: 0.18,
+            spanGaps: false,
+            fill: false
+        };
+    }
+
+    function updateKPICardsAndMascot(config, xLabels, seriesList) {
+        const meanStay = Math.round((config.minStay + config.maxStay) / 2);
+        document.getElementById('kpiMeanStay').textContent = `${meanStay} mins`;
+        document.getElementById('kpiStaySub').textContent = `Uniform ${config.minStay}–${config.maxStay}m (~${config.meanGame}m/game)`;
+
+        const primaryPPG = config.playersPerGame === 'all' ? 4 : config.playersPerGame;
+
+        if (config.simMode === 'fixed_courts') {
+            const fullCapPlayers = config.fixedCourts * primaryPPG;
+            document.getElementById('kpiCapacity').textContent = `${fullCapPlayers} Players`;
+            document.getElementById('kpiCapacitySub').textContent = `${config.fixedCourts} courts × ${primaryPPG} players/game`;
+        } else {
+            document.getElementById('kpiCapacity').textContent = `1–${config.maxCourts} Courts`;
+            document.getElementById('kpiCapacitySub').textContent = `Up to ${config.maxDensity} players/court tested`;
+        }
+
+        latestSimSnapshot = { config, xLabels, seriesList };
+        setMascotNeutral();
+    }
+
+    function renderAllCharts(xLabels, xAxisTitle, config, seriesList) {
+        const showWhiskers = (uiState.stdDisplay === 'whiskers');
+
+        const waitPerGameDS = [], gamesDS = [], playTimeDS = [], totalWaitDS = [];
+        const stdWaitPerGameDS = [], stdGamesDS = [], stdPlayTimeDS = [], stdTotalWaitDS = [];
+
+        for (const s of seriesList) {
+            waitPerGameDS.push(makeDataset(s.meta, s.avgWPG, s.stdWPG, false, xLabels.length));
+            gamesDS.push(makeDataset(s.meta, s.avgGames, s.stdGames, false, xLabels.length));
+            playTimeDS.push(makeDataset(s.meta, s.avgTime, s.stdTime, false, xLabels.length));
+            totalWaitDS.push(makeDataset(s.meta, s.avgWait, s.stdWait, false, xLabels.length));
+
+            stdWaitPerGameDS.push(makeDataset(s.meta, s.stdWPG, null, true, xLabels.length));
+            stdGamesDS.push(makeDataset(s.meta, s.stdGames, null, true, xLabels.length));
+            stdPlayTimeDS.push(makeDataset(s.meta, s.stdTime, null, true, xLabels.length));
+            stdTotalWaitDS.push(makeDataset(s.meta, s.stdWait, null, true, xLabels.length));
+        }
+
+        const pairs = [
+            { chart: charts.waitPerGame,    ds: waitPerGameDS,    isStd: false },
+            { chart: charts.games,          ds: gamesDS,          isStd: false },
+            { chart: charts.playTime,       ds: playTimeDS,       isStd: false },
+            { chart: charts.totalWait,      ds: totalWaitDS,      isStd: false },
+            { chart: charts.stdWaitPerGame, ds: stdWaitPerGameDS, isStd: true },
+            { chart: charts.stdGames,       ds: stdGamesDS,       isStd: true },
+            { chart: charts.stdPlayTime,    ds: stdPlayTimeDS,    isStd: true },
+            { chart: charts.stdTotalWait,   ds: stdTotalWaitDS,   isStd: true }
+        ];
+
+        for (const item of pairs) {
+            item.chart.options.scales.x.title.text = xAxisTitle;
+            if (!item.isStd) {
+                item.chart.options.plugins.whiskerErrorBars.enabled = showWhiskers;
+            }
+            item.chart.data = { labels: xLabels, datasets: item.ds };
+            item.chart.update();
+        }
+
+        updateKPICardsAndMascot(config, xLabels, seriesList);
+        applyStdDisplayPreference();
+    }
+
+    function readAndValidateConfig() {
+        const meanGame = Math.max(5, parseFloat(document.getElementById('meanGame').value) || 15);
+        let minStay = Math.max(10, parseFloat(document.getElementById('minStay').value) || 30);
+        let maxStay = Math.max(20, parseFloat(document.getElementById('maxStay').value) || 240);
+
+        if (minStay < meanGame + 5) {
+            minStay = meanGame + 15;
+            document.getElementById('minStay').value = minStay;
+        }
+        if (maxStay <= minStay) {
+            maxStay = minStay + 120;
+            document.getElementById('maxStay').value = maxStay;
+        }
+
+        return {
+            simMode: uiState.simMode,
+            fixedCourts: Math.max(1, parseInt(document.getElementById('fixedCourts').value, 10) || 8),
+            maxCourts: Math.max(2, parseInt(document.getElementById('maxCourts').value, 10) || 26),
+            maxDensity: Math.max(4, parseInt(document.getElementById('maxDensity').value, 10) || (uiState.simMode === 'fixed_courts' ? 80 : 14)),
+            simsPerConfig: Math.max(5, parseInt(document.getElementById('simsPerConfig').value, 10) || 100),
+            opMinutes: Math.max(60, parseFloat(document.getElementById('opMinutes').value) || 720),
+            minStay,
+            maxStay,
+            meanGame,
+            stdGame: Math.max(0, parseFloat(document.getElementById('stdGame').value) || 5),
+            playersPerGame: uiState.playersPerGame === 'all' ? 'all' : Math.min(4, Math.max(2, parseInt(uiState.playersPerGame, 10) || 4)),
+            workerCount: Math.min(32, Math.max(1, parseInt(document.getElementById('workerCount').value, 10) || defaultThreads))
+        };
+    }
+
+    function runMonteCarlo() {
+        if (isRunning) stopSimulation();
+        isRunning = true;
+        const jobId = ++currentJobId;
+
+        const runBtn = document.getElementById('runBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const progressBar = document.getElementById('progressBar');
+        const statusText = document.getElementById('statusText');
+        const perfText = document.getElementById('perfText');
+
+        runBtn.disabled = true;
+        cancelBtn.style.display = 'inline-block';
+        progressBar.style.width = '0%';
+        perfText.textContent = '';
+
+        const config = readAndValidateConfig();
+        ensureWorkerPool(config.workerCount);
+
+        const tasks = [];
+        let sCount = 0;
+        let xCount = 0;
+        let minPlayersStart = 1;
+        let ppgList = [];
+
+        if (config.simMode === 'fixed_courts') {
+            ppgList = config.playersPerGame === 'all' ? [2, 3, 4] : [config.playersPerGame];
+            minPlayersStart = Math.min(...ppgList);
+            const maxPlayersEnd = Math.max(minPlayersStart + 2, config.maxDensity);
+            sCount = ppgList.length;
+            xCount = maxPlayersEnd - minPlayersStart + 1;
+
+            for (let xIdx = xCount - 1; xIdx >= 0; xIdx--) {
+                const totalSimulPlayers = minPlayersStart + xIdx;
+                for (let sIdx = 0; sIdx < sCount; sIdx++) {
+                    tasks.push({
+                        jobId,
+                        sIdx,
+                        xIdx,
+                        targetSimultaneousTotal: totalSimulPlayers,
+                        courts: config.fixedCourts,
+                        simsPerConfig: config.simsPerConfig,
+                        opMinutes: config.opMinutes,
+                        minStay: config.minStay,
+                        maxStay: config.maxStay,
+                        meanGame: config.meanGame,
+                        stdGame: config.stdGame,
+                        playersPerGame: ppgList[sIdx]
+                    });
+                }
+            }
+        } else {
+            const effectivePPG = config.playersPerGame === 'all' ? 4 : config.playersPerGame;
+            sCount = config.maxDensity;
+            xCount = config.maxCourts;
+
+            for (let sIdx = sCount - 1; sIdx >= 0; sIdx--) {
+                const pSimulPerCourt = sIdx + 1;
+                for (let xIdx = xCount - 1; xIdx >= 0; xIdx--) {
+                    const courts = xIdx + 1;
+                    tasks.push({
+                        jobId,
+                        sIdx,
+                        xIdx,
+                        targetSimultaneousTotal: pSimulPerCourt * courts,
+                        courts,
+                        simsPerConfig: config.simsPerConfig,
+                        opMinutes: config.opMinutes,
+                        minStay: config.minStay,
+                        maxStay: config.maxStay,
+                        meanGame: config.meanGame,
+                        stdGame: config.stdGame,
+                        playersPerGame: effectivePPG
+                    });
+                }
+            }
+        }
+
+        const gamesGrid       = Array.from({ length: sCount }, () => new Array(xCount));
+        const timeGrid        = Array.from({ length: sCount }, () => new Array(xCount));
+        const waitGrid        = Array.from({ length: sCount }, () => new Array(xCount));
+        const waitPerGameGrid = Array.from({ length: sCount }, () => new Array(xCount));
+
+        const totalTasks = tasks.length;
+        let nextTaskIdx = 0;
+        let completedTasks = 0;
+        const startTime = performance.now();
+
+        function finalizeSimulation() {
+            const seriesList = [];
+            let xLabels = [];
+            let xAxisTitle = '';
+
+            if (config.simMode === 'fixed_courts') {
+                xLabels = Array.from({ length: xCount }, (_, idx) => minPlayersStart + idx);
+                xAxisTitle = `Simultaneous Players at Facility (${config.fixedCourts} Courts)`;
+
+                for (let sIdx = 0; sIdx < sCount; sIdx++) {
+                    const ppg = ppgList[sIdx];
+                    const avgGames = [], stdGames = [];
+                    const avgTime  = [], stdTime  = [];
+                    const avgWait  = [], stdWait  = [];
+                    const avgWPG   = [], stdWPG   = [];
+
+                    for (let xIdx = 0; xIdx < xCount; xIdx++) {
+                        const playerCountAtX = xLabels[xIdx];
+
+                        if (playerCountAtX < ppg) {
+                            avgGames.push(null); stdGames.push(null);
+                            avgTime.push(null);  stdTime.push(null);
+                            avgWait.push(null);  stdWait.push(null);
+                            avgWPG.push(null);   stdWPG.push(null);
+                            continue;
+                        }
+
+                        const gStats   = computeMeanAndStd([gamesGrid[sIdx][xIdx]]);
+                        const tStats   = computeMeanAndStd([timeGrid[sIdx][xIdx]]);
+                        const wStats   = computeMeanAndStd([waitGrid[sIdx][xIdx]]);
+                        const wpgStats = computeMeanAndStd([waitPerGameGrid[sIdx][xIdx]]);
+
+                        avgGames.push(gStats.mean); stdGames.push(gStats.std);
+                        avgTime.push(tStats.mean);  stdTime.push(tStats.std);
+                        avgWait.push(wStats.mean);  stdWait.push(wStats.std);
+                        avgWPG.push(wpgStats.mean); stdWPG.push(wpgStats.std);
+                    }
+
+                    seriesList.push({
+                        meta: PPG_SERIES_META[ppg],
+                        avgGames, stdGames,
+                        avgTime,  stdTime,
+                        avgWait,  stdWait,
+                        avgWPG,   stdWPG
+                    });
+                }
+            } else {
+                xLabels = Array.from({ length: xCount }, (_, idx) => idx + 1);
+                xAxisTitle = 'Number of Courts';
+                const effectivePPG = config.playersPerGame === 'all' ? 4 : config.playersPerGame;
+                const groups = buildDensityGroups(config.maxDensity);
+
+                for (const group of groups) {
+                    const avgGames = [], stdGames = [];
+                    const avgTime  = [], stdTime  = [];
+                    const avgWait  = [], stdWait  = [];
+                    const avgWPG   = [], stdWPG   = [];
+
+                    for (let xIdx = 0; xIdx < xCount; xIdx++) {
+                        const courtsAtX = xLabels[xIdx];
+                        const gamesSlice = [], timeSlice = [], waitSlice = [], wpgSlice = [];
+
+                        for (let sIdx = 0; sIdx < sCount; sIdx++) {
+                            const densityVal = sIdx + 1;
+                            const totalSimul = densityVal * courtsAtX;
+                            if (densityVal >= group.low && densityVal <= group.high && totalSimul >= effectivePPG) {
+                                gamesSlice.push(gamesGrid[sIdx][xIdx]);
+                                timeSlice.push(timeGrid[sIdx][xIdx]);
+                                waitSlice.push(waitGrid[sIdx][xIdx]);
+                                wpgSlice.push(waitPerGameGrid[sIdx][xIdx]);
+                            }
+                        }
+
+                        if (gamesSlice.length === 0) {
+                            avgGames.push(null); stdGames.push(null);
+                            avgTime.push(null);  stdTime.push(null);
+                            avgWait.push(null);  stdWait.push(null);
+                            avgWPG.push(null);   stdWPG.push(null);
+                            continue;
+                        }
+
+                        const gStats   = computeMeanAndStd(gamesSlice);
+                        const tStats   = computeMeanAndStd(timeSlice);
+                        const wStats   = computeMeanAndStd(waitSlice);
+                        const wpgStats = computeMeanAndStd(wpgSlice);
+
+                        avgGames.push(gStats.mean); stdGames.push(gStats.std);
+                        avgTime.push(tStats.mean);  stdTime.push(tStats.std);
+                        avgWait.push(wStats.mean);  stdWait.push(wStats.std);
+                        avgWPG.push(wpgStats.mean); stdWPG.push(wpgStats.std);
+                    }
+
+                    seriesList.push({
+                        meta: group,
+                        avgGames, stdGames,
+                        avgTime,  stdTime,
+                        avgWait,  stdWait,
+                        avgWPG,   stdWPG
+                    });
+                }
+            }
+
+            renderAllCharts(xLabels, xAxisTitle, config, seriesList);
+
+            const elapsedMs = performance.now() - startTime;
+            const totalSimulatedDays = (totalTasks * config.simsPerConfig).toLocaleString();
+            statusText.textContent = `${totalSimulatedDays} simulated days complete`;
+            perfText.textContent = `${(elapsedMs / 1000).toFixed(2)}s`;
+            runBtn.disabled = false;
+            cancelBtn.style.display = 'none';
+            isRunning = false;
+        }
+
+        function dispatchNext(worker) {
+            if (nextTaskIdx < totalTasks) {
+                worker.postMessage(tasks[nextTaskIdx++]);
+            }
+        }
+
+        workerPool.forEach(worker => {
+            worker.onmessage = function(e) {
+                const res = e.data;
+                if (res.jobId !== currentJobId) return;
+
+                gamesGrid[res.sIdx][res.xIdx]       = new Float64Array(res.cGamesBuffer);
+                timeGrid[res.sIdx][res.xIdx]        = new Float64Array(res.cTimeBuffer);
+                waitGrid[res.sIdx][res.xIdx]        = new Float64Array(res.cWaitBuffer);
+                waitPerGameGrid[res.sIdx][res.xIdx] = new Float64Array(res.cWaitPerGameBuffer);
+
+                completedTasks++;
+                if (completedTasks % 5 === 0 || completedTasks === totalTasks) {
+                    const pct = Math.round((completedTasks / totalTasks) * 100);
+                    progressBar.style.width = `${pct}%`;
+                    statusText.textContent = `Simulating ${completedTasks}/${totalTasks} scenarios (${pct}%)...`;
+                }
+
+                if (completedTasks === totalTasks) {
+                    finalizeSimulation();
+                } else {
+                    dispatchNext(worker);
+                }
+            };
+
+            dispatchNext(worker);
+        });
+    }
+
+    function bindClickableGroup(containerId, selector, stateKey, onChange) {
+        const container = document.getElementById(containerId);
+        const items = container.querySelectorAll(selector);
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                items.forEach(b => b.classList.remove('active'));
+                item.classList.add('active');
+                uiState[stateKey] = item.getAttribute('data-val');
+                onChange(uiState[stateKey]);
+            });
+        });
+    }
+
+    function bindHybridRange(rangeId, numId, badgeId, unitSuffix) {
+        const rangeEl = document.getElementById(rangeId);
+        const numEl = document.getElementById(numId);
+        const badgeEl = document.getElementById(badgeId);
+
+        function sync(val, triggerRun) {
+            rangeEl.value = val;
+            numEl.value = val;
+            if (badgeEl) {
+                const suffix = typeof unitSuffix === 'function' ? unitSuffix() : unitSuffix;
+                badgeEl.textContent = `${val} ${suffix}`;
+            }
+            if (triggerRun) runMonteCarlo();
+        }
+
+        rangeEl.addEventListener('input', () => sync(rangeEl.value, false));
+        rangeEl.addEventListener('change', () => sync(rangeEl.value, true));
+        numEl.addEventListener('change', () => sync(numEl.value, true));
+    }
+
+    function resetDefaults() {
+        document.getElementById('opMinutes').value = 720;
+        document.getElementById('minStay').value = 30;
+        document.getElementById('maxStay').value = 240;
+        document.getElementById('meanGame').value = 15;
+        document.getElementById('stdGame').value = 5;
+        document.getElementById('simsPerConfig').value = 100;
+        document.getElementById('workerCount').value = defaultThreads;
+        runMonteCarlo();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('minStay').value = 30;
+        document.getElementById('maxStay').value = 240;
+        document.getElementById('meanGame').value = 15;
+        document.getElementById('stdGame').value = 5;
+        document.getElementById('opMinutes').value = 720;
+        document.getElementById('simsPerConfig').value = 100;
+        document.getElementById('workerCount').value = defaultThreads;
+
+        initCharts();
+        syncModeUI();
+        setMascotNeutral();
+
+        bindClickableGroup('modeCards', '.mode-card', 'simMode', () => {
+            syncModeUI();
+            runMonteCarlo();
+        });
+
+        bindClickableGroup('ppgSegmented', 'button', 'playersPerGame', () => {
+            runMonteCarlo();
+        });
+
+        bindClickableGroup('stdSegmented', 'button', 'stdDisplay', () => {
+            applyStdDisplayPreference();
+        });
+
+        bindHybridRange('fixedCourtsRange', 'fixedCourts', 'fixedCourtsBadge', 'Courts');
+        bindHybridRange('maxCourtsRange', 'maxCourts', 'maxCourtsBadge', 'Courts');
+        bindHybridRange('maxDensityRange', 'maxDensity', 'maxDensityBadge', () =>
+            uiState.simMode === 'fixed_courts' ? 'Players' : '/ Court'
+        );
+
+        const advDrawer = document.getElementById('advDrawer');
+        const advBtnText = document.getElementById('advBtnText');
+        document.getElementById('toggleAdvBtn').addEventListener('click', () => {
+            const isOpen = advDrawer.classList.toggle('open');
+            advBtnText.innerHTML = isOpen ? 'Hide Advanced &#9652;' : 'Advanced Parameters &#9662;';
+        });
+
+        document.getElementById('resetDefaultsBtn').addEventListener('click', resetDefaults);
+        document.getElementById('runBtn').addEventListener('click', runMonteCarlo);
+        document.getElementById('cancelBtn').addEventListener('click', stopSimulation);
+
+        runMonteCarlo();
     });
 </script>
 
