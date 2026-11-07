@@ -8,7 +8,7 @@ const defaultThreads = Math.min(12, Math.max(2, detectedCores));
 
 const uiState = {
     simMode: 'fixed_courts',
-    skillMode: 'off',       // 'off' | 'overall' | 'breakdown'
+    skillMode: 'breakdown', // Default: 'By Skill Tier' ('off' | 'overall' | 'breakdown')
     playersPerGame: '4',
     stdDisplay: 'whiskers'
 };
@@ -21,7 +21,7 @@ function updateCourtsBadgeText() {
     const courts = parseInt(document.getElementById('fixedCourts').value, 10) || 8;
     const ppg = uiState.playersPerGame === 'all' ? 4 : (parseInt(uiState.playersPerGame, 10) || 4);
     const activeCap = courts * ppg;
-    document.getElementById('fixedCourtsBadge').textContent = `${courts} (${activeCap} Active)`;
+    document.getElementById('fixedCourtsBadge').textContent = `${activeCap} max active players`;
 }
 
 function syncModeUI() {
@@ -581,7 +581,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     bindHybridRange('fixedCourtsRange', 'fixedCourts', 'fixedCourtsBadge', (val) => {
         const ppg = uiState.playersPerGame === 'all' ? 4 : (parseInt(uiState.playersPerGame, 10) || 4);
-        return `${val} (${val * ppg} Active)`;
+        return `${val * ppg} max active players`;
     });
 
     bindHybridRange('maxCourtsRange', 'maxCourts', 'maxCourtsBadge', (val) => `${val} Courts`);

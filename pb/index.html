@@ -53,11 +53,11 @@
             <!-- Row 2: Sliders & Segmented Controls -->
             <div class="controls-row">
 
-                <!-- Dynamic Court Slider (Includes Active Player Capacity in Badge) -->
+                <!-- Dynamic Court Slider (Displays "32 max active players" in Badge) -->
                 <div class="control-block col-span-2" id="fixedCourtsBlock">
                     <div class="control-label">
                         <span class="label-title">Courts</span>
-                        <span class="val-badge" id="fixedCourtsBadge">8 (32 Active)</span>
+                        <span class="val-badge" id="fixedCourtsBadge">32 max active players</span>
                     </div>
                     <div class="range-hybrid">
                         <input type="range" id="fixedCourtsRange" min="1" max="32" value="8" autocomplete="off">
@@ -88,15 +88,15 @@
                     </div>
                 </div>
 
-                <!-- Skill-Based Stacking Mode -->
+                <!-- Skill-Based Stacking Mode ("By Skill Tier" Default) -->
                 <div class="control-block col-span-3">
                     <div class="control-label">
                         <span class="label-title">Skill-Based Stacking</span>
                     </div>
                     <div class="segmented" id="skillSegmented">
-                        <button type="button" data-val="off" class="active" title="Everyone stacks together regardless of skill">Open Mix</button>
+                        <button type="button" data-val="off" title="Everyone stacks together regardless of skill">Open Mix</button>
                         <button type="button" data-val="overall" title="4 separate skill stacks (5/25/50/20%), showing facility-wide average">Skill Stacks</button>
-                        <button type="button" data-val="breakdown" title="Plot separate curves for Beginner, Intermediate, Advanced, and Expert">By Skill Tier</button>
+                        <button type="button" data-val="breakdown" class="active" title="Plot separate curves for Beginner, Intermediate, Advanced, and Expert">By Skill Tier</button>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@
                         <button type="button" data-val="4" class="active">4 (Doubles)</button>
                         <button type="button" data-val="3">3 (Canadian)</button>
                         <button type="button" data-val="2">2 (Singles)</button>
-                        <button type="button" data-val="all" id="ppgAllBtn">All</button>
+                        <button type="button" data-val="all" id="ppgAllBtn" disabled>All</button>
                     </div>
                 </div>
 
@@ -322,9 +322,9 @@
         </div>
     </section>
 
-    <!-- Primary Mean Charts ("Average Wait Time Between Games" First) -->
+    <!-- Charts Grid (Each Std Dev Chart Appears Immediately After Its Corresponding Metric Chart) -->
     <section class="charts-grid">
-        <!-- 1. Average Wait Time Between Games -->
+        <!-- 1a. Average Wait Time Between Games -->
         <div class="chart-card">
             <div class="chart-header">
                 <div>
@@ -337,7 +337,20 @@
             </div>
         </div>
 
-        <!-- 2. Average Games per Player -->
+        <!-- 1b. Std Dev: Wait Time Between Games -->
+        <div class="chart-card std-chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Std Dev: Wait Time Between Games</h3>
+                    <p>1&sigma; spread in per-game queue wait (minutes)</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartStdWaitPerGame"></canvas>
+            </div>
+        </div>
+
+        <!-- 2a. Average Games per Player -->
         <div class="chart-card">
             <div class="chart-header">
                 <div>
@@ -350,7 +363,20 @@
             </div>
         </div>
 
-        <!-- 3. Average Play Time per Player -->
+        <!-- 2b. Std Dev: Games per Player -->
+        <div class="chart-card std-chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Std Dev: Games per Player</h3>
+                    <p>1&sigma; spread in games played</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartStdGames"></canvas>
+            </div>
+        </div>
+
+        <!-- 3a. Average Play Time per Player -->
         <div class="chart-card">
             <div class="chart-header">
                 <div>
@@ -363,7 +389,20 @@
             </div>
         </div>
 
-        <!-- 4. Average Total Wait Time -->
+        <!-- 3b. Std Dev: Play Time per Player -->
+        <div class="chart-card std-chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Std Dev: Play Time per Player</h3>
+                    <p>1&sigma; spread in active court minutes</p>
+                </div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="chartStdPlayTime"></canvas>
+            </div>
+        </div>
+
+        <!-- 4a. Average Total Wait Time -->
         <div class="chart-card">
             <div class="chart-header">
                 <div>
@@ -375,61 +414,17 @@
                 <canvas id="chartTotalWait"></canvas>
             </div>
         </div>
-    </section>
 
-    <!-- Optional Separate Standard Deviation Charts -->
-    <section id="stdSection">
-        <div class="section-banner">
-            <h2>Standard Deviation Metrics (1&sigma; Variation Across Simulations)</h2>
-            <span>Measures player-to-player &amp; day-to-day volatility</span>
-        </div>
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <div>
-                        <h3>Std Dev: Wait Time Between Games</h3>
-                        <p>1&sigma; spread in per-game queue wait (minutes)</p>
-                    </div>
-                </div>
-                <div class="canvas-wrap">
-                    <canvas id="chartStdWaitPerGame"></canvas>
+        <!-- 4b. Std Dev: Total Wait Time -->
+        <div class="chart-card std-chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Std Dev: Total Wait Time</h3>
+                    <p>1&sigma; spread in cumulative wait minutes</p>
                 </div>
             </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <div>
-                        <h3>Std Dev: Games per Player</h3>
-                        <p>1&sigma; spread in games played</p>
-                    </div>
-                </div>
-                <div class="canvas-wrap">
-                    <canvas id="chartStdGames"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <div>
-                        <h3>Std Dev: Play Time per Player</h3>
-                        <p>1&sigma; spread in active court minutes</p>
-                    </div>
-                </div>
-                <div class="canvas-wrap">
-                    <canvas id="chartStdPlayTime"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <div>
-                        <h3>Std Dev: Total Wait Time</h3>
-                        <p>1&sigma; spread in cumulative wait minutes</p>
-                    </div>
-                </div>
-                <div class="canvas-wrap">
-                    <canvas id="chartStdTotalWait"></canvas>
-                </div>
+            <div class="canvas-wrap">
+                <canvas id="chartStdTotalWait"></canvas>
             </div>
         </div>
     </section>

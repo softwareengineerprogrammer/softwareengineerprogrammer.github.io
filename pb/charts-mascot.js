@@ -373,19 +373,23 @@ function initCharts() {
 }
 
 function applyStdDisplayPreference(stdDisplayMode) {
-    const stdSection = document.getElementById('stdSection');
     const showWhiskers = (stdDisplayMode === 'whiskers');
+    const showSeparate = (stdDisplayMode === 'separate');
 
-    stdSection.style.display = (stdDisplayMode === 'separate') ? 'block' : 'none';
+    const stdCards = document.querySelectorAll('.std-chart-card');
+    stdCards.forEach(card => {
+        card.classList.toggle('visible', showSeparate);
+    });
 
     for (const key of ['waitPerGame', 'games', 'playTime', 'totalWait']) {
         if (charts[key]) {
             charts[key].options.plugins.whiskerErrorBars.enabled = showWhiskers;
+            charts[key].resize();
             charts[key].update('none');
         }
     }
 
-    if (stdDisplayMode === 'separate') {
+    if (showSeparate) {
         for (const key of ['stdWaitPerGame', 'stdGames', 'stdPlayTime', 'stdTotalWait']) {
             if (charts[key]) {
                 charts[key].resize();

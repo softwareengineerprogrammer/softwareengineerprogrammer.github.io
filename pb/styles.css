@@ -210,7 +210,7 @@ body {
 .control-label span.val-badge {
     color: var(--primary);
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.73rem;
     background: var(--primary-soft);
     padding: 2px 7px;
     border-radius: 6px;
@@ -727,30 +727,6 @@ body {
     margin-bottom: 24px;
 }
 
-#stdSection {
-    display: none;
-    margin-top: 8px;
-}
-
-.section-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 8px 0 14px;
-    padding: 0 4px;
-}
-
-.section-banner h2 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-}
-
-.section-banner span {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
 .chart-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -761,6 +737,17 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+}
+
+/* Interleaved Std Dev Chart Cards (Hidden unless Spread = "Charts") */
+.std-chart-card {
+    display: none;
+    background: var(--surface-subtle);
+    border-style: dashed;
+}
+
+.std-chart-card.visible {
+    display: flex;
 }
 
 .chart-header {
