@@ -10,7 +10,7 @@ const uiState = {
     simMode: 'fixed_courts',
     skillMode: 'breakdown', // Default: 'By Skill Tier' ('off' | 'overall' | 'breakdown')
     playersPerGame: '4',
-    stdDisplay: 'whiskers'
+    stdDisplay: 'separate'  // Default: Separate Std Dev Charts ('whiskers' | 'separate' | 'none')
 };
 
 let workerPool = [];

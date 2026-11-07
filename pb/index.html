@@ -113,14 +113,14 @@
                     </div>
                 </div>
 
-                <!-- Standard Deviation Visualization -->
+                <!-- Standard Deviation Visualization ("Charts" Default) -->
                 <div class="control-block col-span-2">
                     <div class="control-label">
                         <span><span class="label-title">Spread</span> (&plusmn;1&sigma;)</span>
                     </div>
                     <div class="segmented" id="stdSegmented">
-                        <button type="button" data-val="whiskers" class="active">Whiskers</button>
-                        <button type="button" data-val="separate">Charts</button>
+                        <button type="button" data-val="whiskers">Whiskers</button>
+                        <button type="button" data-val="separate" class="active">Charts</button>
                         <button type="button" data-val="none">Off</button>
                     </div>
                 </div>
@@ -338,7 +338,7 @@
         </div>
 
         <!-- 1b. Std Dev: Wait Time Between Games -->
-        <div class="chart-card std-chart-card">
+        <div class="chart-card std-chart-card visible">
             <div class="chart-header">
                 <div>
                     <h3>Std Dev: Wait Time Between Games</h3>
@@ -364,7 +364,7 @@
         </div>
 
         <!-- 2b. Std Dev: Games per Player -->
-        <div class="chart-card std-chart-card">
+        <div class="chart-card std-chart-card visible">
             <div class="chart-header">
                 <div>
                     <h3>Std Dev: Games per Player</h3>
@@ -390,7 +390,7 @@
         </div>
 
         <!-- 3b. Std Dev: Play Time per Player -->
-        <div class="chart-card std-chart-card">
+        <div class="chart-card std-chart-card visible">
             <div class="chart-header">
                 <div>
                     <h3>Std Dev: Play Time per Player</h3>
@@ -416,7 +416,7 @@
         </div>
 
         <!-- 4b. Std Dev: Total Wait Time -->
-        <div class="chart-card std-chart-card">
+        <div class="chart-card std-chart-card visible">
             <div class="chart-header">
                 <div>
                     <h3>Std Dev: Total Wait Time</h3>
