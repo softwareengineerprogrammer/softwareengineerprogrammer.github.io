@@ -31,7 +31,6 @@ function buildDensityGroups(maxDensity) {
     return base.filter(g => g.low <= maxDensity);
 }
 
-// --- Reset Mascot & Inspector Readout to Default Neutral State ---
 function setMascotNeutral() {
     const card = document.getElementById('mascotCard');
     const badge = document.getElementById('mascotBadge');
@@ -51,8 +50,8 @@ function setMascotNeutral() {
     badge.style.background = '#f1f5f9';
     badge.style.color = '#475569';
     badge.textContent = 'Player Reaction';
-    headline.textContent = 'Inspect a Datapoint';
-    sub.textContent = 'Hover or tap any point on the charts to see the wait time and player reaction.';
+    headline.textContent = 'Inspect or Click a Point';
+    sub.textContent = 'Hover any point to see player mood, or click a point to drill into its simulated days below!';
 
     mouth.setAttribute('d', 'M 41 62 Q 48 64 55 62');
     browL.setAttribute('d', 'M 33 45 Q 38 44 42 45');
@@ -66,7 +65,6 @@ function setMascotNeutral() {
     document.getElementById('inspTotalWait').textContent = '—';
 }
 
-// --- Animated SVG Mascot Mood Controller (Triggered on Datapoint Hover/Click) ---
 function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLabel) {
     const card = document.getElementById('mascotCard');
     const badge = document.getElementById('mascotBadge');
@@ -95,7 +93,7 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
         headline.textContent = gamesPlayed <= 1.25
             ? `Only ${gamesPlayed.toFixed(1)} Game Played!`
             : `${waitMins.toFixed(0)}m Wait Per Game!`;
-        sub.textContent = `Waiting ${waitMins.toFixed(1)}m per game (${gamesPlayed.toFixed(1)} games total). Need more players or courts!`;
+        sub.textContent = `Waiting ${waitMins.toFixed(1)}m per game (${gamesPlayed.toFixed(1)} games total). Click point to inspect a day!`;
 
         mouth.setAttribute('d', 'M 39 67 Q 48 56 57 67');
         browL.setAttribute('d', 'M 32 47 Q 37 44 42 42');
@@ -110,7 +108,7 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
         badge.style.color = '#c2410c';
         badge.textContent = `${contextLabel} · Bummed Out`;
         headline.textContent = `Long ${waitMins.toFixed(1)}m Queue Wait`;
-        sub.textContent = `Players average ${gamesPlayed.toFixed(1)} games and spend a lot of time staring at the paddle rack.`;
+        sub.textContent = `Players average ${gamesPlayed.toFixed(1)} games. Click point to drill into an individual day!`;
 
         mouth.setAttribute('d', 'M 40 65 Q 48 59 56 65');
         browL.setAttribute('d', 'M 33 46 Q 38 44 42 43');
@@ -125,7 +123,7 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
         badge.style.color = '#a16207';
         badge.textContent = `${contextLabel} · Restless`;
         headline.textContent = `${waitMins.toFixed(1)}m Wait Between Games`;
-        sub.textContent = `Playable (${gamesPlayed.toFixed(1)} games/visit), but the paddle queue is backing up.`;
+        sub.textContent = `Playable (${gamesPlayed.toFixed(1)} games/visit), but queue is backing up. Click point to inspect!`;
 
         mouth.setAttribute('d', 'M 40 63 L 56 62');
         browL.setAttribute('d', 'M 33 43 L 42 46');
@@ -140,7 +138,7 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
         badge.style.color = '#15803d';
         badge.textContent = `${contextLabel} · Happy Rotation`;
         headline.textContent = `Smooth ${waitMins.toFixed(1)}m Breather`;
-        sub.textContent = `Great flow! ${gamesPlayed.toFixed(1)} games per visit with just enough time for water.`;
+        sub.textContent = `Great flow! ${gamesPlayed.toFixed(1)} games per visit. Click point to see the day's matches!`;
 
         mouth.setAttribute('d', 'M 39 61 Q 48 68 57 61');
         browL.setAttribute('d', 'M 33 45 Q 38 42 42 45');
@@ -155,7 +153,7 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
         badge.style.color = '#15803d';
         badge.textContent = `${contextLabel} · Court Heaven!`;
         headline.textContent = `Instant Play (${waitMins.toFixed(1)}m Wait)!`;
-        sub.textContent = `Non-stop action — ${gamesPlayed.toFixed(1)} games per session with open courts ready!`;
+        sub.textContent = `Non-stop action — ${gamesPlayed.toFixed(1)} games per session! Click point to inspect a day.`;
 
         mouth.setAttribute('d', 'M 37 60 Q 48 72 59 60');
         browL.setAttribute('d', 'M 33 44 Q 38 40 42 44');
@@ -165,7 +163,6 @@ function setMascotMood(waitMins, gamesPlayed, playMins, totalWaitMins, contextLa
     }
 }
 
-// --- Subtle Vertical +/- 1 Std Dev Whisker Plugin ---
 const whiskerPlugin = {
     id: 'whiskerErrorBars',
     afterDatasetsDraw(chart, args, pluginOptions) {
@@ -271,6 +268,14 @@ function createChart(canvasId, yLabel, isStdChart = false) {
             maintainAspectRatio: false,
             animation: { duration: 180 },
             interaction: { mode: 'index', intersect: false },
+            onClick: (event, activeElements) => {
+                if (!activeElements || activeElements.length === 0 || !latestSimSnapshot) return;
+                const xIdx = activeElements[0].index;
+                const dsIdx = activeElements[0].datasetIndex;
+                if (typeof selectDayFromChartClick === 'function') {
+                    selectDayFromChartClick(dsIdx, xIdx);
+                }
+            },
             onHover: (event, activeElements, chart) => {
                 if (!activeElements || activeElements.length === 0 || !latestSimSnapshot) return;
                 const dataIndex = activeElements[0].index;
@@ -318,8 +323,8 @@ function createChart(canvasId, yLabel, isStdChart = false) {
                             if (!items.length || !latestSimSnapshot) return '';
                             const xVal = items[0].label;
                             return latestSimSnapshot.config.simMode === 'fixed_courts'
-                                ? `${xVal} Players Present at Facility`
-                                : `${xVal} Courts`;
+                                ? `${xVal} Players Present (Click to Inspect Day)`
+                                : `${xVal} Courts (Click to Inspect Day)`;
                         },
                         label: (context) => {
                             const val = context.parsed.y;

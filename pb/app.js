@@ -127,7 +127,8 @@ function readAndValidateConfig() {
         skillMode: uiState.skillMode,
         fixedCourts: Math.min(100, Math.max(1, parseInt(document.getElementById('fixedCourts').value, 10) || 8)),
         maxCourts: Math.min(100, Math.max(2, parseInt(document.getElementById('maxCourts').value, 10) || 26)),
-        maxDensity: Math.min(500, Math.max(4, parseInt(document.getElementById('maxDensity').value, 10) || (uiState.simMode === 'fixed_courts' ? 80 : 14))),        simsPerConfig: Math.max(5, parseInt(document.getElementById('simsPerConfig').value, 10) || 100),
+        maxDensity: Math.min(500, Math.max(4, parseInt(document.getElementById('maxDensity').value, 10) || (uiState.simMode === 'fixed_courts' ? 80 : 14))),
+        simsPerConfig: Math.max(5, parseInt(document.getElementById('simsPerConfig').value, 10) || 100),
         opMinutes: Math.max(60, parseFloat(document.getElementById('opMinutes').value) || 720),
         minStay,
         maxStay,
@@ -430,6 +431,15 @@ function runMonteCarlo() {
         updateCourtsBadgeText();
         renderAllCharts(xLabels, xAxisTitle, config, seriesList, uiState.stdDisplay);
 
+        // Attach ordered task metadata so any Day # (e.g. Day #545) maps to its exact scenario & deterministic seed
+        if (latestSimSnapshot) {
+            latestSimSnapshot.taskMetaList = tasks.slice().reverse();
+            if (typeof loadAndRenderDayById === 'function') {
+                const currentRequestedDay = parseInt(document.getElementById('dayIdInput').value, 10) || 545;
+                loadAndRenderDayById(currentRequestedDay, false);
+            }
+        }
+
         const elapsedMs = performance.now() - startTime;
         const totalSimulatedDays = (totalTasks * config.simsPerConfig).toLocaleString();
         statusText.textContent = `${totalSimulatedDays} simulated days complete`;
@@ -556,6 +566,9 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('longWaitMixPct').value = 10;
 
     initCharts();
+    if (typeof initDrilldownControls === 'function') {
+        initDrilldownControls();
+    }
     syncModeUI();
     setMascotNeutral();
 

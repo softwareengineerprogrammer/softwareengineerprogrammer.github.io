@@ -1,13 +1,12 @@
 /* =====================================================================
    sim-worker.js
-   Dedicated Web Worker: Zero-Allocation TypedArray Discrete-Event Engine
+   Dedicated Web Worker: Seeded Deterministic PRNG + Zero-Allocation Engine
    ===================================================================== */
 
 let maxP = 0;
 let arrivalTime, departureTime, gamesPlayed, totalPlayTime, isPlaying;
 let playerSkill, queueSkill, queuePos, queueEnterTime;
 
-// 4 separate waiting queues (0: Beginner, 1: Intermediate, 2: Advanced, 3: Expert)
 let waitQueues = [null, null, null, null];
 let waitLens = new Int32Array(4);
 let activeCounts = new Int32Array(4);
@@ -20,6 +19,46 @@ let heapSize = 0;
 
 let maxG = 0;
 let gameSlots;
+
+// Seeded Mulberry32 PRNG so any individual simulated day (#545, etc.) can be reproduced exactly
+let rngState = 1;
+let hasSpare = false;
+let spare = 0.0;
+
+function seedRng(seed) {
+    rngState = (seed >>> 0) || 1;
+    hasSpare = false;
+}
+
+function randFloat() {
+    let t = (rngState += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+function randGauss(mean, std) {
+    if (hasSpare) {
+        hasSpare = false;
+        return mean + std * spare;
+    }
+    let u, v, s;
+    do {
+        u = randFloat() * 2.0 - 1.0;
+        v = randFloat() * 2.0 - 1.0;
+        s = u * u + v * v;
+    } while (s >= 1.0 || s === 0.0);
+    const mul = Math.sqrt(-2.0 * Math.log(s) / s);
+    spare = v * mul;
+    hasSpare = true;
+    return mean + std * (u * mul);
+}
+
+function computeDaySeed(sIdx, xIdx, simIdx) {
+    let h = (sIdx * 374761393 + xIdx * 668265263 + simIdx * 2147483647 + 0x9E3779B9) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return (h ^ (h >>> 16)) >>> 0;
+}
 
 function ensurePlayerCapacity(n) {
     if (n <= maxP) return;
@@ -89,26 +128,6 @@ function heapPush(time, seq, type, payload) {
     heapPayload[i] = payload;
 }
 
-let hasSpare = false;
-let spare = 0.0;
-
-function randGauss(mean, std) {
-    if (hasSpare) {
-        hasSpare = false;
-        return mean + std * spare;
-    }
-    let u, v, s;
-    do {
-        u = Math.random() * 2.0 - 1.0;
-        v = Math.random() * 2.0 - 1.0;
-        s = u * u + v * v;
-    } while (s >= 1.0 || s === 0.0);
-    const mul = Math.sqrt(-2.0 * Math.log(s) / s);
-    spare = v * mul;
-    hasSpare = true;
-    return mean + std * (u * mul);
-}
-
 function removeFromSkillQueueAt(q, qIdx) {
     const qArr = waitQueues[q];
     const pId = qArr[qIdx];
@@ -130,7 +149,6 @@ function enqueuePlayer(pid, targetQ, currentTime) {
     queueEnterTime[pid] = currentTime;
 }
 
-// Decide which stack a player joins (own skill tier vs +/- 1 adjacent tier)
 function chooseTargetQueue(pid, currentTime, skillEnabled, playersPerGame, meanGame, baseMixProb, longWaitMixProb) {
     if (!skillEnabled) return 0;
 
@@ -146,7 +164,7 @@ function chooseTargetQueue(pid, currentTime, skillEnabled, playersPerGame, meanG
     }
 
     const mixProb = isLongWait ? longWaitMixProb : baseMixProb;
-    if (mixProb > 0 && Math.random() < mixProb) {
+    if (mixProb > 0 && randFloat() < mixProb) {
         const lowS  = ownS > 0 ? ownS - 1 : -1;
         const highS = ownS < 3 ? ownS + 1 : -1;
 
@@ -155,7 +173,7 @@ function chooseTargetQueue(pid, currentTime, skillEnabled, playersPerGame, meanG
             const highRem = waitLens[highS] % playersPerGame;
             if (lowRem > highRem) return lowS;
             if (highRem > lowRem) return highS;
-            return Math.random() < 0.5 ? lowS : highS;
+            return randFloat() < 0.5 ? lowS : highS;
         } else if (lowS !== -1) {
             return lowS;
         } else if (highS !== -1) {
@@ -166,7 +184,6 @@ function chooseTargetQueue(pid, currentTime, skillEnabled, playersPerGame, meanG
     return ownS;
 }
 
-// Event Types: 0 = arrival, 1 = game_finish, 2 = departure
 function simulateDayFast(numCourts, numPlayers, config) {
     const {
         opMinutes,
@@ -204,8 +221,8 @@ function simulateDayFast(numCourts, numPlayers, config) {
     for (let q = 0; q < 4; q++) waitLens[q] = 0;
 
     for (let i = 0; i < numPlayers; i++) {
-        const arr = Math.random() * opMinutes;
-        const dep = arr + minStay + Math.random() * staySpan;
+        const arr = randFloat() * opMinutes;
+        const dep = arr + minStay + randFloat() * staySpan;
         arrivalTime[i]    = arr;
         departureTime[i]  = dep;
         gamesPlayed[i]    = 0;
@@ -216,7 +233,7 @@ function simulateDayFast(numCourts, numPlayers, config) {
         queueEnterTime[i] = arr;
 
         if (skillEnabled) {
-            const r = Math.random();
+            const r = randFloat();
             playerSkill[i] = r < cumProb0 ? 0 : (r < cumProb1 ? 1 : (r < cumProb2 ? 2 : 3));
         } else {
             playerSkill[i] = 0;
@@ -276,7 +293,6 @@ function simulateDayFast(numCourts, numPlayers, config) {
             activeOffsets[q] = 0;
         }
 
-        // 1. Primary pass: start games from any skill stack with >= playersPerGame (FIFO fairness across stacks)
         while (availableCourts > 0) {
             let bestQ = -1;
             let earliestEnter = Infinity;
@@ -296,7 +312,6 @@ function simulateDayFast(numCourts, numPlayers, config) {
             startGameFromQueue(bestQ, currentTime);
         }
 
-        // 2. Secondary pass (Skill-Stacking Long-Wait Relief)
         if (skillEnabled && availableCourts > 0 && longWaitMixProb > 0) {
             for (let q = 0; q < 4 && availableCourts > 0; q++) {
                 const rem = activeCounts[q] - activeOffsets[q];
@@ -309,7 +324,7 @@ function simulateDayFast(numCourts, numPlayers, config) {
 
                         const candidatePid = activeByQueue[adj][activeOffsets[adj]];
                         const waited = currentTime - queueEnterTime[candidatePid];
-                        if (waited >= meanGame && Math.random() < longWaitMixProb) {
+                        if (waited >= meanGame && randFloat() < longWaitMixProb) {
                             removeFromSkillQueueAt(adj, queuePos[candidatePid]);
                             enqueuePlayer(candidatePid, q, queueEnterTime[candidatePid]);
                             activeByQueue[q][activeCounts[q]++] = candidatePid;
@@ -503,6 +518,7 @@ self.onmessage = function(e) {
         const cWaitPerGame = new Float64Array(simsPerConfig);
 
         for (let s = 0; s < simsPerConfig; s++) {
+            seedRng(computeDaySeed(sIdx, xIdx, s));
             const dailyPlayers = Math.max(playersPerGame, Math.trunc(randGauss(dailyMean, dailyStd)));
             const res = simulateDayFast(courts, dailyPlayers, simConfig);
             cGames[s]       = res.meanGames;
@@ -531,6 +547,7 @@ self.onmessage = function(e) {
         const cWaitPerGame = new Float64Array(4 * simsPerConfig);
 
         for (let s = 0; s < simsPerConfig; s++) {
+            seedRng(computeDaySeed(sIdx, xIdx, s));
             const dailyPlayers = Math.max(playersPerGame, Math.trunc(randGauss(dailyMean, dailyStd)));
             const res = simulateDayFast(courts, dailyPlayers, simConfig);
             for (let sk = 0; sk < 4; sk++) {
