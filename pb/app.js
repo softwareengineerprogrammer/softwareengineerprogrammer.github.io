@@ -38,7 +38,7 @@ function syncModeUI() {
         maxCourtsBlock.classList.add('hidden');
         maxDensityTitle.textContent = 'Max Crowd Size';
         maxDensityRange.min = 8;
-        maxDensityRange.max = 160;
+        maxDensityRange.max = 500;
         if (parseInt(maxDensityInput.value, 10) <= 24) {
             maxDensityInput.value = 80;
             maxDensityRange.value = 80;
@@ -125,10 +125,9 @@ function readAndValidateConfig() {
     return {
         simMode: uiState.simMode,
         skillMode: uiState.skillMode,
-        fixedCourts: Math.max(1, parseInt(document.getElementById('fixedCourts').value, 10) || 8),
-        maxCourts: Math.max(2, parseInt(document.getElementById('maxCourts').value, 10) || 26),
-        maxDensity: Math.max(4, parseInt(document.getElementById('maxDensity').value, 10) || (uiState.simMode === 'fixed_courts' ? 80 : 14)),
-        simsPerConfig: Math.max(5, parseInt(document.getElementById('simsPerConfig').value, 10) || 100),
+        fixedCourts: Math.min(100, Math.max(1, parseInt(document.getElementById('fixedCourts').value, 10) || 8)),
+        maxCourts: Math.min(100, Math.max(2, parseInt(document.getElementById('maxCourts').value, 10) || 26)),
+        maxDensity: Math.min(500, Math.max(4, parseInt(document.getElementById('maxDensity').value, 10) || (uiState.simMode === 'fixed_courts' ? 80 : 14))),        simsPerConfig: Math.max(5, parseInt(document.getElementById('simsPerConfig').value, 10) || 100),
         opMinutes: Math.max(60, parseFloat(document.getElementById('opMinutes').value) || 720),
         minStay,
         maxStay,

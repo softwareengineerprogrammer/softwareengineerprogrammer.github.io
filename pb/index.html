@@ -53,15 +53,15 @@
             <!-- Row 2: Sliders & Segmented Controls -->
             <div class="controls-row">
 
-                <!-- Dynamic Court Slider (Displays "32 max active players" in Badge) -->
+                <!-- Dynamic Court Slider (Up to 100 Courts) -->
                 <div class="control-block col-span-2" id="fixedCourtsBlock">
                     <div class="control-label">
                         <span class="label-title">Courts</span>
                         <span class="val-badge" id="fixedCourtsBadge">32 max active players</span>
                     </div>
                     <div class="range-hybrid">
-                        <input type="range" id="fixedCourtsRange" min="1" max="32" value="8" autocomplete="off">
-                        <input type="number" id="fixedCourts" min="1" max="60" value="8" autocomplete="off">
+                        <input type="range" id="fixedCourtsRange" min="1" max="100" value="8" autocomplete="off">
+                        <input type="number" id="fixedCourts" min="1" max="100" value="8" autocomplete="off">
                     </div>
                 </div>
 
@@ -71,20 +71,20 @@
                         <span class="val-badge" id="maxCourtsBadge">26 Courts</span>
                     </div>
                     <div class="range-hybrid">
-                        <input type="range" id="maxCourtsRange" min="4" max="40" value="26" autocomplete="off">
-                        <input type="number" id="maxCourts" min="2" max="60" value="26" autocomplete="off">
+                        <input type="range" id="maxCourtsRange" min="4" max="100" value="26" autocomplete="off">
+                        <input type="number" id="maxCourts" min="2" max="100" value="26" autocomplete="off">
                     </div>
                 </div>
 
-                <!-- Dynamic Crowd Size Slider -->
+                <!-- Dynamic Crowd Size Slider (Scaled up to 500 to support 100 courts) -->
                 <div class="control-block col-span-2">
                     <div class="control-label">
                         <span class="label-title" id="maxDensityTitle" title="Maximum average number of players present at the courts at any given time">Max Crowd Size</span>
                         <span class="val-badge" id="maxDensityBadge">80 Present</span>
                     </div>
                     <div class="range-hybrid">
-                        <input type="range" id="maxDensityRange" min="8" max="160" value="80" autocomplete="off">
-                        <input type="number" id="maxDensity" min="4" max="300" value="80" autocomplete="off">
+                        <input type="range" id="maxDensityRange" min="8" max="500" value="80" autocomplete="off">
+                        <input type="number" id="maxDensity" min="4" max="500" value="80" autocomplete="off">
                     </div>
                 </div>
 
