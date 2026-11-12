@@ -1279,3 +1279,117 @@ body {
     color: #cbd5e1;
     font-variant-numeric: tabular-nums;
 }
+
+/* =====================================================================
+   CUSTOM CHART.JS HTML TOOLTIP WITH ANIMATED MINI MASCOTS
+   ===================================================================== */
+.chart-mascot-tooltip {
+    position: fixed;
+    z-index: 9999;
+    background: rgba(15, 23, 42, 0.95);
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 10px;
+    padding: 10px 13px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    min-width: 245px;
+    transition: opacity 0.1s ease;
+    backdrop-filter: blur(6px);
+}
+
+.cmt-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.cmt-title span.cmt-hint {
+    font-size: 0.67rem;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.cmt-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.cmt-mascot-wrap {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cmt-label {
+    color: #e2e8f0;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+}
+
+.cmt-val {
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.cmt-std {
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 0.72rem;
+    margin-left: 3px;
+}
+
+/* Mini Tooltip Mascot Animations */
+@keyframes miniBounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-2.2px); }
+}
+
+@keyframes miniSway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+@keyframes miniShiver {
+    0%, 100% { transform: translateX(0px); }
+    25% { transform: translateX(-1px) translateY(0.8px); }
+    75% { transform: translateX(1px) translateY(0.8px); }
+}
+
+@keyframes miniTear {
+    0% { transform: translateY(0px); opacity: 0.95; }
+    100% { transform: translateY(6px); opacity: 0; }
+}
+
+.mini-mood-ecstatic {
+    animation: miniBounce 0.55s infinite ease-in-out;
+}
+
+.mini-mood-happy {
+    animation: miniSway 1.4s infinite ease-in-out;
+}
+
+.mini-mood-crying {
+    animation: miniShiver 0.3s infinite linear;
+}
+
+.mini-mood-crying .mini-tear {
+    animation: miniTear 0.75s infinite linear;
+}
